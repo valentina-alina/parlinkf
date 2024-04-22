@@ -6,5 +6,5 @@ git add .
 git commit -m "Initial commit"
 git push --set-upstream origin main
 
-first commit - test
+first commit - test2
 ```
