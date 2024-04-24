@@ -1,74 +1,30 @@
-```
-cd existing_folder
-git init --initial-branch=main
-git remote add origin git@git.alt-tools.tech:aquildev/projet-ecole/front.git
-git add .
-git commit -m "Initial commit"
-git push --set-upstream origin main
+# React + TypeScript + Vite
 
-first commit - test3
-```
-first branche VR : ec-40_Admin
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Procédure création projet React Vite
+Currently, two official plugins are available:
 
-1° - npm create vite@latest
-: choisir le nom du projet
-: choisir React + Typescript
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-2° se placer dans le projet cd {nom du projet} 
+## Expanding the ESLint configuration
 
-3° - npm i (node modules)
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-4° - npm i react-router-dom
+- Configure the top-level `parserOptions` property like this:
 
-5° - npm install formik --save 
-
-6° - npm install yup 
-
-7° - npm i axios
-
-8° - npm install -D tailwindcss postcss autoprefixer
-
-9° - npx tailwindcss init -p 
-
-: modifier le fichier `tailwind.config.js`
-
-=====================
-
-/* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-var-requires */
-const flowbite = require("flowbite-react/tailwind");
-
-/** @type {import('tailwindcss').Config} */
+```js
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-    flowbite.content(),
-  ],
-  theme: {
-    extend: {},
+  // other rules...
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
   },
-  plugins: [
-    flowbite.plugin(),
-  ],
 }
+```
 
-=====================
-
-10° - dans le fichier `index.css`, remplacer le code existant par :
-
-=========
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-==========
-
-11° - npm i flowbite-react
-
-12° - npm run dev
-
-13° et consulter le localhost:
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
