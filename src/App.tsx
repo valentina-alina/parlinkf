@@ -11,7 +11,9 @@ function App() {
           <Route path="/" />
 
             <Route element={ <PrivateRoute /> }>
+
             </Route>
+
           <Route path="*" element= { <NotFoundPage />} />
       </Routes>
     </>
