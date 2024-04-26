@@ -1,5 +1,5 @@
 
-const UserEditProfilePage = () => {
+export default function UserEditProfilePage() {
     return (
         <>
             <h1>À propos de vous</h1>
@@ -114,5 +114,3 @@ const UserEditProfilePage = () => {
         </>
     )
 }
-
-export default UserEditProfilePage
