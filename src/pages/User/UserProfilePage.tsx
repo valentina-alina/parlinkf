@@ -1,6 +1,6 @@
 
 
-const UserProfilePage = () => {
+export default function UserProfilePage() {
 
     return (
         <>
@@ -34,5 +34,3 @@ const UserProfilePage = () => {
         </>
     )
 }
-
-export default UserProfilePage
