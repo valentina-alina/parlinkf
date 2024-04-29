@@ -10,6 +10,11 @@ export default {
     flowbite.content(),
   ],
   theme: {
+    fontFamily: {
+      navbar: ['Homemade Apple'],
+      'sans': ['ui-sans-serif', 'system-ui'],
+      'serif': ['ui-serif', 'Georgia'],
+    },
     extend: {},
   },
   plugins: [
