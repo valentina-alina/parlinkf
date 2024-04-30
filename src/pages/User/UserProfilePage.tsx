@@ -1,4 +1,4 @@
-import { Button, Modal, Card } from "flowbite-react";
+import { Button, Modal, Card, ListGroup } from "flowbite-react";
 import { useState } from "react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
@@ -12,13 +12,13 @@ export default function UserProfilePage() {
 
             <div className="flex justify-center items-center">
                 <Card className="w-96 bg-gray-50 shadow-lg m-8">
-                    <div>
-                        <ul>
-                            <li><a href="">Déposer une annonce <span>&gt;</span></a></li>
-                            <li><a href="">Voir mes annonces <span>&gt;</span></a></li>
-                            <li><a href="">Voir mes inscriptions <span>&gt;</span></a></li>
-                        </ul>
-                    </div>
+                        <ListGroup className="w-80">
+                            <ListGroup.Item onClick={() => alert('Profile clicked!')} >
+                                Déposer une annonce <span className="ml-1"> &gt;</span>
+                            </ListGroup.Item>
+                            <ListGroup.Item onClick={() => alert('Profile clicked!')} >Voir mes annonces <span className="ml-6"> &gt;</span></ListGroup.Item>
+                            <ListGroup.Item onClick={() => alert('Profile clicked!')} >Voir mes inscriptions <span className="ml-3"> &gt;</span></ListGroup.Item>
+                        </ListGroup>
 
                     <Button
                         className="flex justify-center items-center"
