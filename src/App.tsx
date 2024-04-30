@@ -3,12 +3,14 @@ import './App.css';
 import NotFoundPage from './services/utils/NotFoundPage';
 import PrivateRoute from './services/utils/PrivateRoute';
 import Navbar from './components/Navbar/Navbar';
+import NavbarMobile from './components/Navbar/NavbarMobile';
 
 function App() {
 
   return (
     <>
       <Navbar />
+      <NavbarMobile />
       <Routes>
           <Route path="/" />
 
