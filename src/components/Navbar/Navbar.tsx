@@ -1,8 +1,9 @@
 "use client";
-import { Button, ListGroup, MegaMenu,Navbar } from "flowbite-react";
+import { Button, ListGroup, MegaMenu,Navbar, TextInput } from "flowbite-react";
 import { Link, Navigate} from 'react-router-dom';
 import { MdAddToPhotos } from "react-icons/md";
-import Logo from '../../assets/logo.png'
+import Logo from '../../assets/logo.png';
+import { HiSearch } from "react-icons/hi";
 
 export default function NavbarComponent(){
 
@@ -14,24 +15,28 @@ export default function NavbarComponent(){
             {auth.token
             ?
             
-            <div>
+            <div className="scale-110 mb-60 flex justify-center items-center">
                 <Navbar fluid rounded>
-                    <Navbar.Brand href="https://flowbite-react.com">
+                    
+                    <Navbar.Brand>
                         <Link to="">
-                            <img src={Logo} alt="logo ParLink" className="mr-3 h-6 sm:h-9" />
+                            <img src={Logo} alt="logo ParLink" className="mr-3 h-6 sm:h-9 scale-150" />
                         </Link>
                     </Navbar.Brand>
+
+                    <div className="max-w-md ml-16 mr-16">
+                        <TextInput className="w-96" id="search" type="search" icon={HiSearch} placeholder="Rechercher..." />
+                    </div>
+
                     <div className="flex md:order-2">
                         
                         <Navbar.Toggle />
                     </div>
+
                     <Navbar.Collapse>
-                        <Link to="#">
-                        Home
-                        </Link>
                         <Link to="/calendrier">
                             <svg
-                                className="w-6 h-6 text-gray-800 dark:text-white"
+                                className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3"
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -44,7 +49,7 @@ export default function NavbarComponent(){
                         </Link>
                         <Link to="/fichiers">
                             <svg
-                                className="w-6 h-6 text-gray-800 dark:text-white"
+                                className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3"
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -62,7 +67,7 @@ export default function NavbarComponent(){
                         </Link>
                         <Link to="/chat">
                             <svg
-                                    className="w-6 h-6 text-gray-800 dark:text-white"
+                                    className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3"
                                     aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="24"
@@ -73,11 +78,11 @@ export default function NavbarComponent(){
                                 <path fill-rule="evenodd" d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-6.616l-2.88 2.592C8.537 20.461 7 19.776 7 18.477V17H5a2 2 0 0 1-2-2V6Zm4 2a1 1 0 0 0 0 2h5a1 1 0 1 0 0-2H7Zm8 0a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Zm-8 3a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2H7Zm5 0a1 1 0 1 0 0 2h5a1 1 0 1 0 0-2h-5Z" clip-rule="evenodd"/>
                             </svg>
                         </Link>
-                        <Link to="/mon-compte">
+                        <div>
                             <MegaMenu.Dropdown
                                 toggle={<>
                                     <svg
-                                        className="w-6 h-6 text-gray-800 dark:text-white"
+                                        className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -119,7 +124,7 @@ export default function NavbarComponent(){
                                     </ListGroup>
                                 </div>
                             </MegaMenu.Dropdown>
-                        </Link>
+                        </div>
                     </Navbar.Collapse>
                 </Navbar>
             </div>
