@@ -24,8 +24,8 @@ export default function NavbarComponent(){
                         </Link>
                     </Navbar.Brand>
 
-                    <div className="max-w-md ml-16 mr-16">
-                        <TextInput className="w-96" id="search" type="search" icon={HiSearch} placeholder="Rechercher..." />
+                    <div className="max-w-md ml-10 sm:ml-16 mr-10 sm:mr-16">
+                        <TextInput className="w-80" id="search" type="search" icon={HiSearch} placeholder="Rechercher..." />
                     </div>
 
                     <div className="flex md:order-2">
