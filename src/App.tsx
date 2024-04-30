@@ -8,6 +8,7 @@ import UserProfilePage from './pages/User/UserProfilePage';
 import UserEditProfilePage from './pages/User/UserEditProfilePage';
 import { ProfileInterface } from './services/interfaces/Profile';
 import { useState } from 'react';
+import AdsDetailPage from './pages/Ads/AdsDetailPage';
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -26,6 +27,7 @@ function App() {
             <Route element={ <PrivateRoute /> }>
               <Route path='/mon-compte' element={ <UserProfilePage /> } />
               <Route path='/editer-mon-profil' element={ <UserEditProfilePage handleSubmitProfile={handleSubmitProfile} /> } />
+              <Route path='/annonce/:idAd' element={ <AdsDetailPage /> } />
             </Route>
 
           <Route path="*" element= { <NotFoundPage />} />

@@ -14,6 +14,7 @@ export default {
       navbar: ['Homemade Apple'],
       h1: ['Kalam'],
       h3: ['Kalam'],
+      body: ['Kalam'],
       input: ['Kalam'],
       button: ['Kalam'],
       footer: ['Kalam'],
