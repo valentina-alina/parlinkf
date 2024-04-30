@@ -10,6 +10,16 @@ export default {
     flowbite.content(),
   ],
   theme: {
+    fontFamily: {
+      navbar: ['Homemade Apple'],
+      h1: ['Kalam'],
+      h3: ['Kalam'],
+      input: ['Kalam'],
+      button: ['Kalam'],
+      footer: ['Kalam'],
+      'sans': ['ui-sans-serif', 'system-ui'],
+      'serif': ['ui-serif', 'Georgia'],
+    },
     extend: {},
   },
   plugins: [
