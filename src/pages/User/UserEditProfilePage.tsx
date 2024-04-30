@@ -1,4 +1,4 @@
-import { Button, Card, TextInput } from "flowbite-react";
+import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import { IoIosSend } from "react-icons/io";
 import { ProfileInterface } from "../../services/interfaces/Profile";
 import { useFormik } from 'formik';
@@ -56,7 +56,7 @@ export default function UserEditProfilePage(props: ProfileProp) {
 
     return (
         <>
-            <h1 className="font-h1 mb-8">À propos de vous</h1>
+            <h1 className="font-h1 mb-8 text-3xl">À propos de vous</h1>
 
             <div className="flex justify-center items-center font-input">
                 <Card className="w-96 bg-gray-50 shadow-lg">
@@ -71,14 +71,11 @@ export default function UserEditProfilePage(props: ProfileProp) {
                             value={ formik.values.file }
                         />
                         <br />
-                        
-                        <input
-                            type="checkbox"
-                            name="publicPicture"
-                            id="publicPicture"
-                        />
-                        <label htmlFor="publicPicture">public</label>
-                        <br />
+
+                        <div className="flex items-center gap-2">
+                            <Checkbox id="publicPicture" />
+                            <Label htmlFor="publicPicture">public</Label>
+                        </div>
                         <br />
                     
                         <TextInput
@@ -95,13 +92,10 @@ export default function UserEditProfilePage(props: ProfileProp) {
                                 </>
                             }
                         />
-                        <input
-                            type="checkbox"
-                            name="publicFirstName"
-                            id="publicFirstName"
-                        />
-                        <label htmlFor="publicFirstName">public</label>
-                        <br />
+                        <div className="flex items-center gap-2">
+                            <Checkbox id="publicFirstname" />
+                            <Label htmlFor="publicFirstname">public</Label>
+                        </div>
                         <br />
                     
                         <TextInput
@@ -118,13 +112,10 @@ export default function UserEditProfilePage(props: ProfileProp) {
                                 </>
                             }
                         />
-                        <input
-                            type="checkbox"
-                            name="publicLastName"
-                            id="publicLastName"
-                        />
-                        <label htmlFor="publicLastName">public</label>
-                        <br />
+                        <div className="flex items-center gap-2">
+                            <Checkbox id="publicLastname" />
+                            <Label htmlFor="publicLastname">public</Label>
+                        </div>
                         <br />
 
                         <TextInput
@@ -142,7 +133,6 @@ export default function UserEditProfilePage(props: ProfileProp) {
                             }
                         />
                         <br />
-                        <br />
 
                         <TextInput
                             id="birthDate"
@@ -158,14 +148,10 @@ export default function UserEditProfilePage(props: ProfileProp) {
                                 </>
                             }
                         />
-                        <input
-                            type="checkbox"
-                            name="publicBirthDate"
-                            id="publicBirthDate"
-                        />
-                        
-                        <label htmlFor="publicBirthDate">public</label>
-                        <br />
+                        <div className="flex items-center gap-2">
+                            <Checkbox id="publicBirthDate" />
+                            <Label htmlFor="publicBirthDate">public</Label>
+                        </div>
                         <br />
                     
                         <TextInput
@@ -182,13 +168,10 @@ export default function UserEditProfilePage(props: ProfileProp) {
                                 </>
                             }
                         />
-                        <input
-                            type="checkbox"
-                            name="publicEmail"
-                            id="publicEmail"
-                        />
-                        <label htmlFor="publicEmail">public</label>
-                        <br />
+                        <div className="flex items-center gap-2">
+                            <Checkbox id="publicEmail" />
+                            <Label htmlFor="publicEmail">public</Label>
+                        </div>
                         <br />
 
                         <TextInput
@@ -205,13 +188,10 @@ export default function UserEditProfilePage(props: ProfileProp) {
                                 </>
                             }
                         />
-                        <input
-                            type="checkbox"
-                            name="publicPhone"
-                            id="publicPhone"
-                        />
-                        <label htmlFor="publicPhone">public</label>
-                        <br />
+                        <div className="flex items-center gap-2">
+                            <Checkbox id="publicPhone" />
+                            <Label htmlFor="publicPhone">public</Label>
+                        </div>
                         <br />
 
                         <Button
