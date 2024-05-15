@@ -3,12 +3,14 @@ import './App.css';
 import NotFoundPage from './services/utils/NotFoundPage';
 import PrivateRoute from './services/utils/PrivateRoute';
 import LoginPage from './pages/Auth/LoginPage';
+import HeaderMenu from './components/Navbar/HeaderMenu';
 
 function App() {
 
   return (
     <>
-     <LoginPage/>
+     {/* <LoginPage/> */}
+     <HeaderMenu/>
     </>
   )
 }
