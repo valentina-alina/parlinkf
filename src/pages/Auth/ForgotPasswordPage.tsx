@@ -13,6 +13,7 @@ export default function ForgotPasswordPage() {
 
                 <div className="md:basis-8/12">
                     <form>
+                        {/* <h1> Changer de mot de passe </h1> <br /><br /> */}
                         <label htmlFor="text" className=" ms-2 text-left text-sm font-medium dark:text-white"> Changer de mot de passe  </label><br /><br />
                         <div className="mb-5">
                             <label htmlFor="newpassword" className="block mb-2 text-left text-sm font-medium  dark:text-white">Nouveau mot de passe</label>
