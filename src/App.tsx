@@ -3,15 +3,20 @@ import './App.css';
 import NotFoundPage from './services/utils/NotFoundPage';
 import PrivateRoute from './services/utils/PrivateRoute';
 import Navbar from './components/Navbar/Navbar';
-import NavbarMobile from './components/Navbar/NavbarMobile';
 import UserProfilePage from './pages/User/UserProfilePage';
 import UserEditProfilePage from './pages/User/UserEditProfilePage';
 import { ProfileInterface } from './services/interfaces/Profile';
 import { useState } from 'react';
 import AdsDetailPage from './pages/Ads/AdsDetailPage';
+import CalendarPage from './pages/Calendar/CalendarPage';
+import AdsListPage from './pages/Ads/AdsListPage';
+import AdsListPageLists from './pages/Ads/AdsListPageLists';
+import FooterNav from './components/Footer/FooterNav';
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  console.log('setSearchQuery', setSearchQuery)
 
   function handleSubmitProfile(profile: ProfileInterface):void{
     setProfiles([ ...profiles,  profile]);
@@ -19,19 +24,22 @@ function App() {
 
   return (
     <>
-      <Navbar />
-      <NavbarMobile />
+      <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery}  />
       <Routes>
           <Route path="/" />
 
             <Route element={ <PrivateRoute /> }>
               <Route path='/mon-compte' element={ <UserProfilePage /> } />
-              <Route path='/editer-mon-profil' element={ <UserEditProfilePage handleSubmitProfile={handleSubmitProfile} /> } />
+              <Route path='/editer-mon-profil/:idProfile' element={ <UserEditProfilePage handleSubmitProfile={handleSubmitProfile} /> } />
               <Route path='/annonce/:idAd' element={ <AdsDetailPage /> } />
+              <Route path='/calendrier' element={ <CalendarPage /> } />
+              <Route path='/ads-list' element={ <AdsListPage searchQuery={searchQuery} /> } />
+              <Route path='/ads-list2' element={ <AdsListPageLists searchQuery={searchQuery} /> } />
             </Route>
 
           <Route path="*" element= { <NotFoundPage />} />
       </Routes>
+      <FooterNav />
     </>
   )
 }
