@@ -3,6 +3,10 @@ import { IoIosSend } from "react-icons/io";
 import { ProfileInterface } from "../../services/interfaces/Profile";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { HiAdjustments, HiUserCircle } from "react-icons/hi";
+import { Link, useParams } from "react-router-dom";
+import { getProfiles } from "../../services/api/userEditProfile";
+import { useEffect, useState } from "react";
 
 interface ProfileProp {
     handleSubmitProfile: (contactForm: ProfileInterface) => void;
@@ -10,18 +14,47 @@ interface ProfileProp {
 
 export default function UserEditProfilePage(props: ProfileProp) {
 
-    const handleSubmitProfile = props.handleSubmitProfile;
+    const { idProfile } = useParams();
+    const [ profiles, setProfiles ] = useState<ProfileInterface | null>(null);
+
+    useEffect(() => {
+        const loadProfiles = async () => {
+            const listProfile = await getProfiles();
+
+            if (listProfile) {
+                const selectedprofile = listProfile.find(profile => profile.id.toString() === idProfile);
+                setProfiles(selectedprofile ? {
+                    ...selectedprofile,
+                } : null);
+            }
+            
+        };
+        loadProfiles();
+    }, [idProfile]);
+
+    const initialValues: ProfileInterface = {
+        id: 0,
+        file: "",
+        firstname: "",
+        lastname: "",
+        password: "",
+        birthDate: null,
+        email: "",
+        phone: "",
+    };
+    
+    if (profiles) {
+        initialValues.file = profiles.file;
+        initialValues.firstname = profiles.firstname;
+        initialValues.lastname = profiles.lastname;
+        initialValues.password = profiles.password;
+        initialValues.birthDate = profiles.birthDate;
+        initialValues.email = profiles.email;
+        initialValues.phone = profiles.phone;
+    }
 
     const formik = useFormik({
-        initialValues: {
-            file: "",
-            firstname: "",
-            lastname: "",
-            password: "",
-            birthDate: "",
-            email: "",
-            phone: "",
-        },
+        initialValues: initialValues,
         validationSchema: Yup.object({
             file: Yup.string()
                             .min(3, "minimum 3 caractères")
@@ -40,33 +73,64 @@ export default function UserEditProfilePage(props: ProfileProp) {
                             .min(3, "minimum 10 caractères"),
         }),
         onSubmit: (values) => {
-            const parsedValues = {
+            const parsedValues: ProfileInterface = {
+                ...profiles,
                 ...values,
-                birthDate: values.birthDate ? new Date(values.birthDate) : null
+                birthDate: values.birthDate ? new Date(values.birthDate) : null,
+                id: profiles?.id ?? 0
             };
-        
+
             handleSubmitProfile(parsedValues);
 
-            // setCurrentId(idIncrement(currentId));
             formik.resetForm();
             alert('Votre profil a bien été mis à jour!');
         },
     });
 
+    if (!profiles) {
+        return <p>No profile found with ID: {idProfile}</p>;
+    }
+
+    const birthDateString: string | undefined = profiles.birthDate ? profiles.birthDate.toISOString().substr(0, 10) : undefined;
+
+    const handleSubmitProfile = (values: ProfileInterface): void => {
+        if (profiles) {
+            const updatedProfile: ProfileInterface = {
+                ...profiles,
+                ...values,
+                id: profiles.id
+            };
+            props.handleSubmitProfile(updatedProfile);
+        }
+    };
+
+
+
 
     return (
         <>
-            <h1 className="font-h1 mb-8 text-3xl">À propos de vous</h1>
+            <Button.Group className="flex justify-center items-center mr-5 sm:mr-0">
+                <Button color="gray" className="sm:w-96 bg-blue-700 text-white" disabled>
+                    <HiUserCircle className="mr-3 h-4 w-4" />
+                        À propos de vous
+                </Button>
+                <Link to="/mon-compte">
+                    <Button color="gray" className="sm:w-96 -z-10">
+                        <HiAdjustments className="mr-3 h-4 w-4" />
+                            Mon compte
+                    </Button>
+                </Link>
+            </Button.Group>
 
-            <div className="flex justify-center items-center font-input">
-                <Card className="w-96 bg-gray-50 shadow-lg">
+            <div className="flex justify-center items-center font-bodyTest scale-110 sm:scale:100 mt-20 sm:mt-15">
+                <Card className="w-96 bg-gray-50 shadow-lg m-8">
                     <form onSubmit={formik.handleSubmit}>
                     
                         <input
                             type="file"
                             id="picture"
                             name="picture"
-                            className="mb-2"
+                            className="mb-2 max-w-xs break-words"
                             onChange={formik.handleChange}
                             value={ formik.values.file }
                         />
@@ -83,9 +147,8 @@ export default function UserEditProfilePage(props: ProfileProp) {
                             type="text"
                             name="firstname"
                             className="mb-2"
-                            placeholder="Votre prénom"
                             onChange={formik.handleChange}
-                            value={ formik.values.firstname }
+                            value={formik.values.firstname !== "" ? formik.values.firstname : profiles?.firstname}
                             helperText={
                                 <>
                                 <span className="font-medium">{formik.errors.firstname}</span>
@@ -103,9 +166,8 @@ export default function UserEditProfilePage(props: ProfileProp) {
                             type="text"
                             name="lastname"
                             className="mb-2"
-                            placeholder="Votre nom"
                             onChange={formik.handleChange}
-                            value={ formik.values.lastname }
+                            value={formik.values.lastname !== "" ? formik.values.lastname : profiles?.lastname}
                             helperText={
                                 <>
                                 <span className="font-medium">{formik.errors.lastname}</span>
@@ -123,9 +185,8 @@ export default function UserEditProfilePage(props: ProfileProp) {
                             type="password"
                             name="password"
                             className="mb-2"
-                            placeholder="Votre mot de passe"
                             onChange={formik.handleChange}
-                            value={ formik.values.password }
+                            value={formik.values.password !== "" ? formik.values.password : profiles?.password}
                             helperText={
                                 <>
                                 <span className="font-medium">{formik.errors.password}</span>
@@ -139,9 +200,9 @@ export default function UserEditProfilePage(props: ProfileProp) {
                             type="date"
                             name="birthDate"
                             className="mb-2"
-                            placeholder="Votre date de naissance"
                             onChange={formik.handleChange}
-                            value={ formik.values.birthDate }
+                            value={birthDateString}
+                            disabled
                             helperText={
                                 <>
                                 <span className="font-medium">{formik.errors.birthDate}</span>
@@ -159,9 +220,8 @@ export default function UserEditProfilePage(props: ProfileProp) {
                             type="email"
                             name="email"
                             className="mb-2"
-                            placeholder="Votre email"
                             onChange={formik.handleChange}
-                            value={ formik.values.email }
+                            value={formik.values.email !== "" ? formik.values.email : profiles?.email}
                             helperText={
                                 <>
                                 <span className="font-medium">{formik.errors.email}</span>
@@ -179,9 +239,8 @@ export default function UserEditProfilePage(props: ProfileProp) {
                             type="text"
                             name="phone"
                             className="mb-2"
-                            placeholder="Votre n° de téléphone"
                             onChange={formik.handleChange}
-                            value={ formik.values.phone }
+                            value={formik.values.phone !== "" ? formik.values.phone : profiles?.phone}
                             helperText={
                                 <>
                                 <span className="font-medium">{formik.errors.phone}</span>
@@ -193,13 +252,14 @@ export default function UserEditProfilePage(props: ProfileProp) {
                             <Label htmlFor="publicPhone">public</Label>
                         </div>
                         <br />
-
-                        <Button
-                            className="bg-violet-900 font-button"
-                            type="submit"
-                        >
-                            Actualiser <IoIosSend className="mt-1 ml-1" />
-                        </Button>
+                        <span className='before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative flex gap-2 p-1 mt-2 flex justify-center items-center'>
+                            <Button className="bg-blue-700">
+                            <span className="relative text-white m-1">Actualiser</span> <span>
+                                <IoIosSend className="relative text-white h-5 w-5" />
+                            </span>
+                            </Button>
+                            
+                        </span>
                     </form>
                 </Card>
             </div>

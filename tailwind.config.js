@@ -15,6 +15,8 @@ export default {
       h1: ['Kalam'],
       h3: ['Kalam'],
       body: ['Kalam'],
+      titleTest: ['Poppins'],
+      bodyTest: ['Montserrat'],
       input: ['Kalam'],
       button: ['Kalam'],
       footer: ['Kalam'],

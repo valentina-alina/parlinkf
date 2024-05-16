@@ -1,31 +1,44 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { Button, ListGroup, MegaMenu,Navbar, TextInput } from "flowbite-react";
+import { ListGroup, MegaMenu,Navbar, TextInput } from "flowbite-react";
 import { Link, Navigate} from 'react-router-dom';
 import { MdAddToPhotos } from "react-icons/md";
 import Logo from '../../assets/logo.png';
 import { HiSearch } from "react-icons/hi";
 
-export default function NavbarComponent(){
+interface NavbarProps {
+    searchQuery: string;
+    setSearchQuery: (query: string) => void;
+}
+
+export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarProps){
 
     const auth = { token: true};
 
     return(
         <>
             {/* Conditionner l'affichage des trois liens si l'on n'est pas connecté */}
-            {auth.token
-            ?
+            {auth.token 
+            ? 
             
-            <div className="scale-110 mb-60 flex justify-center items-center">
-                <Navbar fluid rounded>
+            <div className="sticky top-0 scale-110 mb-8 flex justify-center items-center z-50">
+                <Navbar fluid rounded className="hidden sm:block w-full">
                     
                     <Navbar.Brand>
-                        <Link to="">
+                        <Link to="/ads-list">
                             <img src={Logo} alt="logo ParLink" className="mr-3 h-6 sm:h-9 scale-150" />
                         </Link>
                     </Navbar.Brand>
 
                     <div className="max-w-md ml-10 sm:ml-16 mr-10 sm:mr-16">
-                        <TextInput className="w-80" id="search" type="search" icon={HiSearch} placeholder="Rechercher..." />
+                        <TextInput
+                            className="w-80"
+                            id="search"
+                            type="text"
+                            icon={HiSearch}
+                            placeholder="Rechercher..."
+                            value={searchQuery}
+                            onChange={(event) => { setSearchQuery(event.target.value) }} />
                     </div>
 
                     <div className="flex md:order-2">
@@ -36,7 +49,7 @@ export default function NavbarComponent(){
                     <Navbar.Collapse>
                         <Link to="/calendrier">
                             <svg
-                                className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3"
+                                className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3 hover:text-blue-800 dark:hover:text-blue-800"
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -49,7 +62,7 @@ export default function NavbarComponent(){
                         </Link>
                         <Link to="/fichiers">
                             <svg
-                                className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3"
+                                className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3 hover:text-blue-800 dark:hover:text-blue-800"
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -61,13 +74,15 @@ export default function NavbarComponent(){
                             </svg>
                         </Link>
                         <Link to="/ajouter-annonce">
-                            <Button>
-                                ajout annonce <MdAddToPhotos className="mt-1 ml-1" />
-                            </Button>
+                            <span className='before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative flex gap-2 p-1 mt-2'>
+                                <span className="relative text-white m-1">ajout annonce</span> <span>
+                                    <MdAddToPhotos className="relative text-white h-5 w-5" />
+                                </span>
+                            </span>
                         </Link>
                         <Link to="/chat">
                             <svg
-                                    className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3"
+                                    className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3 hover:text-blue-800 dark:hover:text-blue-800"
                                     aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="24"
@@ -82,7 +97,7 @@ export default function NavbarComponent(){
                             <MegaMenu.Dropdown
                                 toggle={<>
                                     <svg
-                                        className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3"
+                                        className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3 hover:text-blue-800 dark:hover:text-blue-800"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="24"
@@ -127,6 +142,53 @@ export default function NavbarComponent(){
                         </div>
                     </Navbar.Collapse>
                 </Navbar>
+
+                    <Navbar fluid rounded className="w-screen sm:hidden">
+                        <Navbar.Brand className="bg-white p-5">
+                            
+                            <div className="mt-2 flex gap-4 w-full justify-center">
+                                <Link to="/ads-list">
+                                    <img src={Logo} alt="logo ParLink" className="flex mr-32 h-7 sm:h-9 scale-150" />
+                                </Link>
+                                <Link to="/annonces">
+                                    <svg className="w-6 h-6 text-gray-800 dark:text-white scale-150 hover:text-blue-800 dark:hover:text-blue-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd" d="M8 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1h2a2 2 0 0 1 2 2v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2Zm6 1h-4v2H9a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2h-1V4Zm-3 8a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Zm2 5a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Z" clip-rule="evenodd"/>
+                                    </svg>
+                                </Link>  
+                                <Link to="/calendrier">
+                                    <svg
+                                        className="w-6 h-6 text-gray-800 dark:text-white scale-150 hover:text-blue-800 dark:hover:text-blue-800"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
+                                    </svg>
+                                </Link>
+                                <Link to="/fichiers">
+                                    <svg
+                                        className="w-6 h-6 text-gray-800 dark:text-white scale-150 hover:text-blue-800 dark:hover:text-blue-800"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path fill-rule="evenodd" d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z" clip-rule="evenodd"/>
+                                    </svg>
+                                </Link>
+                                <Link to="/carte">
+                                    <svg className="w-6 h-6 text-gray-800 dark:text-white scale-150 hover:text-blue-800 dark:hover:text-blue-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd" d="M11.906 1.994a8.002 8.002 0 0 1 8.09 8.421 7.996 7.996 0 0 1-1.297 3.957.996.996 0 0 1-.133.204l-.108.129c-.178.243-.37.477-.573.699l-5.112 6.224a1 1 0 0 1-1.545 0L5.982 15.26l-.002-.002a18.146 18.146 0 0 1-.309-.38l-.133-.163a.999.999 0 0 1-.13-.202 7.995 7.995 0 0 1 6.498-12.518ZM15 9.997a3 3 0 1 1-5.999 0 3 3 0 0 1 5.999 0Z" clip-rule="evenodd"/>
+                                    </svg>
+                                </Link>
+                            </div>
+                        </Navbar.Brand>
+                    </Navbar>
             </div>
             : <Navigate to="/" />
             }
