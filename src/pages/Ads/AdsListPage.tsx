@@ -66,6 +66,9 @@ export default function AdsListPage(props: any) {
                             </Label>
                         </span>
                     </Link>
+                    <p className={`${selectedCategories.includes('poolcar') ? 'font-bold text-sm font-bodyTest' : 'font-light text-sm font-bodyTest'}`}>
+                        {filteredAds.filter(ad => ad.category === 'poolcar').length}
+                    </p>
                 </div>
                 <div className="event_filter_wrapper">
                     <Link
@@ -82,6 +85,9 @@ export default function AdsListPage(props: any) {
                             </Label>
                         </span>
                     </Link>
+                    <p className={`${selectedCategories.includes('tutoring') ? 'font-bold text-sm font-bodyTest' : 'font-light text-sm font-bodyTest'}`}>
+                        {filteredAds.filter(ad => ad.category === 'tutoring').length}
+                    </p>
                 </div>
                 <div className="event_filter_wrapper">
                     <Link
@@ -98,6 +104,9 @@ export default function AdsListPage(props: any) {
                             </Label>
                         </span>
                     </Link>
+                    <p className={`${selectedCategories.includes('childcare') ? 'font-bold text-sm font-bodyTest' : 'font-light text-sm font-bodyTest'}`}>
+                        {filteredAds.filter(ad => ad.category === 'childcare').length}
+                    </p>
                 </div>
                 <div className="event_filter_wrapper">
                     <Link
@@ -114,6 +123,9 @@ export default function AdsListPage(props: any) {
                             </Label>
                         </span>
                     </Link>
+                    <p className={`${selectedCategories.includes('events') ? 'font-bold text-sm font-bodyTest' : 'font-light text-sm font-bodyTest'}`}>
+                        {filteredAds.filter(ad => ad.category === 'events').length}
+                    </p>
                 </div>
                 <div className='flex justify-end items-center  max-sm:hidden'>
                     <Link className='text-blue-800' to="/ads-list">
@@ -125,7 +137,7 @@ export default function AdsListPage(props: any) {
                 </div>
             </div>
 
-            <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56 ">
+            <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56s">
                 <Carousel slide={false}>
                     {filteredAds.map((event) => (
                         <div key={event.id} className={"p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover  bg-no-repeat dark:text-white bg-[url('/src/assets/" + event.imageUrl + "')]"}>
