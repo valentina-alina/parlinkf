@@ -12,6 +12,7 @@ import CalendarPage from './pages/Calendar/CalendarPage';
 import AdsListPage from './pages/Ads/AdsListPage';
 import AdsListPageLists from './pages/Ads/AdsListPageLists';
 import FooterNav from './components/Footer/FooterNav';
+import AdSubscriptionPage from './pages/Ads/AdSubscriptionPage';
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -32,6 +33,7 @@ function App() {
               <Route path='/mon-compte' element={ <UserProfilePage /> } />
               <Route path='/editer-mon-profil/:idProfile' element={ <UserEditProfilePage handleSubmitProfile={handleSubmitProfile} /> } />
               <Route path='/annonce/:idAd' element={ <AdsDetailPage /> } />
+              <Route path='/mes-annonces/:idUser' element={ <AdSubscriptionPage /> } />
               <Route path='/calendrier' element={ <CalendarPage /> } />
               <Route path='/ads-list' element={ <AdsListPage searchQuery={searchQuery} /> } />
               <Route path='/ads-list2' element={ <AdsListPageLists searchQuery={searchQuery} /> } />

@@ -190,12 +190,12 @@ const events:MyEvent[] = [
     },
 ]
 
-    function parseDate(dateString:any, hour = 0, minute = 0) {
-        const [day, month, year] = dateString.split('/');
-        return new Date(year, month - 1, day, hour, minute);
-    }
+function parseDate(dateString:any, hour = 0, minute = 0) {
+    const [day, month, year] = dateString.split('/');
+    return new Date(year, month - 1, day, hour, minute);
+}
 
-    //const eventsWithStringIds = events.map(event => ({ ...event, id: String(event.id) }));
+//const eventsWithStringIds = events.map(event => ({ ...event, id: String(event.id) }));
 
 export default function CalendarPage() {
 

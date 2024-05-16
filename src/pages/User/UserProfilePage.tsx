@@ -26,11 +26,21 @@ export default function UserProfilePage() {
             <div className="flex justify-center items-center scale-90 sm:scale-100">
                 <Card className="w-96 bg-gray-50 shadow-lg m-24 scale-125 justify-center items-center">
                         <ListGroup className="w-80 ml-4 sm:ml-0">
-                            <ListGroup.Item onClick={() => alert('Déposer une annonce!')} >
-                                Déposer une annonce <span className="ml-20"> &gt;</span>
+                            <ListGroup.Item >
+                                <Link to="/ajouter-annonce">
+                                    Déposer une annonce <span className="ml-20"> &gt;</span>
+                                </Link>
                             </ListGroup.Item>
-                            <ListGroup.Item onClick={() => alert('Mes annonces!')} >Voir mes annonces <span className="ml-24"> &gt;</span></ListGroup.Item>
-                            <ListGroup.Item onClick={() => alert('Mes inscriptions!')} >Voir mes inscriptions <span className="ml-20"> &gt;</span></ListGroup.Item>
+                            <ListGroup.Item>
+                                <Link to="/mes-annonces">
+                                    Voir mes annonces <span className="ml-24"> &gt;</span>
+                                </Link>
+                            </ListGroup.Item>
+                            <ListGroup.Item>
+                                <Link to="/mes-inscriptions">
+                                    Voir mes inscriptions <span className="ml-20"> &gt;</span>
+                                </Link>
+                            </ListGroup.Item>
                         </ListGroup>
 
                     <span className='before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative mt-4 w-75 sm:w-full p-1 ml-7 sm:ml-0 flex justify-center items-center'>
