@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import { User } from '../../services/interfaces/User';
 import ChildForm from '../../components/Child/ChildForm';
-import ControlButtonNumber from '../../components/Utils/ControlButtonNumber';
+import ControlButtonNumber from '../../services/utils/ControlButtonNumber';
 
 import { Button, Card, } from "flowbite-react";
 import { FloatingLabel } from "flowbite-react";

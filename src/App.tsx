@@ -31,7 +31,7 @@ function App() {
           <Route path="/" />
 
             <Route element={ <PrivateRoute /> }>
-            <Route path='/gestion-utilisateur' element={ <UserCreatePage handleSubmitUser={function (author: User): void {
+            <Route path='/gestion-utilisateurs' element={ <UserCreatePage handleSubmitUser={function (author: User): void {
             throw new Error('Function not implemented.');
           } } /> } />
               <Route path='/mon-compte' element={ <UserProfilePage /> } />
