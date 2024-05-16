@@ -34,6 +34,17 @@ export default function AdsListPage(props: any) {
         return matchesCategory && matchesSearchQueryFromNavbar && matchesLocalSearchQuery;
     });
 
+    const categoryCounts: {[key: string]: number} = {
+        poolcar: 0,
+        tutoring: 0,
+        childcare: 0,
+        events: 0
+    };
+
+    list.forEach(ad => {
+        categoryCounts[ad.category]++;
+    });
+
     return (
         <>
             <h2 className="font-titleTest text-3xl my-8">Fil des annonces : {filteredAds.length}</h2>
@@ -66,8 +77,8 @@ export default function AdsListPage(props: any) {
                             </Label>
                         </span>
                     </Link>
-                    <p className={`${selectedCategories.includes('poolcar') ? 'font-bold text-sm font-bodyTest' : 'font-light text-sm font-bodyTest'}`}>
-                        {filteredAds.filter(ad => ad.category === 'poolcar').length}
+                    <p className={`${selectedCategories.includes('poolcar') ? 'font-bold font-bodyTest text-sm text-center' : 'font-light font-bodyTest text-sm text-center'}`}>
+                        {categoryCounts['poolcar']}
                     </p>
                 </div>
                 <div className="event_filter_wrapper">
@@ -79,14 +90,14 @@ export default function AdsListPage(props: any) {
                         <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
                             <Label
                                 htmlFor="tutoring"
-                                className={`flex ${selectedCategories.includes('tutoring') ? 'font-bold active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
+                                className={`${selectedCategories.includes('tutoring') ? 'font-bold active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
                             >
                                 Soutien
                             </Label>
                         </span>
                     </Link>
-                    <p className={`${selectedCategories.includes('tutoring') ? 'font-bold text-sm font-bodyTest' : 'font-light text-sm font-bodyTest'}`}>
-                        {filteredAds.filter(ad => ad.category === 'tutoring').length}
+                    <p className={`${selectedCategories.includes('tutoring') ? 'font-bold font-bodyTest text-sm text-center' : 'font-light font-bodyTest text-sm text-center'}`}>
+                        {categoryCounts['tutoring']}
                     </p>
                 </div>
                 <div className="event_filter_wrapper">
@@ -104,8 +115,8 @@ export default function AdsListPage(props: any) {
                             </Label>
                         </span>
                     </Link>
-                    <p className={`${selectedCategories.includes('childcare') ? 'font-bold text-sm font-bodyTest' : 'font-light text-sm font-bodyTest'}`}>
-                        {filteredAds.filter(ad => ad.category === 'childcare').length}
+                    <p className={`${selectedCategories.includes('childcare') ? 'font-bold font-bodyTest text-sm text-center' : 'font-light font-bodyTest text-sm text-center'}`}>
+                        {categoryCounts['childcare']}
                     </p>
                 </div>
                 <div className="event_filter_wrapper">
@@ -123,8 +134,8 @@ export default function AdsListPage(props: any) {
                             </Label>
                         </span>
                     </Link>
-                    <p className={`${selectedCategories.includes('events') ? 'font-bold text-sm font-bodyTest' : 'font-light text-sm font-bodyTest'}`}>
-                        {filteredAds.filter(ad => ad.category === 'events').length}
+                    <p className={`${selectedCategories.includes('events') ? 'font-bold font-bodyTest text-sm text-center' : 'font-light font-bodyTest text-sm text-center'}`}>
+                        {categoryCounts['events']}
                     </p>
                 </div>
                 <div className='flex justify-end items-center  max-sm:hidden'>

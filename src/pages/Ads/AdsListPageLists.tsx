@@ -27,6 +27,18 @@ export default function AdsListPage(props: any) {
         ? list.filter((ad) => selectedCategories.includes(ad.category))
         : list;
 
+    
+    const categoryCounts: {[key: string]: number} = {
+        poolcar: 0,
+        tutoring: 0,
+        childcare: 0,
+        events: 0
+    };
+
+    list.forEach(ad => {
+        categoryCounts[ad.category]++;
+    });
+
     return (
         <>
         <h2 className="font-titleTest text-3xl my-8">Fil des annonces : {filteredAds.length}</h2>
@@ -47,6 +59,9 @@ export default function AdsListPage(props: any) {
                             </Label>
                         </span>
                     </Link>
+                    <p className={`${selectedCategories.includes('poolcar') ? 'font-bold font-bodyTest text-sm text-center' : 'font-light font-bodyTest text-sm text-center'}`}>
+                        {categoryCounts['poolcar']}
+                    </p>
                 </div>
                 <div className="event_filter_wrapper">
                     <Link
@@ -63,6 +78,9 @@ export default function AdsListPage(props: any) {
                             </Label>
                         </span>
                     </Link>
+                    <p className={`${selectedCategories.includes('tutoring') ? 'font-bold font-bodyTest text-sm text-center' : 'font-light font-bodyTest text-sm text-center'}`}>
+                        {categoryCounts['tutoring']}
+                    </p>
                 </div>
                 <div className="event_filter_wrapper">
                     <Link
@@ -79,6 +97,9 @@ export default function AdsListPage(props: any) {
                             </Label>
                         </span>
                     </Link>
+                    <p className={`${selectedCategories.includes('childcare') ? 'font-bold font-bodyTest text-sm text-center' : 'font-light font-bodyTest text-sm text-center'}`}>
+                        {categoryCounts['childcare']}
+                    </p>
                 </div>
                 <div className="event_filter_wrapper">
                     <Link
@@ -95,6 +116,9 @@ export default function AdsListPage(props: any) {
                             </Label>
                         </span>
                     </Link>
+                    <p className={`${selectedCategories.includes('events') ? 'font-bold font-bodyTest text-sm text-center' : 'font-light font-bodyTest text-sm text-center'}`}>
+                        {categoryCounts['events']}
+                    </p>
                 </div>
                 <div className='flex justify-end items-center  max-sm:hidden'>
                     <Link className='text-blue-800' to="/ads-list">
