@@ -13,6 +13,7 @@ import AdsListPage from './pages/Ads/AdsListPage';
 import AdsListPageLists from './pages/Ads/AdsListPageLists';
 import FooterNav from './components/Footer/FooterNav';
 import AdCreatePage from './pages/Ads/AdsCreatePage';
+import UserCreatePage from './pages/User/UserCreatePage';
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -30,6 +31,9 @@ function App() {
           <Route path="/" />
 
             <Route element={ <PrivateRoute /> }>
+            <Route path='/gestion-utilisateur' element={ <UserCreatePage handleSubmitUser={function (author: User): void {
+            throw new Error('Function not implemented.');
+          } } /> } />
               <Route path='/mon-compte' element={ <UserProfilePage /> } />
               <Route path='/editer-mon-profil/:idProfile' element={ <UserEditProfilePage handleSubmitProfile={handleSubmitProfile} /> } />
               <Route path='/annonce/:idAd' element={ <AdsDetailPage /> } />
