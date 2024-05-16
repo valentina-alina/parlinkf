@@ -29,7 +29,7 @@ export default function AdsListPage(props: any) {
 
     return (
         <>
-        <h2 className="p-1 m-1 text-xl font-bold tracking-tight text-blue-600 dark:text-white">Fil des annonces : {filteredAds.length}</h2>
+        <h2 className="font-titleTest text-3xl my-8">Fil des annonces : {filteredAds.length}</h2>
         
             <div className='flex flex-row justify-around items-center gap-4 my-6'>
                 <div className="event_filter_wrapper">
