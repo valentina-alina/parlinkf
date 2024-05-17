@@ -8,6 +8,10 @@ import UserEditProfilePage from './pages/User/UserEditProfilePage';
 import { ProfileInterface } from './services/interfaces/Profile';
 import { useState } from 'react';
 import AdsDetailPage from './pages/Ads/AdsDetailPage';
+import ConfidentialityPage from './pages/Confidentiality/ConfidentialityPage';
+import LegalPage from './pages/Legal/LegalPage';
+import ContactPage from './pages/Contact/ContactPage';
+import { ContactInterface } from './services/interfaces/Contact';
 import CalendarPage from './pages/Calendar/CalendarPage';
 import AdsListPage from './pages/Ads/AdsListPage';
 import AdsListPageLists from './pages/Ads/AdsListPageLists';
@@ -16,11 +20,16 @@ import AdSubscriptionPage from './pages/Ads/AdSubscriptionPage';
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
+  const [contactForms, setContactForms] = useState<ContactInterface[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  console.log('setSearchQuery', setSearchQuery)
+  console.log('setSearchQuery', setSearchQuery);
 
   function handleSubmitProfile(profile: ProfileInterface):void{
     setProfiles([ ...profiles,  profile]);
+  }
+
+  function handleSubmitContactForm(contactForm: ContactInterface):void{
+    setContactForms([ ...contactForms, contactForm]);
   }
 
   return (
@@ -35,6 +44,9 @@ function App() {
               <Route path='/annonce/:idAd' element={ <AdsDetailPage /> } />
               <Route path='/mes-annonces/:idUser' element={ <AdSubscriptionPage /> } />
               <Route path='/calendrier' element={ <CalendarPage /> } />
+              <Route path='/confidentialite' element={ <ConfidentialityPage /> } />
+              <Route path='/mentions-legales' element={ <LegalPage /> } />
+              <Route path='/contact' element={ <ContactPage handleSubmitContactForm={handleSubmitContactForm} /> } />
               <Route path='/ads-list' element={ <AdsListPage searchQuery={searchQuery} /> } />
               <Route path='/ads-list2' element={ <AdsListPageLists searchQuery={searchQuery} /> } />
             </Route>
