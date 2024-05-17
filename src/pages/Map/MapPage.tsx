@@ -101,7 +101,7 @@ const MapPage = () => {
             </h1>
 
             <MapProvider>
-                <div className="w-96 sm:w-full flex justify-center items-center">
+                <div className="w-50 sm:w-full flex justify-center items-center">
                     <GoogleMap
                         mapContainerStyle={defaultMapContainerStyle}
                         center={defaultMapCenter}
