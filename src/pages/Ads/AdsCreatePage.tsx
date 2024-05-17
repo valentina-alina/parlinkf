@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, TextInput, Select, Card, FileInput, Label, FloatingLabel,Textarea  } from "flowbite-react";
+import { Link } from "react-router-dom";
 
 export default function AdCreatePage() {
 
@@ -106,6 +107,8 @@ export default function AdCreatePage() {
 
           <Button type="submit">Ajouter l'annonce</Button>
         </form>
+      
+
       </Card>
     </div>
     </>

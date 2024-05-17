@@ -14,6 +14,7 @@ import AdsListPageLists from './pages/Ads/AdsListPageLists';
 import FooterNav from './components/Footer/FooterNav';
 import AdCreatePage from './pages/Ads/AdsCreatePage';
 import UserCreatePage from './pages/User/UserCreatePage';
+import AdsEditPage from './pages/Ads/AdsEditPage';
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -38,6 +39,7 @@ function App() {
               <Route path='/editer-mon-profil/:idProfile' element={ <UserEditProfilePage handleSubmitProfile={handleSubmitProfile} /> } />
               <Route path='/annonce/:idAd' element={ <AdsDetailPage /> } />
               <Route path='/ajouter-annonce' element={<AdCreatePage />}/>
+              <Route path='/edit-annonce/:adId' element={<AdsEditPage />}/>
               <Route path='/calendrier' element={ <CalendarPage /> } />
               <Route path='/ads-list' element={ <AdsListPage searchQuery={searchQuery} /> } />
               <Route path='/ads-list2' element={ <AdsListPageLists searchQuery={searchQuery} /> } />
