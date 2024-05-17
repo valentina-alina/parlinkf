@@ -18,6 +18,9 @@ import AdsListPage from './pages/Ads/AdsListPage';
 import AdsListPageLists from './pages/Ads/AdsListPageLists';
 import FooterNav from './components/Footer/FooterNav';
 import AdSubscriptionPage from './pages/Ads/AdSubscriptionPage';
+import AdCreatePage from './pages/Ads/AdsCreatePage';
+import UserCreatePage from './pages/User/UserCreatePage';
+import AdsEditPage from './pages/Ads/AdsEditPage';
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -40,10 +43,15 @@ function App() {
           <Route path="/" />
 
             <Route element={ <PrivateRoute /> }>
+            <Route path='/gestion-utilisateurs' element={ <UserCreatePage handleSubmitUser={function (author: User): void {
+            throw new Error('Function not implemented.');
+          } } /> } />
               <Route path='/mon-compte' element={ <UserProfilePage /> } />
               <Route path='/editer-mon-profil/:idProfile' element={ <UserEditProfilePage handleSubmitProfile={handleSubmitProfile} /> } />
               <Route path='/annonce/:idAd' element={ <AdsDetailPage /> } />
               <Route path='/mes-annonces/:idUser' element={ <AdSubscriptionPage /> } />
+              <Route path='/ajouter-annonce' element={<AdCreatePage />}/>
+              <Route path='/edit-annonce/:adId' element={<AdsEditPage />}/>
               <Route path='/calendrier' element={ <CalendarPage /> } />
               <Route path='/carte' element={ <MapPage /> } />
               <Route path='/confidentialite' element={ <ConfidentialityPage /> } />
@@ -61,3 +69,4 @@ function App() {
 }
 
 export default App
+
