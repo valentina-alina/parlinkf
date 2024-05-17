@@ -8,14 +8,8 @@ import { MdOutlineApps } from "react-icons/md";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import { HiSearch } from "react-icons/hi";
 import { MdOutlineAllInclusive } from "react-icons/md";
-import { CiEdit } from "react-icons/ci";
-
-import fakerCategories from './fakerCategories';
-import CategoryLink from './CategoryLink';
 
 const list = fakerAdsList;
-const categoriesFilter = fakerCategories;
-
 
 export default function AdsListPage(props: any) {
     const searchQueryFromNavbar = props.searchQuery;
@@ -64,6 +58,17 @@ export default function AdsListPage(props: any) {
         <>
             <h2 className="font-titleTest text-3xl my-8">Fil des annonces : {filteredAds.length}</h2>
 
+            <div className="sm:hidden w-50">
+                <TextInput
+                    className="w-80"
+                    id="search"
+                    type="text"
+                    icon={HiSearch}
+                    placeholder="Rechercher..."
+                    value={localSearchQuery}
+                    onChange={handleSearchChange}
+                />
+            </div>
 
             <div className='flex flex-row justify-around items-center gap-4 my-6'>
                 <div className="event_filter_wrapper">
@@ -169,7 +174,6 @@ export default function AdsListPage(props: any) {
                         <HiViewList className='w-8 h-8' />
                     </Link>
                 </div>
-                </Link>
             </div>
 
             <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56s">

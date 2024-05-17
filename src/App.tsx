@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import NotFoundPage from './services/utils/NotFoundPage';
@@ -23,7 +24,8 @@ import UserCreatePage from './pages/User/UserCreatePage';
 import AdsEditPage from './pages/Ads/AdsEditPage';
 import LoginPage from './pages/Auth/LoginPage';
 import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
-import HeaderMenu from './components/Navbar/HeaderMenu';
+import { User } from './services/interfaces/User';
+// import HeaderMenu from './components/Navbar/HeaderMenu';
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -43,13 +45,15 @@ function App() {
   return(
     <>
       <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery}  />
+      {/* <HeaderMenu/> */}
       <Routes>
           <Route path="/" />
 
             <Route element={ <PrivateRoute /> }>
-            <Route path='/gestion-utilisateurs' element={ <UserCreatePage handleSubmitUser={function (author: User): void {
+            <Route path='/gestion-utilisateurs' element={ <UserCreatePage handleSubmitUser={function (_author: User): void {
             throw new Error('Function not implemented.');
           } } /> } />
+              <Route path='/login' element={ <LoginPage /> } />
               <Route path='/mon-compte' element={ <UserProfilePage /> } />
               <Route path='/editer-mon-profil/:idProfile' element={ <UserEditProfilePage handleSubmitProfile={handleSubmitProfile} /> } />
               <Route path='/annonce/:idAd' element={ <AdsDetailPage /> } />
@@ -69,8 +73,8 @@ function App() {
           <Route path="*" element= { <NotFoundPage />} />
       </Routes>
       <FooterNav />
-      <LoginPage/>
-      <HeaderMenu/>
+      
+      
     </>
   )
 }
