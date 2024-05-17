@@ -58,8 +58,7 @@ function App() {
               <Route path='/edit-annonce/:adId' element={<AdsEditPage />}/>
               <Route path='/calendrier' element={ <CalendarPage /> } />
               <Route path='/carte' element={ <MapPage /> } />
-              <Route path="/forgot-password-page" element ={<ForgotPasswordPage/> } /> 
-              <Route path="/login-page" element = {<LoginPage/>} />
+              <Route path="/forgot-password-page" element ={<ForgotPasswordPage/> } />
               <Route path='/confidentialite' element={ <ConfidentialityPage /> } />
               <Route path='/mentions-legales' element={ <LegalPage /> } />
               <Route path='/contact' element={ <ContactPage handleSubmitContactForm={handleSubmitContactForm} /> } />
@@ -70,7 +69,7 @@ function App() {
           <Route path="*" element= { <NotFoundPage />} />
       </Routes>
       <FooterNav />
-     {/* <LoginPage/> */}
+      <LoginPage/>
       <HeaderMenu/>
     </>
   )
