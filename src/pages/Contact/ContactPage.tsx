@@ -114,12 +114,12 @@ export default function ContactPage(props: ContactFormProp) {
                                     </>
                                 }
                             />
-                            <Button
-                                className="bg-blue-800 font-bodyTest"
-                                type="submit"
-                            >
-                                Envoyer <IoIosSend className="mt-1 ml-1" />
-                            </Button>
+
+                            <span className='before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative mt-4 w-75 sm:w-full p-1 ml-7 sm:ml-0 flex justify-center mt-12'>
+                                <Button className="bg-blue-700 font-bodyTest">
+                                    <span className="relative text-white m-1">Envoyer </span><span><IoIosSend className="relative text-white h-5 w-5" /></span>
+                                </Button>
+                            </span>
                         </form>
                     </Card>
                 </div>

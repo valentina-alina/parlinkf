@@ -7,6 +7,7 @@ import { HiViewList } from "react-icons/hi";
 import { MdOutlineApps } from "react-icons/md";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import { HiSearch } from "react-icons/hi";
+import { MdOutlineAllInclusive } from "react-icons/md";
 
 const list = fakerAdsList;
 
@@ -14,12 +15,19 @@ export default function AdsListPage(props: any) {
     const searchQueryFromNavbar = props.searchQuery;
     const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
 
     const handleCategoryChange = (category: string) => {
-        if (selectedCategories.includes(category)) {
-            setSelectedCategories(selectedCategories.filter((c) => c !== category));
+        if (category === 'all') {
+            setSelectedCategories([]);
+            setIsAllSelected(true);
         } else {
-            setSelectedCategories([...selectedCategories, category]);
+            setIsAllSelected(false);
+            if (selectedCategories.includes(category)) {
+                setSelectedCategories(selectedCategories.filter((c) => c !== category));
+            } else {
+                setSelectedCategories([...selectedCategories, category]);
+            }
         }
     };
 
@@ -34,11 +42,12 @@ export default function AdsListPage(props: any) {
         return matchesCategory && matchesSearchQueryFromNavbar && matchesLocalSearchQuery;
     });
 
-    const categoryCounts: {[key: string]: number} = {
-        poolcar: 0,
-        tutoring: 0,
-        childcare: 0,
-        events: 0
+    const categoryCounts: { [key: string]: number } = {
+        all: list.length,
+        poolcar: list.filter(ad => ad.category === 'poolcar').length,
+        tutoring: list.filter(ad => ad.category === 'tutoring').length,
+        childcare: list.filter(ad => ad.category === 'childcare').length,
+        events: list.filter(ad => ad.category === 'events').length
     };
 
     list.forEach(ad => {
@@ -65,13 +74,32 @@ export default function AdsListPage(props: any) {
                 <div className="event_filter_wrapper">
                     <Link
                         to=""
+                        onClick={() => handleCategoryChange('all')}
+                        className='flex border-b-4 border-grey-800 active:ring focus:outline-none focus:border-b-4 focus:border-b-blue-800'
+                    >
+                        <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
+                            <Label
+                                htmlFor="all"
+                                className={`flex ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
+                            >
+                                Toutes
+                            </Label>
+                        </span>
+                    </Link>
+                    <p className='flex justify-center'>
+                        <MdOutlineAllInclusive className={`${isAllSelected ? 'font-bold font-bodyTest text-xl' : 'font-light font-bodyTest text-xl'}`} />
+                    </p>
+                </div>
+                <div className="event_filter_wrapper">
+                    <Link
+                        to=""
                         onClick={() => handleCategoryChange('poolcar')}
                         className="flex border-b-4 border-grey-800 active:ring focus:outline-none focus:border-b-4 focus:border-b-blue-800"
                     >
                         <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
                             <Label
                                 htmlFor="poolcar"
-                                className={`flex ${selectedCategories.includes('poolcar') ? 'font-bold  active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
+                                className={`flex ${selectedCategories.includes('poolcar') ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
                             >
                                 Covoiturage
                             </Label>
@@ -90,7 +118,7 @@ export default function AdsListPage(props: any) {
                         <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
                             <Label
                                 htmlFor="tutoring"
-                                className={`${selectedCategories.includes('tutoring') ? 'font-bold active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
+                                className={`${selectedCategories.includes('tutoring') ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
                             >
                                 Soutien
                             </Label>
@@ -109,7 +137,7 @@ export default function AdsListPage(props: any) {
                         <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
                             <Label
                                 htmlFor="childcare"
-                                className={`flex ${selectedCategories.includes('childcare') ? 'font-bold active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
+                                className={`flex ${selectedCategories.includes('childcare') ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
                             >
                                 Garde enfants
                             </Label>
@@ -128,7 +156,7 @@ export default function AdsListPage(props: any) {
                         <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
                             <Label
                                 htmlFor="events"
-                                className={`flex ${selectedCategories.includes('events') ? 'font-bold active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
+                                className={`flex ${selectedCategories.includes('events') ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
                             >
                                 Sortie
                             </Label>
