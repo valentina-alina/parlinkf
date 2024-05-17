@@ -13,6 +13,7 @@ import LegalPage from './pages/Legal/LegalPage';
 import ContactPage from './pages/Contact/ContactPage';
 import { ContactInterface } from './services/interfaces/Contact';
 import CalendarPage from './pages/Calendar/CalendarPage';
+import MapPage from './pages/Map/MapPage';
 import AdsListPage from './pages/Ads/AdsListPage';
 import AdsListPageLists from './pages/Ads/AdsListPageLists';
 import FooterNav from './components/Footer/FooterNav';
@@ -44,6 +45,7 @@ function App() {
               <Route path='/annonce/:idAd' element={ <AdsDetailPage /> } />
               <Route path='/mes-annonces/:idUser' element={ <AdSubscriptionPage /> } />
               <Route path='/calendrier' element={ <CalendarPage /> } />
+              <Route path='/carte' element={ <MapPage /> } />
               <Route path='/confidentialite' element={ <ConfidentialityPage /> } />
               <Route path='/mentions-legales' element={ <LegalPage /> } />
               <Route path='/contact' element={ <ContactPage handleSubmitContactForm={handleSubmitContactForm} /> } />

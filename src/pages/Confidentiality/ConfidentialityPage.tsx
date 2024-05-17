@@ -18,7 +18,7 @@ export default function ConfidentialityPage() {
                                 <div className="flex items-center space-x-4">
                                     <div className="min-w-0 flex-1">
                                         <p className="text-xl font-bold text-gray-900 dark:text-white mb-6">Qui sommes-nous ?</p>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Trott ‘n Go est un site destiné à faire aider les utilisateurs de trottinettes, toujours plus nombreux, à équiper ou réparer leur trottinette.</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">ParLink est un site destiné à mettre en lien les parents dans un esprti d'entraide et de partage.</p>
                                         <p className="text-sm text-gray-500 dark:text-gray-400">L’adresse de notre site Web est : https://www.parlink.fr.</p>
                                     </div>
                                     {/* <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">$320</div> */}

@@ -34,7 +34,9 @@ export default function FooterNav() {
                         <FooterLinkGroup col>
                             <div className="flex flex-col items-start justify-start">
                                 <FooterTitle title="help center" />
-                                <FooterLink href="#"><span>Nous contacter</span></FooterLink>
+                                <FooterLink href="/contact">
+                                    <span>Nous contacter</span>
+                                </FooterLink>
                                 <FooterLink href="#">Parametres des cookies</FooterLink>
                             </div>
                         </FooterLinkGroup>
@@ -42,8 +44,10 @@ export default function FooterNav() {
                         <FooterLinkGroup col>
                             <div className="flex flex-col items-start justify-start">
                                 <FooterTitle title="legal" />
-                                <FooterLink href="#">Conditions d'utilisation</FooterLink>
-                                <FooterLink href="#">Politique de confidentialité</FooterLink>
+                                <FooterLink href="/mentions-legales">Mentions légales</FooterLink>
+                                <FooterLink href="/confidentialite">
+                                    Politique de confidentialité
+                                </FooterLink>
                             </div>
                         </FooterLinkGroup>
 
