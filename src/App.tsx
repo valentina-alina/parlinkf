@@ -23,6 +23,7 @@ import UserCreatePage from './pages/User/UserCreatePage';
 import AdsEditPage from './pages/Ads/AdsEditPage';
 import LoginPage from './pages/Auth/LoginPage';
 import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
+import HeaderMenu from './components/Navbar/HeaderMenu';
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -69,6 +70,8 @@ function App() {
           <Route path="*" element= { <NotFoundPage />} />
       </Routes>
       <FooterNav />
+     {/* <LoginPage/> */}
+      <HeaderMenu/>
     </>
   )
 }
