@@ -21,6 +21,8 @@ import AdSubscriptionPage from './pages/Ads/AdSubscriptionPage';
 import AdCreatePage from './pages/Ads/AdsCreatePage';
 import UserCreatePage from './pages/User/UserCreatePage';
 import AdsEditPage from './pages/Ads/AdsEditPage';
+import LoginPage from './pages/Auth/LoginPage';
+import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -36,7 +38,8 @@ function App() {
     setContactForms([ ...contactForms, contactForm]);
   }
 
-  return (
+
+  return(
     <>
       <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery}  />
       <Routes>
@@ -54,6 +57,8 @@ function App() {
               <Route path='/edit-annonce/:adId' element={<AdsEditPage />}/>
               <Route path='/calendrier' element={ <CalendarPage /> } />
               <Route path='/carte' element={ <MapPage /> } />
+              <Route path="/forgot-password-page" element ={<ForgotPasswordPage/> } /> 
+              <Route path="/login-page" element = {<LoginPage/>} />
               <Route path='/confidentialite' element={ <ConfidentialityPage /> } />
               <Route path='/mentions-legales' element={ <LegalPage /> } />
               <Route path='/contact' element={ <ContactPage handleSubmitContactForm={handleSubmitContactForm} /> } />

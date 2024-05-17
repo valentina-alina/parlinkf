@@ -7,6 +7,7 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
+    "node_modules/flowbite-react/lib/esm/**/*.js",
     flowbite.content(),
   ],
   theme: {
@@ -26,6 +27,7 @@ export default {
     extend: {},
   },
   plugins: [
-    flowbite.plugin(),
+    require('flowbite/plugin'),
+    require('daisyui'),
   ],
 }
