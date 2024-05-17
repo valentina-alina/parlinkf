@@ -1,5 +1,5 @@
 // Mot de passe oublié 
-import './ForgotPasswordPage.css';
+// import './ForgotPasswordPage.css';
 
 
 export default function ForgotPasswordPage() {

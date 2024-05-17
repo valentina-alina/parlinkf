@@ -1,4 +1,5 @@
 // Me connecter 
+import { Link } from 'react-router-dom';
 import './LoginPage.css';
 
 
@@ -33,7 +34,8 @@ export default function LoginPage() {
                                 </div>
                             </div>
                             <div className="text-left">
-                                <a href="#" className="ms-2 text-sm  text-blue-400 dark:text-blue-300 hover:underline">Mot de passe oublié ?</a>
+                                {/* <a href="" className="ms-2 text-sm  text-blue-400 dark:text-blue-300 hover:underline">Mot de passe oublié ?</a> */}
+                                <Link to="/forgot-password-page" className="ms-2 text-sm  text-blue-400 dark:text-blue-300 hover:underline">Mot de passe oublié ?</Link>
                             </div>
                         </div>
 
