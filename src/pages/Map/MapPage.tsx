@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getAds } from '../../services/api/ads';
 import { useEffect, useState } from 'react';
 import { MapProvider } from '../../providers/MapProvider';
-import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, InfoWindowF } from "@react-google-maps/api";
+import { useNavigate } from 'react-router-dom';
 
 interface AdInterface {
     id: number;
@@ -54,6 +56,20 @@ interface AdInterfaceWithCoordinates {
 const MapPage = () => {
 
     const [ads, setAds] = useState<AdInterfaceWithCoordinates[]>([]);
+    const [ activeMarker, setActiveMarker ] = useState(null);
+
+    const handleActiveMarker = (getAds:any) => {
+        if (getAds === activeMarker) {
+            return;
+        }
+        setActiveMarker(getAds);
+    }
+
+    const navigate = useNavigate();
+
+    const handleViewDetail = (getAds: any) => {
+        navigate(`/annonce/${getAds.id}`, { state: { getAds } });
+    };
 
     useEffect(() => {
         const fetchAndSetAds = async () => {
@@ -109,7 +125,25 @@ const MapPage = () => {
                         options={defaultMapOptions}
                     >
                         {ads.map(ad => (
-                            <MarkerF key={ad.id} position={{ lat: ad.lat, lng: ad.lng }} />
+                            <MarkerF
+                                key={ad.id}
+                                position={{ lat: ad.lat, lng: ad.lng }}
+                                onClick={() => handleActiveMarker(ad.id)}>
+                                {activeMarker === ad.id ? <InfoWindowF onCloseClick={ () => setActiveMarker(null)} >
+                                    <button
+                                        className="text-blue-800 text-bold text-bodyTest"
+                                        onClick={() => handleViewDetail(ad)}>
+                                        <div className='text-md sm:text-lg'>
+                                            <p className='font-bold'>
+                                                {ad.title}
+                                            </p>
+                                            <p>
+                                                {ad.postal_code} {ad.city}
+                                            </p>
+                                        </div>
+                                    </button>
+                                </InfoWindowF>:null}
+                            </MarkerF>
                         ))}
                     </GoogleMap>
                 </div>
