@@ -85,7 +85,7 @@ export default function AdsDetailPage() {
         zoomControl: true,
         tilt: 0,
         gestureHandling: 'auto',
-        mapTypeId: 'map',
+        mapTypeId: 'satellite',
     };
 
     const startDate = new Date(ads.start);

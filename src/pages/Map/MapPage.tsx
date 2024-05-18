@@ -91,7 +91,7 @@ const MapPage = () => {
         zoomControl: true,
         tilt: 0,
         gestureHandling: 'auto',
-        mapTypeId: 'map',
+        mapTypeId: 'satellite',
     };
 
     return (
