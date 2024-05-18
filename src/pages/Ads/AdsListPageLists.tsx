@@ -2,22 +2,29 @@
 import { Link } from 'react-router-dom';
 import { Card, Carousel, Label } from "flowbite-react";
 import fakerAdsList from './fakerAdsList';
-// import fakerCategories from './fakerCategories';
+import fakerCategories from './fakerCategories';
 import { HiViewList } from "react-icons/hi";
 import { MdOutlineApps } from "react-icons/md";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import { useState } from 'react';
-import { MdOutlineAllInclusive } from "react-icons/md";
+
+type Category = typeof fakerCategories[number]['name'];
 
 const list = fakerAdsList;
-const categories = ['all', 'poolcar', 'tutoring', 'childcare', 'events'] as const;
-type Category = typeof categories[number];
 
 export default function AdsListPage(props: any) {
     const searchQuery = props.searchQuery;
 
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
+
+    const initialCategoryCounts: Record<Category, number> = {
+        all: 0,
+        poolcar: 0,
+        tutoring: 0,
+        childcare: 0,
+        events: 0,
+    };
 
     const handleCategoryChange = (category: Category) => {
         if (category === 'all') {
@@ -43,115 +50,48 @@ export default function AdsListPage(props: any) {
         acc[category] = (acc[category] || 0) + 1;
         acc['all'] = (acc['all'] || 0) + 1;
         return acc;
-    }, {
-        all: 0,
-        poolcar: 0,
-        tutoring: 0,
-        childcare: 0,
-        events: 0,
-    });
+    }, { ...initialCategoryCounts });
 
     return (
         <>
-        <h2 className="font-titleTest text-3xl my-8">Fil des annonces : {filteredAds.length}</h2>
-        
-            <div className='flex flex-row justify-around items-center gap-4 my-6'>
-            <div className="event_filter_wrapper">
-                    <Link
-                        to=""
-                        onClick={() => handleCategoryChange('all')}
-                        className='flex border-b-4 border-grey-800 active:ring focus:outline-none focus:border-b-4 focus:border-b-blue-800'
-                    >
-                        <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
-                            <Label
-                                htmlFor="all"
-                                className={`flex ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
+            <div className='flex flex-row justify-around items-center gap-4 my-6 border-b-2 py-4 font-bodyTest'>
+                {fakerCategories.map((category) => (
+                    <div className="event_filter_wrapper relative group" key={category.id}>
+                        <div className='relative'>
+                            <Link
+                                to=""
+                                onClick={() => handleCategoryChange(category.name as Category)}
+                                className='flex active:ring focus:outline-none focus:border-b-2 focus:border-b-blue-800'
                             >
-                                Toutes
-                            </Label>
-                        </span>
-                    </Link>
-                    <p className='flex justify-center'>
-                        <MdOutlineAllInclusive className={`${isAllSelected ? 'font-bold font-bodyTest text-xl' : 'font-light font-bodyTest text-xl'}`} />
-                    </p>
-                </div>
-                <div className="event_filter_wrapper">
-                    <Link
-                        to=""
-                        onClick={() => handleCategoryChange('poolcar')}
-                        className="flex border-b-4 border-grey-800 active:ring focus:outline-none focus:border-b-4 focus:border-b-blue-800"
-                    >
-                        <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
-                            <Label
-                                htmlFor="poolcar"
-                                className={`flex ${selectedCategories.includes('poolcar') ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
-                            >
-                                Covoiturage
-                            </Label>
-                        </span>
-                    </Link>
-                    <p className={`${selectedCategories.includes('poolcar') || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
-                        {categoryCounts['poolcar']}
-                    </p>
-                </div>
-                <div className="event_filter_wrapper">
-                    <Link
-                        to=""
-                        onClick={() => handleCategoryChange('tutoring')}
-                        className="flex border-b-4 border-grey-800 active:ring focus:outline-none focus:border-b-4 focus:border-b-blue-800"
-                    >
-                        <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
-                            <Label
-                                htmlFor="tutoring"
-                                className={`flex ${selectedCategories.includes('tutoring') ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
-                            >
-                                Soutien
-                            </Label>
-                        </span>
-                    </Link>
-                    <p className={`${selectedCategories.includes('tutoring') || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
-                        {categoryCounts['tutoring']}
-                    </p>
-                </div>
-                <div className="event_filter_wrapper">
-                    <Link
-                        to=""
-                        onClick={() => handleCategoryChange('childcare')}
-                        className="flex border-b-4 border-grey-800 active:ring focus:outline-none focus:border-b-4 focus:border-b-blue-800"
-                    >
-                        <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
-                            <Label
-                                htmlFor="childcare"
-                                className={`flex ${selectedCategories.includes('childcare') ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
-                            >
-                                Garde enfants
-                            </Label>
-                        </span>
-                    </Link>
-                    <p className={`${selectedCategories.includes('childcare') || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
-                        {categoryCounts['childcare']}
-                    </p>
-                </div>
-                <div className="event_filter_wrapper">
-                    <Link
-                        to=""
-                        onClick={() => handleCategoryChange('events')}
-                        className="flex border-b-4 border-grey-800 active:ring focus:outline-none focus:border-b-4 focus:border-b-blue-800"
-                    >
-                        <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
-                            <Label
-                                htmlFor="events"
-                                className={`flex ${selectedCategories.includes('events') ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
-                            >
-                                Sortie
-                            </Label>
-                        </span>
-                    </Link>
-                    <p className={`${selectedCategories.includes('events') || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
-                        {categoryCounts['events']}
-                    </p>
-                </div>
-                <div className='flex justify-end items-center  max-sm:hidden'>
+                                <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
+                                    <Label
+                                        htmlFor={category.name}
+                                        className={`flex ${selectedCategories.includes(category.name as Category) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
+                                    >
+                                        {category.label}
+                                    </Label>
+                                </span>
+                            </Link>
+                        </div>
+                        {category.group && (
+                            <div className='absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
+                                {category.group.map((item) => (
+                                    <Link
+                                        key={item.id}
+                                        to=""
+                                        className='block px-4 py-2 text-sm text-gray-700 hover:bg-blue-700 hover:text-white'
+                                    >
+                                        {item.title}
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                        <p className={`${selectedCategories.includes(category.name as Category) || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
+                            {categoryCounts[category.name as Category]}
+                        </p>
+                    </div>
+                ))}
+                <div className='flex justify-end items-center max-sm:hidden'>
                     <Link className='text-blue-800' to="/ads-list">
                         <MdOutlineApps className='w-8 h-8 tex-blue-800' />
                     </Link>
@@ -160,6 +100,8 @@ export default function AdsListPage(props: any) {
                     </Link>
                 </div>
             </div>
+
+            <h2 className="font-titleTest text-3xl my-8">Fil des annonces : {filteredAds.length}</h2>
 
             <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56 ">
                 <Carousel slide={false}>

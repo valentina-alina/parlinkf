@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, Label } from 'flowbite-react';
 import { FaMapMarkedAlt } from "react-icons/fa";
+import fakerCategories from '../Ads/fakerCategories';
 import poolcar from '../../assets/poolcar.png';
 import childcare from '../../assets/childcare.png';
 import event from '../../assets/event.jpg';
@@ -785,13 +786,14 @@ function parseDate(dateString:any, hour = 0, minute = 0) {
     return new Date(year, month - 1, day, hour, minute);
 }
 
-//const eventsWithStringIds = events.map(event => ({ ...event, id: String(event.id) }));
+type Category = typeof fakerCategories[number]['name'];
 
 export default function CalendarPage() {
 
     const [showWeekNumbers, setShowWeekNumbers] = useState(true);
     const [mobileView, setMobileView] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
 
     useEffect(() => {
         const handleResize = () => {
@@ -806,11 +808,17 @@ export default function CalendarPage() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const handleCategoryChange = (category: string) => {
-        if (selectedCategories.includes(category)) {
-            setSelectedCategories(selectedCategories.filter((c) => c !== category));
+    const handleCategoryChange = (category: Category) => {
+        if (category === 'all') {
+            setSelectedCategories([]);
+            setIsAllSelected(true);
         } else {
-            setSelectedCategories([...selectedCategories, category]);
+            setIsAllSelected(false);
+            setSelectedCategories((prevCategories) =>
+                prevCategories.includes(category)
+                ? prevCategories.filter((c) => c !== category)
+                : [...prevCategories, category]
+            );
         }
     };
 
@@ -834,73 +842,44 @@ export default function CalendarPage() {
 
     return (
         <>
-            <h1 className='font-titleTest text-3xl my-8'>Calendrier des annonces</h1>
-            <div className='flex flex-row justify-around items-center gap-4 my-6 overflow-x-auto'>
-                <div className="event_filter_wrapper">
-                    <Link
-                        to=""
-                        onClick={() => handleCategoryChange('poolcar')}
-                        className="flex border-b-4 border-grey-800 active:ring focus:outline-none focus:border-b-4 focus:border-b-blue-800"
-                    >
-                        <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
-                            <Label
-                                htmlFor="poolcar"
-                                className={`flex ${selectedCategories.includes('poolcar') ? 'font-bold  active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
+            <div className='flex flex-row justify-around items-center gap-4 my-6 border-b-2 py-4 font-bodyTest'>
+                {fakerCategories.map((category) => (
+                    <div className="event_filter_wrapper relative group" key={category.id}>
+                        <div className='relative'>
+                            <Link
+                                to=""
+                                onClick={() => handleCategoryChange(category.name as Category)}
+                                className='flex active:ring focus:outline-none focus:border-b-2 focus:border-b-blue-800'
                             >
-                                Covoiturage
-                            </Label>
-                        </span>
-                    </Link>
-                </div>
-                <div className="event_filter_wrapper">
-                    <Link
-                        to=""
-                        onClick={() => handleCategoryChange('tutoring')}
-                        className="flex border-b-4 border-grey-800 active:ring focus:outline-none focus:border-b-4 focus:border-b-blue-800"
-                    >
-                        <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
-                            <Label
-                                htmlFor="tutoring"
-                                className={`flex ${selectedCategories.includes('tutoring') ? 'font-bold active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
-                            >
-                                Soutien
-                            </Label>
-                        </span>
-                    </Link>
-                </div>
-                <div className="event_filter_wrapper">
-                    <Link
-                        to=""
-                        onClick={() => handleCategoryChange('childcare')}
-                        className="flex border-b-4 border-grey-800 active:ring focus:outline-none focus:border-b-4 focus:border-b-blue-800"
-                    >
-                        <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
-                            <Label
-                                htmlFor="childcare"
-                                className={`flex ${selectedCategories.includes('childcare') ? 'font-bold active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
-                            >
-                                Garde enfants
-                            </Label>
-                        </span>
-                    </Link>
-                </div>
-                <div className="event_filter_wrapper">
-                    <Link
-                        to=""
-                        onClick={() => handleCategoryChange('events')}
-                        className="flex border-b-4 border-grey-800 active:ring focus:outline-none focus:border-b-4 focus:border-b-blue-800"
-                    >
-                        <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
-                            <Label
-                                htmlFor="events"
-                                className={`flex ${selectedCategories.includes('events') ? 'font-bold active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
-                            >
-                                Sortie
-                            </Label>
-                        </span>
-                    </Link>
-                </div>
+                                <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
+                                    <Label
+                                        htmlFor={category.name}
+                                        className={`flex ${selectedCategories.includes(category.name as Category) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white' : 'flex active:relative active:text-white hover:relative hover:text-white'}`}
+                                    >
+                                        {category.label}
+                                    </Label>
+                                </span>
+                            </Link>
+                        </div>
+                        {category.group && (
+                            <div className='absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
+                                {category.group.map((item) => (
+                                    <Link
+                                        key={item.id}
+                                        to=""
+                                        className='block px-4 py-2 text-sm text-gray-700 hover:bg-blue-700 hover:text-white'
+                                    >
+                                        {item.title}
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
+
+            <h1 className='font-titleTest text-3xl my-8'>Calendrier des annonces</h1>
+
             <div className="flex flex-wrap gap-8 overflow-hidden">
                 <div className={`w-full  ${mobileView ? 'p-0' : ''}`}>
                     <FullCalendar
