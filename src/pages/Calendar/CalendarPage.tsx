@@ -835,7 +835,7 @@ export default function CalendarPage() {
     return (
         <>
             <h1 className='font-titleTest text-3xl my-8'>Calendrier des annonces</h1>
-            <div className='flex flex-row justify-around items-center gap-4 my-6'>
+            <div className='flex flex-row justify-around items-center gap-4 my-6 overflow-x-auto'>
                 <div className="event_filter_wrapper">
                     <Link
                         to=""

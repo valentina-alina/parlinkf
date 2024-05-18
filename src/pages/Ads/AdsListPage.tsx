@@ -73,7 +73,7 @@ export default function AdsListPage(props: any) {
                 />
             </div>
 
-            <div className='flex flex-row justify-around items-center gap-4 my-6'>
+            <div className='flex flex-row justify-around items-center gap-4 my-6 overflow-x-auto'>
                 <div className="event_filter_wrapper">
                     <Link
                         to=""
