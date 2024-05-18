@@ -67,7 +67,7 @@ const AdSubscriptionPage = () => {
                                     className="text-blue-800 text-bold text-bodyTest"
                                     onClick={() => handleViewDetail(subscription)}
                                 >
-                                    <Card className="w-full">
+                                    <Card className="w-full sm:w-96">
                                         <p className="text-xl font-titleTest border-b-4 border-blue-700 mb-4"><strong>{subscription.ad_title}</strong></p>
                                         <div className="flex flex-col sm:flex-row justify-evenly items-start">
                                             <img src={subscription.ad_imageUrl} alt="Ad Image" className="w-36 sm:w-40 h-auto" />

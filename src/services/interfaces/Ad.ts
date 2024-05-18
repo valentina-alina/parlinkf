@@ -4,8 +4,8 @@ export interface AdInterface {
     address: string;
     city: string;
     postal_code: string;
-    lat: number;
-    lng: number;
+    lat: string;
+    lng: string;
     start: Date;
     end: Date;
     attendees: number;

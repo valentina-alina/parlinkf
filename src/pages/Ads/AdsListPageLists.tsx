@@ -10,42 +10,45 @@ import { useState } from 'react';
 import { MdOutlineAllInclusive } from "react-icons/md";
 
 const list = fakerAdsList;
+const categories = ['all', 'poolcar', 'tutoring', 'childcare', 'events'] as const;
+type Category = typeof categories[number];
 
 export default function AdsListPage(props: any) {
     const searchQuery = props.searchQuery;
 
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
 
-    const handleCategoryChange = (category: string) => {
+    const handleCategoryChange = (category: Category) => {
         if (category === 'all') {
             setSelectedCategories([]);
             setIsAllSelected(true);
         } else {
             setIsAllSelected(false);
-            if (selectedCategories.includes(category)) {
-                setSelectedCategories(selectedCategories.filter((c) => c !== category));
-            } else {
-                setSelectedCategories([...selectedCategories, category]);
-            }
+            setSelectedCategories((prevCategories) =>
+                prevCategories.includes(category)
+                ? prevCategories.filter((c) => c !== category)
+                : [...prevCategories, category]
+            );
         }
     };
 
     const filteredAds = selectedCategories.length > 0
-        ? list.filter((ad) => selectedCategories.includes(ad.category))
+        ? list.filter((ad) => selectedCategories.includes(ad.category as Category))
         : list;
 
     
-    const categoryCounts: { [key: string]: number } = {
-        all: list.length,
-        poolcar: list.filter(ad => ad.category === 'poolcar').length,
-        tutoring: list.filter(ad => ad.category === 'tutoring').length,
-        childcare: list.filter(ad => ad.category === 'childcare').length,
-        events: list.filter(ad => ad.category === 'events').length
-    };
-
-    list.forEach(ad => {
-        categoryCounts[ad.category]++;
+    const categoryCounts = list.reduce((acc, ad) => {
+        const category = ad.category as Category;
+        acc[category] = (acc[category] || 0) + 1;
+        acc['all'] = (acc['all'] || 0) + 1;
+        return acc;
+    }, {
+        all: 0,
+        poolcar: 0,
+        tutoring: 0,
+        childcare: 0,
+        events: 0,
     });
 
     return (
@@ -194,7 +197,7 @@ export default function AdsListPage(props: any) {
                                     </span>
                                     </div>
                                     <div>
-                                    <img src={"/src/assets/" + event.imageUrl} alt="Ad Image" className="w-96 h-40 sm:w-80 sm:h-30 ml-3" />
+                                    <img src={event.imageUrl} alt="Ad Image" className="w-96 h-40 sm:w-80 sm:h-30 ml-3" />
                                     </div> 
                                 </div>
                         

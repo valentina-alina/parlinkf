@@ -10,24 +10,26 @@ import { HiSearch } from "react-icons/hi";
 import { MdOutlineAllInclusive } from "react-icons/md";
 
 const list = fakerAdsList;
+const categories = ['all', 'poolcar', 'tutoring', 'childcare', 'events'] as const;
+type Category = typeof categories[number];
 
 export default function AdsListPage(props: any) {
     const searchQueryFromNavbar = props.searchQuery;
     const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
 
-    const handleCategoryChange = (category: string) => {
+    const handleCategoryChange = (category: Category) => {
         if (category === 'all') {
             setSelectedCategories([]);
             setIsAllSelected(true);
         } else {
             setIsAllSelected(false);
-            if (selectedCategories.includes(category)) {
-                setSelectedCategories(selectedCategories.filter((c) => c !== category));
-            } else {
-                setSelectedCategories([...selectedCategories, category]);
-            }
+            setSelectedCategories((prevCategories) =>
+                prevCategories.includes(category)
+                ? prevCategories.filter((c) => c !== category)
+                : [...prevCategories, category]
+            );
         }
     };
 
@@ -36,22 +38,23 @@ export default function AdsListPage(props: any) {
     };
 
     const filteredAds = list.filter((ad) => {
-        const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(ad.category);
+        const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
         const matchesSearchQueryFromNavbar = !searchQueryFromNavbar || ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) || ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
         const matchesLocalSearchQuery = !localSearchQuery || ad.title.toLowerCase().includes(localSearchQuery.toLowerCase()) || ad.city.toLowerCase().includes(localSearchQuery.toLowerCase());
         return matchesCategory && matchesSearchQueryFromNavbar && matchesLocalSearchQuery;
     });
 
-    const categoryCounts: { [key: string]: number } = {
-        all: list.length,
-        poolcar: list.filter(ad => ad.category === 'poolcar').length,
-        tutoring: list.filter(ad => ad.category === 'tutoring').length,
-        childcare: list.filter(ad => ad.category === 'childcare').length,
-        events: list.filter(ad => ad.category === 'events').length
-    };
-
-    list.forEach(ad => {
-        categoryCounts[ad.category]++;
+    const categoryCounts = list.reduce((acc, ad) => {
+        const category = ad.category as Category;
+        acc[category] = (acc[category] || 0) + 1;
+        acc['all'] = (acc['all'] || 0) + 1;
+        return acc;
+    }, {
+        all: 0,
+        poolcar: 0,
+        tutoring: 0,
+        childcare: 0,
+        events: 0,
     });
 
     return (
@@ -202,7 +205,7 @@ export default function AdsListPage(props: any) {
                                 <i className='flex justify-between items-center'>
                                     {event.city} <span className='text-blue-700 font-bold'> Nbp {event.attendees}</span>
                                 </i>
-                                <img src={"/src/assets/" + event.imageUrl} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
+                                <img src={event.imageUrl} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
                             </div>
                         </Link>
                     </Card>
