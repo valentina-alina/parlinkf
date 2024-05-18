@@ -4,7 +4,6 @@ import childcare from '../../assets/childcare.png';
 import event from '../../assets/event.jpg';
 import tutoring from '../../assets/tutoring.jpg';
 
-
 const fakeAd = [
     {
         id: 1,
