@@ -142,6 +142,10 @@ export default function MapPage(props: any) {
         mapTypeId: 'satellite',
     };
 
+    if (!filteredAds || filteredAds.length === 0) {
+        return <p>Nous n'avons pas trouvé d'évènement.</p>;
+    }
+
     return (
         <>
             
