@@ -20,13 +20,14 @@ const navigationItems = [
 export default function FooterNav() {
     return (
         <>        
-            <Footer className="w-full bg-gray-200 mt-28 mb-18 scale-125">
+            <Footer className="w-full bg-gray-200 mt-28 mb-18 scale-125 sm:scale-100 sm:sticky sm:relative sm:-bottom-8">
                 <div className="w-full">
                     <div className="grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
                         <FooterLinkGroup col>
                             <div className="flex flex-col items-start justify-start">
                                 <FooterTitle title="Company" />
-                                <FooterLink href="#">Apropos de ParLink</FooterLink>
+                                <FooterLink href="#" className='sm:hidden'>ParLink</FooterLink>
+                                <FooterLink href="#" className='hidden sm:block'>À propos de ParLink</FooterLink>
                                 <FooterLink href="#">Plan du site</FooterLink>
                             </div>
                         </FooterLinkGroup>
@@ -37,15 +38,20 @@ export default function FooterNav() {
                                 <FooterLink href="/contact">
                                     <span>Nous contacter</span>
                                 </FooterLink>
-                                <FooterLink href="#">Parametres des cookies</FooterLink>
+                                <FooterLink href="#" className='sm:hidden'>Cookies</FooterLink>
+                                <FooterLink href="#" className='hidden sm:block'>Paramètres des cookies</FooterLink>
                             </div>
                         </FooterLinkGroup>
 
                         <FooterLinkGroup col>
                             <div className="flex flex-col items-start justify-start">
                                 <FooterTitle title="legal" />
-                                <FooterLink href="/mentions-legales">Mentions légales</FooterLink>
-                                <FooterLink href="/confidentialite">
+                                <FooterLink href="/mentions-legales" className='sm:hidden'>Mentions</FooterLink>
+                                <FooterLink href="/mentions-legales" className='hidden sm:block'>Mentions Légales</FooterLink>
+                                <FooterLink href="/confidentialite" className='sm:hidden'>
+                                    Confidentialité
+                                </FooterLink>
+                                <FooterLink href="/confidentialite" className='hidden sm:block'>
                                     Politique de confidentialité
                                 </FooterLink>
                             </div>
@@ -58,10 +64,9 @@ export default function FooterNav() {
                                 <FooterLink href="#">Desktop</FooterLink>
                             </div>
                         </FooterLinkGroup>
-
                     </div>
-                    <div className="w-full bg-gray-300 px-4 py-20 sm:py-2 flex flex-col sm:flex-row items-center justify-between">
-                        <div className="flex space-x-10 sm:space-x-4 sm:mt-0 justify-center items-center">
+                    <div className="w-full bg-gray-300 px-4 pt-5 pb-24 sm:py-5 flex flex-col sm:flex-row items-center justify-between">
+                        <div className="flex space-x-10 sm:space-x-4 sm:mt-0 justify-center items-center mb-3 sm:mb-0">
                             <FooterIcon href="#" icon={BsFacebook} />
                             <FooterIcon href="#" icon={BsInstagram} />
                             <FooterIcon href="#" icon={BsTwitter} />
@@ -69,7 +74,7 @@ export default function FooterNav() {
                             <FooterIcon href="#" icon={BsDribbble} />
                         </div>
                         <div className='flex justify-center items-center'>
-                            <FooterCopyright href="#" by="AquilDev™, Inc. | Tous droits reservés" year={2024} />
+                            <FooterCopyright className='sm:text-xl' href="#" by="AquilDev™, Inc. | Tous droits reservés" year={2024} />
                         </div>
                     </div>
                 </div>
