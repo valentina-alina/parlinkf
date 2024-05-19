@@ -1,19 +1,20 @@
 // Mot de passe oublié 
 import './ForgotPasswordPage.css';
+import Logo from '../../assets/logo.png';
 
 
 export default function ForgotPasswordPage() {
     return (
         <>
-            <div className="md:flex " id="main-connexion">
+            <div className="flex justify-center items-center">
 
-                <div className="md:basis-4/12">
-                    <img src="../../../public/images/logo.png" className="logo" alt="" />
+            <div className="md:basis-4/12">
+                    <img src={Logo} className="scale-75 m-x-10" alt="logo" />
                 </div>
 
                 <div className="md:basis-8/12">
                     <form>
-                        <h1 className="block mb-2  text-sm font-medium text-gray-900 dark:text-white"> Changer de mot de passe </h1><br/><br/> 
+                        <h1 className="font-titleTest text-3xl my-3"> Changer de mot de passe </h1><br/><br/> 
                         <div className="mb-5">
                             <label htmlFor="newpassword" className="block mb-2 text-left text-sm font-medium  dark:text-white">Nouveau mot de passe</label>
                             <input type="text" id="newpassword" className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required />
