@@ -111,7 +111,7 @@ export default function AdsListPage(props: any) {
 
             <h2 className="font-titleTest text-3xl my-8">Fil des annonces : {filteredAds.length}</h2>
 
-            <div className="sm:hidden w-50">
+            <div className="sm:hidden w-50 my-4">
                 <TextInput
                     className="w-80"
                     id="search"

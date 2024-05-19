@@ -7,10 +7,11 @@ import frLocale from '@fullcalendar/core/locales/fr';
 import { EventInput } from '@fullcalendar/core';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Card, Label } from 'flowbite-react';
+import { Card, Label, TextInput } from 'flowbite-react';
 import { FaMapMarkedAlt } from "react-icons/fa";
 import fakerCategories from '../Ads/fakerCategories';
 import { CiEdit } from "react-icons/ci";
+import { HiSearch } from "react-icons/hi";
 import poolcar from '../../assets/poolcar.png';
 import childcare from '../../assets/childcare.png';
 import event from '../../assets/event.jpg';
@@ -789,7 +790,9 @@ function parseDate(dateString:any, hour = 0, minute = 0) {
 
 type Category = typeof fakerCategories[number]['name'];
 
-export default function CalendarPage() {
+export default function CalendarPage(props:any) {
+    const searchQueryFromNavbar = props.searchQuery;
+    const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
 
     const [showWeekNumbers, setShowWeekNumbers] = useState(true);
     const [mobileView, setMobileView] = useState(false);
@@ -823,11 +826,18 @@ export default function CalendarPage() {
         }
     };
 
-    const filteredEvents = selectedCategories.length > 0
-        ? events.filter((event) => selectedCategories.includes(event.category))
-        : events;
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setLocalSearchQuery(event.target.value);
+    };
 
-    const eventInputs: EventInput[] = filteredEvents.map((event) => ({
+    const filteredEvents = events.filter((ad:any) => {
+        const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
+        const matchesSearchQueryFromNavbar = !searchQueryFromNavbar || ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) || ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
+        const matchesLocalSearchQuery = !localSearchQuery || ad.title.toLowerCase().includes(localSearchQuery.toLowerCase()) || ad.city.toLowerCase().includes(localSearchQuery.toLowerCase());
+        return matchesCategory && matchesSearchQueryFromNavbar && matchesLocalSearchQuery;
+    });
+
+    const eventInputs: EventInput[] = filteredEvents.map((event:any) => ({
         id: String(event.id),
         title: event.title,
         start: event.start,
@@ -880,6 +890,18 @@ export default function CalendarPage() {
             </div>
 
             <h1 className='font-titleTest text-3xl my-8'>Calendrier des annonces</h1>
+
+            <div className="sm:hidden w-50 my-4">
+                <TextInput
+                    className="w-80"
+                    id="search"
+                    type="text"
+                    icon={HiSearch}
+                    placeholder="Rechercher..."
+                    value={localSearchQuery}
+                    onChange={handleSearchChange}
+                />
+            </div>
 
             <div className="flex flex-wrap gap-8 overflow-hidden">
                 <div className={`w-full  ${mobileView ? 'p-0' : ''}`}>

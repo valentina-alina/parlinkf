@@ -60,8 +60,8 @@ function App() {
               <Route path='/mes-annonces/:idUser' element={ <AdSubscriptionPage /> } />
               <Route path='/ajouter-annonce' element={<AdCreatePage />}/>
               <Route path='/edit-annonce/:adId' element={<AdsEditPage />}/>
-              <Route path='/calendrier' element={ <CalendarPage /> } />
-              <Route path='/carte' element={ <MapPage /> } />
+              <Route path='/calendrier' element={ <CalendarPage searchQuery={searchQuery} /> } />
+              <Route path='/carte' element={ <MapPage searchQuery={searchQuery} /> } />
               <Route path="/forgot-password-page" element ={<ForgotPasswordPage/> } />
               <Route path='/confidentialite' element={ <ConfidentialityPage /> } />
               <Route path='/mentions-legales' element={ <LegalPage /> } />
