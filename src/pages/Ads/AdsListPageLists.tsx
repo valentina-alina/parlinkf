@@ -7,6 +7,7 @@ import { HiViewList } from "react-icons/hi";
 import { MdOutlineApps } from "react-icons/md";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import { useState } from 'react';
+import { CiEdit } from "react-icons/ci";
 
 type Category = typeof fakerCategories[number]['name'];
 
@@ -128,6 +129,9 @@ export default function AdsListPage(props: any) {
                     .map((event) => (
                         <Card key={event.id} className='w-full my-4 shadow-lg'>
                             <Link to={`/annonce/${event.id}`} className="w-full link text-blue-800 text-bodyTest">
+                                <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
+                                    <CiEdit />
+                                </Link>
                                 <div className=" grid grid-cols-1 md:grid-cols-3" color="violet-900">
                                     <div className='col-span-2 flex flex-col '>
                                     <p className="text-start text-blue-600 p-1">{event.start}</p>

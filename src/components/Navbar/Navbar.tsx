@@ -27,7 +27,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                     
                     <Navbar.Brand>
                         <Link to="/ads-list">
-                            <img src={Logo} alt="logo ParLink" className="mr-3 h-6 sm:h-9 scale-150" />
+                            <img src={Logo} alt="logo ParLink" className="ml-8 h-6 sm:h-9 scale-150" />
                         </Link>
                     </Navbar.Brand>
 

@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Card, Label } from 'flowbite-react';
 import { FaMapMarkedAlt } from "react-icons/fa";
 import fakerCategories from '../Ads/fakerCategories';
+import { CiEdit } from "react-icons/ci";
 import poolcar from '../../assets/poolcar.png';
 import childcare from '../../assets/childcare.png';
 import event from '../../assets/event.jpg';
@@ -948,6 +949,9 @@ function Sidebar({ events}: SidebarProps) {
                         <ul className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                         {events.map((event:MyEvent) => (
                             <Card className='my-4 shadow-lg'>
+                                <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
+                                    <CiEdit />
+                                </Link>
                                 <SidebarEvent key={event.id} event={event} />
                             </Card>
                         ))}
