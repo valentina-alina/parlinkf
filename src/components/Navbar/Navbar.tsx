@@ -26,7 +26,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                 <Navbar fluid rounded className="hidden sm:block w-full">
                     
                     <Navbar.Brand>
-                        <Link to="/ads-list">
+                        <Link to="/login">
                             <img src={Logo} alt="logo ParLink" className="ml-8 h-6 sm:h-9 scale-150" />
                         </Link>
                     </Navbar.Brand>

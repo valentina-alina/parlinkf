@@ -143,7 +143,76 @@ export default function MapPage(props: any) {
     };
 
     if (!filteredAds || filteredAds.length === 0) {
-        return <p>Nous n'avons pas trouvé d'évènement.</p>;
+        return (
+            <>
+
+                <div className="flex justify-around items-center gap-4 my-6 border-b-2 py-4 text-xs sm:text-lg font-bodyTest">
+                {fakerCategories.map((category) => (
+                    <div className="event_filter_wrapper relative group" key={category.id}>
+                        <div className='relative'>
+                            <button
+                                onClick={() => handleCategoryChange(category.name as Category)}
+                                className={`flex ${selectedCategories.includes(category.name as Category) ? 'font-bold border-b-4 border-b-blue-800' : ''} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800' : ''}`}
+                            >
+                                <span>{category.label}</span>
+                            </button>
+                        </div>
+                    </div>
+                ))}
+                
+            </div>
+
+            <h1 className="font-titleTest text-3xl my-8">
+                Voir les annonces sur la carte
+            </h1>
+
+            <p className='font-bodyTest text-2xl'>Nous n'avons pas trouvé d'évènement.</p>
+
+            <div className="sm:hidden w-50 my-4">
+                <TextInput
+                    className="w-80"
+                    id="search"
+                    type="text"
+                    icon={HiSearch}
+                    placeholder="Rechercher..."
+                    value={localSearchQuery}
+                    onChange={handleSearchChange}
+                />
+            </div>
+
+            <MapProvider>
+                <div className="w-50 sm:w-full flex justify-center items-center">
+                    <GoogleMap
+                        mapContainerStyle={defaultMapContainerStyle}
+                        center={defaultMapCenter}
+                        zoom={defaultMapZoom}
+                        options={defaultMapOptions}
+                    >
+                        {filteredAds.map(ad => (
+                            <MarkerF
+                                key={ad.id}
+                                position={{ lat: ad.lat, lng: ad.lng }}
+                                onClick={() => handleActiveMarker(ad.id)}>
+                                {activeMarker === ad.id ? (
+                                    <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
+                                        <button
+                                            className="text-blue-800 font-bold"
+                                            onClick={() => handleViewDetail(ad)}
+                                        >
+                                            <div>
+                                                <p className="font-bold">{ad.title}</p>
+                                                <p>{ad.postal_code} {ad.city}</p>
+                                            </div>
+                                        </button>
+                                    </InfoWindowF>
+                                ) : null}
+                            </MarkerF>
+                        ))}
+                    </GoogleMap>
+                </div>
+            </MapProvider>
+            </>
+        );
     }
 
     return (
