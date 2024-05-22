@@ -1,7 +1,7 @@
 const fakeProfile = [
     {
         id: 1,
-        file: "",
+        file: "./src/assets/user.jpeg",
         firstname: "Luis",
         lastname: "Jaramillo",
         password: "motdepasse",
