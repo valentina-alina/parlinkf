@@ -854,7 +854,7 @@ export default function CalendarPage(props:any) {
     return (
         <>
             <div className='flex flex-row justify-around items-center gap-4 my-6 border-b-2 py-4 font-bodyTest'>
-                {fakerCategories.map((category) => (
+                {fakerCategories?.map((category) => (
                     <div className="event_filter_wrapper relative group" key={category.id}>
                         <div className='relative'>
                             <Link
@@ -889,7 +889,15 @@ export default function CalendarPage(props:any) {
                 ))}
             </div>
 
-            <h1 className='font-titleTest text-3xl my-14'>Calendrier des annonces</h1>
+            {
+                !filteredEvents || filteredEvents.length === 0 ? (
+                    <p className='font-bodyTest text-2xl my-14 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
+                ) : (
+                    <h1 className="font-titleTest text-3xl my-14">
+                        Calendrier des annonces
+                    </h1>
+                )
+            }
 
             <div className="sm:hidden w-50 my-16">
                 <TextInput
@@ -958,11 +966,6 @@ function renderEventContent(eventInfo:MyEvent) {
 }
 
 function Sidebar({ events}: SidebarProps) {
-
-    if (!events || events.length === 0) {
-        return <p className='font-bodyTest text-2xl italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>;
-    }
-
     
     return (
         <>

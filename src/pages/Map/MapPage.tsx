@@ -162,9 +162,15 @@ export default function MapPage(props: any) {
                 
             </div>
 
-            <h1 className="font-titleTest text-3xl my-14">
-                Voir les annonces sur la carte
-            </h1>
+            {
+                !filteredAds || filteredAds.length === 0 ? (
+                    <p className='font-bodyTest text-2xl my-14 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
+                ) : (
+                    <h1 className="font-titleTest text-3xl my-14">
+                        Voir les annonces sur la carte
+                    </h1>
+                )
+            }
 
             <div className="sm:hidden w-50 my-16">
                 <TextInput
@@ -177,12 +183,6 @@ export default function MapPage(props: any) {
                     onChange={handleSearchChange}
                 />
             </div>
-
-            {
-                !filteredAds || filteredAds.length === 0 && (
-                    <p className='font-bodyTest text-2xl mb-4 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
-                )
-            }
 
             <MapProvider>
                 <div className="w-50 sm:w-full flex justify-center items-center">
