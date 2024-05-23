@@ -14,7 +14,7 @@ type Category = typeof fakerCategories[number]['name'];
 const list = fakerAdsList;
 
 export default function AdsListPage(props: any) {
-    const searchQuery = props.searchQuery;
+    const searchQueryFromNavbar = props.searchQuery;
 
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
@@ -41,9 +41,15 @@ export default function AdsListPage(props: any) {
         }
     };
 
-    const filteredAds = selectedCategories.length > 0
+    /* const filteredAds = selectedCategories.length > 0
         ? list.filter((ad) => selectedCategories.includes(ad.category as Category))
-        : list;
+        : list; */
+
+    const filteredAds = list.filter((ad) => {
+        const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
+        const matchesSearchQueryFromNavbar = !searchQueryFromNavbar || ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) || ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
+        return matchesCategory && matchesSearchQueryFromNavbar;
+    });
 
     
     const categoryCounts = list.reduce((acc, ad) => {
@@ -102,11 +108,18 @@ export default function AdsListPage(props: any) {
                 </div>
             </div>
 
-            <h2 className="font-titleTest text-3xl my-8">Fil des annonces : {filteredAds.length}</h2>
+            <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {filteredAds.length}</h2>
+
+            {
+                !filteredAds || filteredAds.length === 0 && (
+                    <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
+                )
+            }
 
             <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56 ">
                 <Carousel slide={false}>
-                {filteredAds.map((event) => (
+                {filteredAds &&
+                filteredAds.map((event) => (
                     <div key={event.id} className={"p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover  bg-no-repeat dark:text-white bg-[url('/src/assets/" + event.imageUrl + "')]"}>
                     <Link to={`/annonce/${event.id}`} className="link">
                         <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
@@ -123,8 +136,8 @@ export default function AdsListPage(props: any) {
 
                 {filteredAds
                     .filter((event) => {
-                        if (searchQuery === '') { return event; }
-                        else if (event.title.toLowerCase().includes(searchQuery.toLowerCase()) || event.city.toLowerCase().includes(searchQuery.toLowerCase())) { return event }
+                        if (searchQueryFromNavbar === '') { return event; }
+                        else if (event.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) || event.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase())) { return event }
                     })
                     .map((event) => (
                         <Card key={event.id} className='w-full my-4 shadow-lg'>

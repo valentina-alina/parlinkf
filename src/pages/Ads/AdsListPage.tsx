@@ -109,9 +109,9 @@ export default function AdsListPage(props: any) {
                 </div>
             </div>
 
-            <h2 className="font-titleTest text-3xl my-8">Fil des annonces : {filteredAds.length}</h2>
+            <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {filteredAds.length}</h2>
 
-            <div className="sm:hidden w-50 my-4">
+            <div className="sm:hidden w-50 my-16">
                 <TextInput
                     className="w-80"
                     id="search"
@@ -122,6 +122,12 @@ export default function AdsListPage(props: any) {
                     onChange={handleSearchChange}
                 />
             </div>
+
+            {
+                !filteredAds || filteredAds.length === 0 && (
+                    <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
+                )
+            }
 
             <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56">
                 <Carousel slide={false}>

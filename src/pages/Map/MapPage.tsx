@@ -168,7 +168,7 @@ export default function MapPage(props: any) {
 
             {
                 !filteredAds || filteredAds.length === 0 && (
-                    <p className='font-bodyTest text-2xl'>Nous n'avons pas trouvé d'évènement.</p>
+                    <p className='font-bodyTest text-2xl mb-4 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
                 )
             }
 

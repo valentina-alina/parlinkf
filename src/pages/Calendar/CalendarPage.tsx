@@ -960,7 +960,7 @@ function renderEventContent(eventInfo:MyEvent) {
 function Sidebar({ events}: SidebarProps) {
 
     if (!events || events.length === 0) {
-        return <p>Nous n'avons pas trouvé d'évènement.</p>;
+        return <p className='font-bodyTest text-2xl italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>;
     }
 
     
