@@ -889,9 +889,9 @@ export default function CalendarPage(props:any) {
                 ))}
             </div>
 
-            <h1 className='font-titleTest text-3xl my-8'>Calendrier des annonces</h1>
+            <h1 className='font-titleTest text-3xl my-14'>Calendrier des annonces</h1>
 
-            <div className="sm:hidden w-50 my-4">
+            <div className="sm:hidden w-50 my-16">
                 <TextInput
                     className="w-80"
                     id="search"
