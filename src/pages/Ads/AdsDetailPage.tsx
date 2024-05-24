@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { MapProvider } from '../../providers/MapProvider';
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import { HiPencilAlt } from "react-icons/hi";
+import MapConfig from '../../services/utils/MapConfig';
 
 export default function AdsDetailPage() {
 
@@ -68,26 +69,6 @@ export default function AdsDetailPage() {
         return <p className="font-titleTest text-3xl">Oups! Il n'y a pas d'annonce correspondante</p>;
     }
 
-    const defaultMapContainerStyle = {
-        width: '400px',
-        height: '30vh',
-        borderRadius: '10px 10px 10px 10px',
-    };
-
-    const defaultMapCenter = {
-        lat: ads.lat,
-        lng: ads.lng
-    }
-
-    const defaultMapZoom = 18
-
-    const defaultMapOptions = {
-        zoomControl: true,
-        tilt: 0,
-        gestureHandling: 'auto',
-        mapTypeId: 'satellite',
-    };
-
     const startDate = new Date(ads.start);
     const endDate = new Date(ads.end);
 
@@ -102,6 +83,8 @@ export default function AdsDetailPage() {
 
     const formattedDate = `Le ${day}/${month}/${year} de ${hour}h${minute} à ${endHour}h${endMinute}`;
 
+    const mapConfig = new MapConfig();
+    console.log('mapConfig', mapConfig)
 
     return (
         <>
@@ -127,12 +110,12 @@ export default function AdsDetailPage() {
                     <MapProvider>
                         <div className="w-96 sm:w-full flex justify-center items-center">
                             <GoogleMap
-                                mapContainerStyle={defaultMapContainerStyle}
-                                center={defaultMapCenter}
-                                zoom={defaultMapZoom}
-                                options={defaultMapOptions}
+                                mapContainerStyle={mapConfig.defaultMapContainerStyle('400px','30vh')}
+                                center={mapConfig.defaultMapCenterAdDetail(ads)}
+                                zoom={mapConfig.defaultMapZoom(18)}
+                                options={mapConfig.defaultMapOptions(true,0,'auto','satellite')}
                             >
-                                <MarkerF key={ads.id} position={defaultMapCenter}>
+                                <MarkerF key={ads.id} position={mapConfig.defaultMapCenterAdDetail(ads)}>
                                 </MarkerF>
                             </GoogleMap>
                         </div>
@@ -183,12 +166,12 @@ export default function AdsDetailPage() {
 
                     {
                         ads.comments?.map((comment) => (
-                            <div className="flex justify-center items-center mb-1">
+                            <div key={comment.id} className="flex justify-center items-center mb-1">
                                 <Card
                                     className="w-96 bg-gray-50 shadow-lg"
                                     horizontal
                                 >
-                                    <div key={comment.id} className="flex space-x-8">
+                                    <div className="flex space-x-8">
                                         <div>
                                             <h3 className="mb-3"><strong className="font-bodyTest text-blue-800">{comment.firstname} {comment.lastname}</strong> <span>{comment.message}</span></h3>
                                             <p>{comment.date}</p>

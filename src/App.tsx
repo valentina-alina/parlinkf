@@ -25,7 +25,6 @@ import AdsEditPage from './pages/Ads/AdsEditPage';
 import LoginPage from './pages/Auth/LoginPage';
 import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
 import { User } from './services/interfaces/User';
-// import HeaderMenu from './components/Navbar/HeaderMenu';
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -41,14 +40,11 @@ function App() {
     setContactForms([ ...contactForms, contactForm]);
   }
 
-
   return(
     <>
       <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery}  />
-      {/* <HeaderMenu/> */}
       <Routes>
           <Route path="/" />
-
             <Route element={ <PrivateRoute /> }>
             <Route path='/gestion-utilisateurs' element={ <UserCreatePage handleSubmitUser={function (_author: User): void {
             throw new Error('Function not implemented.');
@@ -69,15 +65,11 @@ function App() {
               <Route path='/ads-list' element={ <AdsListPage searchQuery={searchQuery} /> } />
               <Route path='/ads-list2' element={ <AdsListPageLists searchQuery={searchQuery} /> } />
             </Route>
-
           <Route path="*" element= { <NotFoundPage />} />
       </Routes>
       <FooterNav />
-      
-      
     </>
   )
 }
 
 export default App
-

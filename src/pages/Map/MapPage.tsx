@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getAds } from '../../services/api/ads';
+import { AdInterface } from '../../services/interfaces/Ad';
+import { AdWithoutCoordinatesInterface } from '../../services/interfaces/AdWithoutCoordinates';
 import { useEffect, useState } from 'react';
 import { MapProvider } from '../../providers/MapProvider';
 import { GoogleMap, MarkerF, InfoWindowF } from "@react-google-maps/api";
@@ -7,59 +9,14 @@ import { useNavigate } from 'react-router-dom';
 import fakerCategories from '../Ads/fakerCategories';
 import { TextInput } from 'flowbite-react';
 import { HiSearch } from "react-icons/hi";
+import MapConfig from '../../services/utils/MapConfig';
 
 type Category = typeof fakerCategories[number]['name'];
-
-interface AdInterface {
-    id: number;
-    title: string;
-    address: string;
-    city: string;
-    postal_code: string;
-    lat: string;
-    lng: string;
-    start: Date;
-    end: Date;
-    attendees: number;
-    category: string;
-    description: string;
-    imageUrl: string;
-    comments: {
-        id: number;
-        firstname: string;
-        lastname: string;
-        message: string;
-        date: string;
-    }[] | null;
-}
-
-interface AdInterfaceWithCoordinates {
-    id: number;
-    title: string;
-    address: string;
-    city: string;
-    postal_code: string;
-    lat: number;
-    lng: number;
-    start: Date;
-    end: Date;
-    attendees: number;
-    category: string;
-    description: string;
-    imageUrl: string;
-    comments: {
-        id: number;
-        firstname: string;
-        lastname: string;
-        message: string;
-        date: string;
-    }[] | null;
-}
 
 export default function MapPage(props: any) {
     const searchQueryFromNavbar = props.searchQuery || '';
 
-    const [ads, setAds] = useState<AdInterfaceWithCoordinates[]>([]);
+    const [ads, setAds] = useState<AdInterface[]>([]);
     const [activeMarker, setActiveMarker] = useState<number | null>(null);
     const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
@@ -99,7 +56,7 @@ export default function MapPage(props: any) {
 
     const navigate = useNavigate();
 
-    const handleViewDetail = (ad: AdInterfaceWithCoordinates) => {
+    const handleViewDetail = (ad: AdInterface) => {
         navigate(`/annonce/${ad.id}`, { state: { ad } });
     };
 
@@ -108,7 +65,7 @@ export default function MapPage(props: any) {
             try {
                 const listAd = await getAds();
                 if (listAd) {
-                    setAds(listAd.map((ad: AdInterface) => ({
+                    setAds(listAd.map((ad: AdWithoutCoordinatesInterface) => ({
                         ...ad,
                         lat: parseFloat(ad.lat),
                         lng: parseFloat(ad.lng),
@@ -122,25 +79,8 @@ export default function MapPage(props: any) {
         fetchAndSetAds();
     }, []);
 
-    const defaultMapContainerStyle = {
-        width: '1200px',
-        height: '80vh',
-        borderRadius: '10px 10px 10px 10px',
-    };
-
-    const defaultMapCenter = {
-        lat: ads.length > 0 ? ads[0].lat : 0,
-        lng: ads.length > 0 ? ads[0].lng : 0,
-    };
-
-    const defaultMapZoom = 6;
-
-    const defaultMapOptions = {
-        zoomControl: true,
-        tilt: 0,
-        gestureHandling: 'auto',
-        mapTypeId: 'satellite',
-    };
+    const mapConfig = new MapConfig();
+    console.log('mapConfig', mapConfig)
 
     return (
         <>
@@ -187,10 +127,10 @@ export default function MapPage(props: any) {
             <MapProvider>
                 <div className="w-50 sm:w-full flex justify-center items-center">
                     <GoogleMap
-                        mapContainerStyle={defaultMapContainerStyle}
-                        center={defaultMapCenter}
-                        zoom={defaultMapZoom}
-                        options={defaultMapOptions}
+                        mapContainerStyle={mapConfig.defaultMapContainerStyle('1200px', '80vh')}
+                        center={mapConfig.defaultMapCenter(ads)}
+                        zoom={mapConfig.defaultMapZoom(6)}
+                        options={mapConfig.defaultMapOptions(true,0,'auto','satellite')}
                     >
                         {filteredAds.map(ad => (
                             <MarkerF
