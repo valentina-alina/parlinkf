@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getAds } from '../../services/api/ads';
+import MapButton from '../../components/Map/MapButton';
 import Sidebar from '../../components/Calendar/Sidebar';
 import FullCalendar from '../../components/Calendar/FullCalendar';
 import { EventInput } from '@fullcalendar/core';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Label, TextInput } from 'flowbite-react';
-import { FaMapMarkedAlt } from "react-icons/fa";
 import fakerCategories from '../Ads/fakerCategories';
 import { HiSearch } from "react-icons/hi";
 
@@ -164,11 +164,7 @@ export default function CalendarPage(props:any) {
                             events={filteredEvents}
                         />
                     </div>
-                    <div className="fixed bottom-1 left-1/2 z-50 px-2 content-center bg-orange-400 rounded max-sm:hidden py-2">
-                        <Link className='text-md flex gap-2 content-center items-center text-white' to="/carte">Voir sur la carte
-                            <FaMapMarkedAlt className='h-6 w-6' />
-                        </Link>
-                    </div>
+                    <MapButton />
                 </div>
         </>
     )

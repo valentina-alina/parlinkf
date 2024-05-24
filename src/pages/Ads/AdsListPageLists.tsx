@@ -5,7 +5,7 @@ import fakerAdsList from './fakerAdsList';
 import fakerCategories from './fakerCategories';
 import { HiViewList } from "react-icons/hi";
 import { MdOutlineApps } from "react-icons/md";
-import { FaMapMarkedAlt } from "react-icons/fa";
+import MapButton from '../../components/Map/MapButton';
 import { useState } from 'react';
 import { CiEdit } from "react-icons/ci";
 
@@ -167,11 +167,7 @@ export default function AdsListPage(props: any) {
                         </Card>
                 ))}
             </div>
-            <div className="fixed bottom-1 left-1/2 z-50 px-2 content-center bg-orange-400 rounded max-sm:hidden py-2">
-                <Link className='text-md flex gap-2 content-center items-center text-white' to="/carte">Voir sur la carte
-                    <FaMapMarkedAlt className='h-6 w-6' />
-                </Link>
-            </div>
+            <MapButton />
         </>
     );
 }
