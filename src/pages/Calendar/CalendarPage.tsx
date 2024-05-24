@@ -1,18 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AdWithoutCoordinatesInterface, SidebarEventProps, SidebarProps } from '../../services/interfaces/AdWithoutCoordinates';
 import { getAds } from '../../services/api/ads';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import frLocale from '@fullcalendar/core/locales/fr';
+import Sidebar from '../../components/Calendar/Sidebar';
+import FullCalendar from '../../components/Calendar/FullCalendar';
 import { EventInput } from '@fullcalendar/core';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Card, Label, TextInput } from 'flowbite-react';
+import { Label, TextInput } from 'flowbite-react';
 import { FaMapMarkedAlt } from "react-icons/fa";
 import fakerCategories from '../Ads/fakerCategories';
-import { CiEdit } from "react-icons/ci";
 import { HiSearch } from "react-icons/hi";
 
 type Category = typeof fakerCategories[number]['name'];
@@ -22,7 +17,6 @@ export default function CalendarPage(props:any) {
     console.log('ads', ads);
 
     useEffect(() => {
-
         const loadAds = async() => {
             const listAd = await getAds();
             setAds(listAd);
@@ -134,64 +128,35 @@ export default function CalendarPage(props:any) {
 
             {
                 !filteredEvents || filteredEvents.length === 0 ? (
-                    <>
-                        <p className='font-bodyTest text-2xl my-32 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
-                        <div className="sm:hidden w-50 my-16">
-                            <TextInput
-                                className="w-80"
-                                id="search"
-                                type="text"
-                                icon={HiSearch}
-                                placeholder="Rechercher..."
-                                value={localSearchQuery}
-                                onChange={handleSearchChange}
-                            />
-                        </div>
-                    </>
+                    <p className='font-bodyTest text-2xl my-32 italic text-orange-500'>
+                        Nous n'avons pas trouvé d'évènement.
+                    </p>
                 ) : (
-                    <>
                         <h1 className="font-titleTest text-3xl my-14">
                             Calendrier des annonces
                         </h1>
-                        
-                        <div className="sm:hidden w-50 my-16">
-                            <TextInput
-                                className="w-80"
-                                id="search"
-                                type="text"
-                                icon={HiSearch}
-                                placeholder="Rechercher..."
-                                value={localSearchQuery}
-                                onChange={handleSearchChange}
-                            />
-                        </div>
-                    </>
                 )
             }
+
+            <div className="sm:hidden w-50 my-16">
+                <TextInput
+                    className="w-80"
+                    id="search"
+                    type="text"
+                    icon={HiSearch}
+                    placeholder="Rechercher..."
+                    value={localSearchQuery}
+                    onChange={handleSearchChange}
+                />
+            </div>
 
             <div className="flex flex-wrap gap-8 overflow-hidden">
                     <div className={`w-full  ${mobileView ? 'p-0' : ''}`}>
                         <FullCalendar
-                            timeZone={'local'}
-                            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                            initialView={'dayGridMonth'}
-                            headerToolbar={{
-                                start: mobileView ? 'title' : 'prev,today,next',
-                                center: mobileView ? 'prev,next,today' : 'title',
-                                end: mobileView ? '' : 'dayGridMonth,timeGridWeek,timeGridDay',
-                            }}
-                            weekends={true}
-                            events={eventInputs}
-                            eventContent={renderEventContent}
-                            eventClick={handleEventClick}
-                            locale={frLocale}
-                            weekNumbers={showWeekNumbers}
-                            navLinks={true}
-                            dayMaxEvents={true}
-                            selectable={true}
-                            height={
-                                mobileView ? '80vh' : '90vh'
-                            }
+                            mobileView={mobileView}
+                            showWeekNumbers={showWeekNumbers}
+                            eventInputs={eventInputs}
+                            handleEventClick={handleEventClick}
                         />
                     </div>
                     <div className="w-full mt-10 sm:mt-0">
@@ -205,89 +170,6 @@ export default function CalendarPage(props:any) {
                         </Link>
                     </div>
                 </div>
-
-            
-        </>
-    )
-}
-
-function renderEventContent(eventInfo:AdWithoutCoordinatesInterface) {
-    
-    return (
-        <>
-            <span className='flex flex-col text-xs text-white w-72 py-1 before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-orange-400 relative inline-block' >
-                <span className='relative text-white flex flex-col'>
-                    <b>{eventInfo.timeText}</b>
-                    <i>{eventInfo.event.title}</i>
-                </span>
-            </span>
-        </>
-    );
-}
-
-function Sidebar({ events}: SidebarProps) {
-    
-    return (
-        <>
-            <div className='demo-app-sidebar-section'>
-                <h2 className="text-lg font-titleTest font-bold mb-4 border-e-4 border-solid border-blue-700">Toutes les annonces ({events.length})</h2>
-                        <ul className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                        {events.map((event:AdWithoutCoordinatesInterface) => (
-                            <Card key={event.id} className='my-4 shadow-lg'>
-                                <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
-                                    <CiEdit />
-                                </Link>
-                                <SidebarEvent key={event.id} event={event} />
-                            </Card>
-                        ))}
-                        </ul>
-            </div>
-        </>
-    )
-}
-
-function SidebarEvent({ event }: SidebarEventProps) {
-    
-    const startDate = new Date(event.start);
-    const endDate = new Date(event.end);
-
-    const day = startDate.getDate().toString().padStart(2, '0');
-    const month = (startDate.getMonth() + 1).toString().padStart(2, '0');
-    const year = startDate.getFullYear();
-    const hour = startDate.getHours().toString().padStart(2, '0');
-    const minute = startDate.getMinutes().toString().padStart(2, '0');
-
-    const endHour = endDate.getHours().toString().padStart(2, '0');
-    const endMinute = endDate.getMinutes().toString().padStart(2, '0');
-
-    const formattedDate = `Le ${day}/${month}/${year} de ${hour}h${minute} à ${endHour}h${endMinute}`;
-
-    const navigate = useNavigate();
-
-    const handleViewDetail = (event: AdWithoutCoordinatesInterface) => {
-        navigate(`/annonce/${event.id}`, { state: { event } });
-    };
-
-    return (
-        <>
-            <li key={event.id}>
-                <button
-                    className="text-blue-800 text-bold text-bodyTest"
-                    onClick={() => handleViewDetail(event)}
-                >
-                    <div className='flex flex-col'>
-                        <b>
-                            {event.title}
-                        </b>
-                        <i className='tracking-wider'>{formattedDate}</i>
-                        
-                        <i className='flex justify-between items-center'>
-                            {event.city} <span className='text-blue-700 font-bold'> Nbp {event.attendees}</span>
-                        </i>
-                        <img src={event.imageUrl} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
-                    </div>
-                </button>
-            </li>
         </>
     )
 }
