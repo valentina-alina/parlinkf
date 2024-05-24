@@ -892,7 +892,7 @@ export default function CalendarPage(props:any) {
             {
                 !filteredEvents || filteredEvents.length === 0 ? (
                     <>
-                        <p className='font-bodyTest text-2xl my-14 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
+                        <p className='font-bodyTest text-2xl my-32 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
                         <div className="sm:hidden w-50 my-16">
                             <TextInput
                                 className="w-80"
@@ -922,46 +922,46 @@ export default function CalendarPage(props:any) {
                                 onChange={handleSearchChange}
                             />
                         </div>
-                        
-                        <div className="flex flex-wrap gap-8 overflow-hidden">
-                            <div className={`w-full  ${mobileView ? 'p-0' : ''}`}>
-                                <FullCalendar
-                                    timeZone={'local'}
-                                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                                    initialView={'dayGridMonth'}
-                                    headerToolbar={{
-                                        start: mobileView ? 'title' : 'prev,today,next',
-                                        center: mobileView ? 'prev,next,today' : 'title',
-                                        end: mobileView ? '' : 'dayGridMonth,timeGridWeek,timeGridDay',
-                                    }}
-                                    weekends={true}
-                                    events={eventInputs}
-                                    eventContent={renderEventContent}
-                                    eventClick={handleEventClick}
-                                    locale={frLocale}
-                                    weekNumbers={showWeekNumbers}
-                                    navLinks={true}
-                                    dayMaxEvents={true}
-                                    selectable={true}
-                                    height={
-                                        mobileView ? '80vh' : '90vh'
-                                    }
-                                />
-                            </div>
-                            <div className="w-full mt-10 sm:mt-0">
-                                <Sidebar
-                                    events={filteredEvents}
-                                />
-                            </div>
-                            <div className="fixed bottom-1 left-1/2 z-50 px-2 content-center bg-orange-400 rounded max-sm:hidden py-2">
-                                <Link className='text-md flex gap-2 content-center items-center text-white' to="/carte">Voir sur la carte
-                                    <FaMapMarkedAlt className='h-6 w-6' />
-                                </Link>
-                            </div>
-                        </div>
                     </>
                 )
             }
+
+            <div className="flex flex-wrap gap-8 overflow-hidden">
+                <div className={`w-full  ${mobileView ? 'p-0' : ''}`}>
+                    <FullCalendar
+                        timeZone={'local'}
+                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                        initialView={'dayGridMonth'}
+                        headerToolbar={{
+                            start: mobileView ? 'title' : 'prev,today,next',
+                            center: mobileView ? 'prev,next,today' : 'title',
+                            end: mobileView ? '' : 'dayGridMonth,timeGridWeek,timeGridDay',
+                        }}
+                        weekends={true}
+                        events={eventInputs}
+                        eventContent={renderEventContent}
+                        eventClick={handleEventClick}
+                        locale={frLocale}
+                        weekNumbers={showWeekNumbers}
+                        navLinks={true}
+                        dayMaxEvents={true}
+                        selectable={true}
+                        height={
+                            mobileView ? '80vh' : '90vh'
+                        }
+                    />
+                </div>
+                <div className="w-full mt-10 sm:mt-0">
+                    <Sidebar
+                        events={filteredEvents}
+                    />
+                </div>
+                <div className="fixed bottom-1 left-1/2 z-50 px-2 content-center bg-orange-400 rounded max-sm:hidden py-2">
+                    <Link className='text-md flex gap-2 content-center items-center text-white' to="/carte">Voir sur la carte
+                        <FaMapMarkedAlt className='h-6 w-6' />
+                    </Link>
+                </div>
+            </div>
 
             
         </>

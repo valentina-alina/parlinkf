@@ -20,7 +20,7 @@ const navigationItems = [
 export default function FooterNav() {
     return (
         <>        
-            <Footer className="w-full bg-gray-200 mt-28 mb-18 scale-125 sm:scale-100 sm:sticky sm:relative sm:-bottom-8">
+            <Footer className="w-full bg-gray-200 mt-28 mb-18 sm:mt-48 scale-125 sm:scale-100 sm:sticky sm:relative sm:-bottom-8">
                 <div className="w-full">
                     <div className="grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
                         <FooterLinkGroup col>
