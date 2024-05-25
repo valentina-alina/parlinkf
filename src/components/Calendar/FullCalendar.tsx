@@ -39,7 +39,7 @@ const CustomFullCalendar: React.FC<CustomFullCalendarProps> = ({
             navLinks={true}
             dayMaxEvents={true}
             selectable={true}
-            height={mobileView ? '80vh' : '90vh'}
+            height={mobileView ? '95vh' : '90vh'}
         />
     );
 };
