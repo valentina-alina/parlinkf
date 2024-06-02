@@ -4,7 +4,6 @@ import { AiOutlineHome } from "react-icons/ai";
 import { IoMdAddCircle } from "react-icons/io";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
-
 import { Footer, FooterCopyright, FooterIcon, FooterLink, FooterLinkGroup, FooterTitle } from "flowbite-react";
 import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
 
@@ -19,12 +18,12 @@ const navigationItems = [
 
 export default function FooterNav() {
     return (
-        <>        
-            <Footer className="w-full bg-gray-200 mt-28 mb-18 sm:mt-48 scale-125 sm:scale-100 sm:sticky sm:relative sm:-bottom-8">
+        <>
+            <Footer className="w-full bg-gray-200 mt-28 mb-18 sm:mt-48 scale-125 sm:scale-100 sm:sticky sm:relative sm:-bottom-8">                
                 <div className="w-full">
                     <div className="grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
                         <FooterLinkGroup col>
-                            <div className="flex flex-col items-start justify-start">
+                            <div className="flex flex-col items-start justify-start">                                
                                 <FooterTitle title="Company" />
                                 <FooterLink href="#" className='sm:hidden'>ParLink</FooterLink>
                                 <FooterLink href="#" className='hidden sm:block'>À propos de ParLink</FooterLink>

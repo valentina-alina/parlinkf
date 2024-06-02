@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Label, TextInput } from 'flowbite-react';
 import fakerCategories from '../Ads/fakerCategories';
 import { HiSearch } from "react-icons/hi";
+import Bird from '../../components/Calendar/Bird';
 
 type Category = typeof fakerCategories[number]['name'];
 
@@ -148,6 +149,10 @@ export default function CalendarPage(props:any) {
                     value={localSearchQuery}
                     onChange={handleSearchChange}
                 />
+            </div>
+
+            <div className='flex justify-center items-center mr-8'>
+                <Bird />
             </div>
 
             <div className="flex flex-wrap gap-8 overflow-hidden">

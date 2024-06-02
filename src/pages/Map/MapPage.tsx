@@ -10,6 +10,7 @@ import fakerCategories from '../Ads/fakerCategories';
 import { TextInput } from 'flowbite-react';
 import { HiSearch } from "react-icons/hi";
 import MapConfig from '../../services/utils/MapConfig';
+import Earth from '../../components/Map/earth'
 
 type Category = typeof fakerCategories[number]['name'];
 
@@ -124,6 +125,10 @@ export default function MapPage(props: any) {
                 />
             </div>
 
+
+            <div className='flex justify-center items-center mr-8'>
+                <Earth />
+            </div>
             <MapProvider>
                 <div className="w-50 sm:w-full flex justify-center items-center">
                     <GoogleMap
