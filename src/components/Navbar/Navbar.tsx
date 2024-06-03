@@ -6,6 +6,7 @@ import { MdAddToPhotos } from "react-icons/md";
 import Logo from '../../assets/logo.png';
 import { HiSearch } from "react-icons/hi";
 import { useState } from "react";
+// import NavbarLogo from "./NavbarLogo";
 
 interface NavbarProps {
     searchQuery: string;
@@ -27,7 +28,8 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                     
                     <Navbar.Brand>
                         <Link to="/login">
-                            <img src={Logo} alt="logo ParLink" className="ml-8 h-6 sm:h-9 scale-150" />
+                            <img src={Logo} alt="logo ParLink" className="ml-8 h-6 sm:h-9 scale-150"></img>
+                            {/* <NavbarLogo /> */}
                         </Link>
                     </Navbar.Brand>
 

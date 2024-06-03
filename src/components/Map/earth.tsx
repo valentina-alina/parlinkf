@@ -12,6 +12,12 @@ const Earth: React.FC = () => {
     }, []);
 
     return <canvas id="canvas3d" ref={canvasRef} className="w-full h-96"></canvas>;
+
+    /* return (
+        <div style={{ transform: 'scale(0.23)', transformOrigin: 'top left', width: '300%', height: '300%' }}>
+            <canvas id="canvas3d" ref={canvasRef} className="w-full h-96"></canvas>
+        </div>
+    ); */
 };
 
 export default Earth;

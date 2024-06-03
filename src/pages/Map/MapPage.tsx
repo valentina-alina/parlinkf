@@ -85,8 +85,6 @@ export default function MapPage(props: any) {
 
     return (
         <>
-            
-
             <div className="flex justify-around items-center gap-4 my-6 border-b-2 py-4 text-xs sm:text-lg font-bodyTest">
                 {fakerCategories.map((category) => (
                     <div className="event_filter_wrapper relative group" key={category.id}>
@@ -125,8 +123,7 @@ export default function MapPage(props: any) {
                 />
             </div>
 
-
-            <div className='flex justify-center items-center mr-8'>
+            <div className=' flex justify-center items-center'>
                 <Earth />
             </div>
             <MapProvider>
