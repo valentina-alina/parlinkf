@@ -25,6 +25,10 @@ const $incrementEl: HTMLElement = document.getElementById('increment-button');
 
 const $decrementEl: HTMLElement = document.getElementById('decrement-button');
 
+import profileFaker from './profileFaker'
+
+const users = profileFaker;
+
 // optional options with default values and callback functions
 const options: InputCounterOptions = {
   minValue: 0,
@@ -64,7 +68,7 @@ interface PropUserPage {
 
 export default function UserCreatePage(props: PropUserPage) {
 
-  const handleSubmitUser=props.handleSubmitUser;
+  const handleSubmitUser = props.handleSubmitUser;
 
   const [childCounterFromControlButton, setChildCounterFromControlButton] = useState<number>(0);
 
@@ -88,7 +92,7 @@ export default function UserCreatePage(props: PropUserPage) {
       email: '',
     },
     validationSchema: validationSchema, // Utiliser le schéma de validation Yup
-  
+
     onSubmit: values => {
       // handleSubmitUser(
       //   {
@@ -97,7 +101,7 @@ export default function UserCreatePage(props: PropUserPage) {
       // )
       // Gérer la logique de soumission du formulaire ici
       console.log(values);
-      alert("Nouveau user ajoutée") 
+      alert("Nouveau user ajoutée")
     },
   });
 
@@ -105,122 +109,68 @@ export default function UserCreatePage(props: PropUserPage) {
 
   return (
     <>
-<div className='flex flex-col gap-3 md:flex-row'>
+      <div className='flex flex-col gap-3 md:flex-row'>
 
-      <Card href="#" className="max-w-sm hover:bg-transparent  ">
-        <h5 className="text-2xl font-bold tracking-tight text-blue-800 dark:text-white">
-          Ajouter un utilisateur
-        </h5>
-        <form onSubmit={formik.handleSubmit} className="flex max-w-md flex-col gap-4">
-          <div className="max-w-md">
+        {/* <Card href="#" className="max-w-sm hover:bg-transparent  "> */}
 
-            <Tabs aria-label="Tabs with underline" style="underline" >
-              <Tabs.Item active title="Parent" className="bg-red-500 border-red-500" ></Tabs.Item>
-              <Tabs.Item title="Intervenant" ></Tabs.Item>
-              <Tabs.Item title="Admin" ></Tabs.Item>
-            </Tabs>
+        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4 w-full mx-auto">
+  {/* <h5 className="text-2xl font-bold tracking-tight text-blue-800 dark:text-white">
+  Ajouter un utilisateur
+  </h5> */}
+  <div className="">
+    <label htmlFor="countries" className="block mb-2 text-left text-sm font-medium text-gray-900 dark:text-white">Choisir une categorie</label>
+    <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      <option value="parent">Parent</option>
+      <option value="intervenant">Intervenant</option>
+      <option value="admin">Administrateur</option>
+    </select>
 
-            <FloatingLabel variant="outlined" label="Nom" sizing="sm"
-              id="nom"
-              name="nom"
-              onChange={formik.handleChange}
-              value={formik.values.nom}
-            />
-            {formik.touched.nom && formik.errors.nom ? (
-              <div>{formik.errors.nom}</div>
-            ) : null}
+    <FloatingLabel variant="outlined" label="Nom" sizing="sm"
+      id="nom"
+      name="nom"
+      onChange={formik.handleChange}
+      value={formik.values.nom}
+    />
+    {formik.touched.nom && formik.errors.nom ? (
+      <div>{formik.errors.nom}</div>
+    ) : null}
 
-            <FloatingLabel variant="outlined" label="Prenom" sizing="sm"
-              id="prenom"
-              name="prenom"
-              onChange={formik.handleChange}
-              value={formik.values.prenom} />
-            {formik.touched.prenom && formik.errors.prenom ? (
-              <div>{formik.errors.prenom}</div>
-            ) : null}
+    <FloatingLabel variant="outlined" label="Prenom" sizing="sm"
+      id="prenom"
+      name="prenom"
+      onChange={formik.handleChange}
+      value={formik.values.prenom} />
+    {formik.touched.prenom && formik.errors.prenom ? (
+      <div>{formik.errors.prenom}</div>
+    ) : null}
 
-            <FloatingLabel variant="outlined" label="&#9993; name@email.com" sizing="sm"
-              id="email"
-              name="email"
-              onChange={formik.handleChange}
-              value={formik.values.email} />
-            {formik.touched.email && formik.errors.email ? (
-              <div>{formik.errors.email}</div>
-            ) : null}
+    <FloatingLabel variant="outlined" label="&#9993; name@email.com" sizing="sm"
+      id="email"
+      name="email"
+      onChange={formik.handleChange}
+      value={formik.values.email} />
+    {formik.touched.email && formik.errors.email ? (
+      <div>{formik.errors.email}</div>
+    ) : null}
 
-            <h5 className="text-left tracking-tight text-blue-600 dark:text-white"> Nombre d'enfants</h5>
-            <ControlButtonNumber handleChildCounter={handleUpdateChildCounter} />
+    <h5 className="text-left text-sm font-medium  tracking-tight text-blue-600 dark:text-white"> Nombre d'enfants</h5>
+    <ControlButtonNumber handleChildCounter={handleUpdateChildCounter} />
+  </div>
 
-          </div>
-          {/* Repeter le formulaire ChildForm autant des fois que nb des enfants */}
-          <div>
-            <p>Child counter: {childCounterFromControlButton}</p>
-            {Array.from({ length: childCounterFromControlButton }, (_, index) => (
-              <ChildForm />
-            ))}
-          </div>
+  <div>
+    <p>Child counter: {childCounterFromControlButton}</p>
+    {Array.from({ length: childCounterFromControlButton }, (_, index) => (
+      <ChildForm key={index} />
+    ))}
+  </div>
+
+  <Button type="submit" className='bg-blue-700'>Enregistrer un nouveau utilisateur</Button>
+</form>
 
 
 
-          <Button type="submit" className='bg-blue-700' >Register new account</Button>
-        </form>
 
-      </Card>
-
-      <List unstyled className="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
-      <List.Item className="pb-3 sm:pb-4">
-        <div className="flex items-center space-x-4 rtl:space-x-reverse">
-          <Avatar img="/images/people/profile-picture-1.jpg" alt="Neil image" rounded size="sm" />
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-gray-900 dark:text-white">Neil Sims</p>
-            <p className="truncate text-sm text-gray-500 dark:text-gray-400">email@flowbite.com</p>
-          </div>
-          <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">$320</div>
-        </div>
-      </List.Item>
-      <List.Item className="py-3 sm:py-4">
-        <div className="flex items-center space-x-4 rtl:space-x-reverse">
-          <Avatar img="/images/people/profile-picture-3.jpg" alt="Neil image" rounded size="sm" />
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-gray-900 dark:text-white">Bonnie Green</p>
-            <p className="truncate text-sm text-gray-500 dark:text-gray-400">email@flowbite.com</p>
-          </div>
-          <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">$3467</div>
-        </div>
-      </List.Item>
-      <List.Item className="py-3 sm:py-4">
-        <div className="flex items-center space-x-4 rtl:space-x-reverse">
-          <Avatar img="/images/people/profile-picture-2.jpg" alt="Neil image" rounded size="sm" />
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-gray-900 dark:text-white">Michael Gough</p>
-            <p className="truncate text-sm text-gray-500 dark:text-gray-400">email@flowbite.com</p>
-          </div>
-          <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">$67</div>
-        </div>
-      </List.Item>
-      <List.Item className="py-3 sm:py-4">
-        <div className="flex items-center space-x-4 rtl:space-x-reverse">
-          <Avatar img="/images/people/profile-picture-5.jpg" alt="Neil image" rounded size="sm" />
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-gray-900 dark:text-white">Thomas Lean</p>
-            <p className="truncate text-sm text-gray-500 dark:text-gray-400">email@flowbite.com</p>
-          </div>
-          <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">$2367</div>
-        </div>
-      </List.Item>
-      <List.Item className="pb-0 pt-3 sm:pt-4">
-        <div className="flex items-center space-x-4 rtl:space-x-reverse">
-          <Avatar img="/images/people/profile-picture-4.jpg" alt="Neil image" rounded size="sm" />
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-gray-900 dark:text-white">Lana Byrd</p>
-            <p className="truncate text-sm text-gray-500 dark:text-gray-400">email@flowbite.com</p>
-          </div>
-          <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">$367</div>
-        </div>
-      </List.Item>
-    </List>
-
-</div>
+      </div>
     </>
   );
 }
