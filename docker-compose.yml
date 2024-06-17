@@ -1,0 +1,21 @@
+services:
+  reactjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: reactjs:v1
+    container_name: reactjs
+    ports:
+        - "5173:5173"
+    command: npm run dev
+    environment:
+      - WORK_DIR=/usr/app
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /${WORK_DIR}
+          ignore:
+            - node_modules
+        - action: rebuild
+          path: package.json
