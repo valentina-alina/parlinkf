@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Carousel, Label } from "flowbite-react";
 import fakerAdsList from './fakerAdsList';
@@ -6,25 +8,54 @@ import fakerCategories from './fakerCategories';
 import { HiViewList } from "react-icons/hi";
 import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
-import { useState } from 'react';
 import { CiEdit } from "react-icons/ci";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 type Category = typeof fakerCategories[number]['name'];
 
-const list = fakerAdsList;
+const initialCategoryCounts: Record<Category, number> = {
+    all: 0,
+    poolcar: 0,
+    tutoring: 0,
+    childcare: 0,
+    events: 0,
+};
 
 export default function AdsListPage(props: any) {
     const searchQueryFromNavbar = props.searchQuery;
 
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
+    const [items, setItems] = useState<any[]>([]);
+    const [hasMore, setHasMore] = useState(true);    
 
-    const initialCategoryCounts: Record<Category, number> = {
-        all: 0,
-        poolcar: 0,
-        tutoring: 0,
-        childcare: 0,
-        events: 0,
+    const list = fakerAdsList;
+
+    useEffect(() => {
+        
+        fetchInitialItems();
+    }, []);
+
+    useEffect(() => {
+        // Reset items when filters change
+        fetchInitialItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedCategories]);
+
+    const fetchInitialItems = () => {
+        
+        const filteredAds = list.filter((ad) => {
+            const matchesCategory =
+                selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
+            const matchesSearchQueryFromNavbar =
+                !searchQueryFromNavbar ||
+                ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) ||
+                ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
+            return matchesCategory && matchesSearchQueryFromNavbar;
+        });
+
+        setItems(filteredAds.slice(0, 10));
+        setHasMore(filteredAds.length > 10);
     };
 
     const handleCategoryChange = (category: Category) => {
@@ -41,16 +72,29 @@ export default function AdsListPage(props: any) {
         }
     };
 
-    /* const filteredAds = selectedCategories.length > 0
-        ? list.filter((ad) => selectedCategories.includes(ad.category as Category))
-        : list; */
+    const fetchMoreData = () => {
+        
+        const currentLength = items.length;
+        const filteredAds = list.filter((ad) => {
+            const matchesCategory =
+                selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
+            const matchesSearchQueryFromNavbar =
+                !searchQueryFromNavbar ||
+                ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) ||
+                ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
+            return matchesCategory && matchesSearchQueryFromNavbar;
+        });
 
-    const filteredAds = list.filter((ad) => {
-        const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
-        const matchesSearchQueryFromNavbar = !searchQueryFromNavbar || ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) || ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
-        return matchesCategory && matchesSearchQueryFromNavbar;
-    });
+        const nextBatch = filteredAds.slice(currentLength, currentLength + 10);
+        if (nextBatch.length === 0) {
+            setHasMore(false);
+            return;
+        }
 
+        setTimeout(() => {
+            setItems([...items, ...nextBatch]);
+        }, 1500);
+    };
     
     const categoryCounts = list.reduce((acc, ad) => {
         const category = ad.category as Category;
@@ -109,20 +153,19 @@ export default function AdsListPage(props: any) {
             </div>
 
             {
-                !filteredAds || filteredAds.length === 0 ? (
+                items.length === 0 ? (
                     <>
-                        <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {filteredAds.length}</h2>
+                        <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
                         <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
                     </>
                 ) : (
-                    <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {filteredAds.length}</h2>
+                    <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
                 )
             }
 
             <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56 ">
                 <Carousel slide={false}>
-                {filteredAds &&
-                filteredAds.map((event) => (
+                {items.map((event) => (
                     <div key={event.id} className={"p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover  bg-no-repeat dark:text-white bg-[url('/src/assets/" + event.imageUrl + "')]"}>
                     <Link to={`/annonce/${event.id}`} className="link">
                         <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
@@ -134,39 +177,49 @@ export default function AdsListPage(props: any) {
                 ))}
                 </Carousel>
             </div>
-            <div className='md:flex flex-wrap justify-between item-center gap-2'>
-
-
-                {filteredAds
-                    .filter((event) => {
-                        if (searchQueryFromNavbar === '') { return event; }
-                        else if (event.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) || event.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase())) { return event }
-                    })
-                    .map((event) => (
-                        <Card key={event.id} className='w-full my-4 shadow-lg'>
-                            <Link to={`/annonce/${event.id}`} className="w-full link text-blue-800 text-bodyTest">
-                                <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
-                                    <CiEdit />
-                                </Link>
-                                <div className=" grid grid-cols-1 md:grid-cols-3" color="violet-900">
-                                    <div className='col-span-2 flex flex-col '>
-                                    <p className="text-start text-blue-600 p-1">{event.start}</p>
-                                    <p className="text-center p-1"><b >{event.title}</b> </p>
-                                    <p className="text-justify visible max-sm:hidden mb-1">{event.description}</p>
-                                    <span className="grid grid-cols-2 ">
-                                        <i className="text-start">{event.city}</i>
-                                        <span className=" text-blue-700 flex gap-1 justify-end items-center font-bold">Nbp: {event.attendees} </span>
-                                    </span>
+            <InfiniteScroll
+                dataLength={items.length}
+                next={fetchMoreData}
+                hasMore={hasMore}
+                loader={<h4>Chargement...</h4>}
+                endMessage={
+                    <p style={{ textAlign: 'center' }}>
+                        <b>La liste est complète!</b>
+                    </p>
+                }
+            >            
+                <div className='md:flex flex-wrap justify-between item-center gap-2'>
+                    {items
+                        .filter((event) => {
+                            if (searchQueryFromNavbar === '') { return event; }
+                            else if (event.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) || event.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase())) { return event }
+                        })
+                        .map((event) => (
+                            <Card key={event.id} className='w-full my-4 shadow-lg'>
+                                <Link to={`/annonce/${event.id}`} className="w-full link text-blue-800 text-bodyTest">
+                                    <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
+                                        <CiEdit />
+                                    </Link>
+                                    <div className=" grid grid-cols-1 md:grid-cols-3" color="violet-900">
+                                        <div className='col-span-2 flex flex-col '>
+                                        <p className="text-start text-blue-600 p-1">{event.start}</p>
+                                        <p className="text-center p-1"><b >{event.title}</b> </p>
+                                        <p className="text-justify visible max-sm:hidden mb-1">{event.description}</p>
+                                        <span className="grid grid-cols-2 ">
+                                            <i className="text-start">{event.city}</i>
+                                            <span className=" text-blue-700 flex gap-1 justify-end items-center font-bold">Nbp: {event.attendees} </span>
+                                        </span>
+                                        </div>
+                                        <div>
+                                        <img src={event.imageUrl} alt="Ad Image" className="w-96 h-40 sm:w-80 sm:h-30 ml-3" />
+                                        </div> 
                                     </div>
-                                    <div>
-                                    <img src={event.imageUrl} alt="Ad Image" className="w-96 h-40 sm:w-80 sm:h-30 ml-3" />
-                                    </div> 
-                                </div>
-                        
-                            </Link>
-                        </Card>
-                ))}
-            </div>
+                            
+                                </Link>
+                            </Card>
+                    ))}
+                </div>
+            </InfiniteScroll>
             <MapButton />
         </>
     );
