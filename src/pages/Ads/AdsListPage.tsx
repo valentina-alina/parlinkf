@@ -9,7 +9,7 @@ import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getAds } from '../../services/api/ads';
+import { getAds, getAdsByParams } from '../../services/api/ads';
 
 type Category = typeof fakerCategories[number]['name'];
 
@@ -36,20 +36,29 @@ export default function AdsListPage(props: any) {
     }, []);
 
     useEffect(() => {
-        
-        fetchInitialItems();
-    }, [selectedCategories, localSearchQuery, adsList]);
+        fetchFilteredAds();
+    }, [selectedCategories, localSearchQuery, searchQueryFromNavbar]);
 
     const fetchAds = async () => {
         const ads = await getAds();
         setAdsList(ads);
         updateCategoryCounts(ads);
-        fetchInitialItems();
+        fetchInitialItems(ads);
     };
 
-    const fetchInitialItems = () => {
+    const fetchFilteredAds = async () => {
+        if (localSearchQuery || searchQueryFromNavbar) {
+            const query = localSearchQuery || searchQueryFromNavbar || '';
+            const ads = await getAdsByParams(query);
+            fetchInitialItems(ads);
+        } else {
+            fetchInitialItems(adsList);
+        }
+    };
+
+    const fetchInitialItems = (ads: any[]) => {
         // Filter the ads based on current filters
-        const filteredAds = adsList.filter((ad) => {
+        const filteredAds = ads.filter((ad) => {
             const matchesCategory =
                 selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
             const matchesSearchQueryFromNavbar =

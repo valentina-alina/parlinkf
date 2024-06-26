@@ -28,7 +28,7 @@ export async function getAds() {
     }
 }
 
-/* export async function getAdsByParams(search: string) {
+export async function getAdsByParams(search: string) {
     try {
         const {data} = await api.get(`ad/params?search=${search}`);
         return data
@@ -39,7 +39,7 @@ export async function getAds() {
     }
 }
 
-export async function getAdsByCategories(categoryName: string) {
+/*  export async function getAdsByCategories(categoryName: string) {
     try {
         const {data} = await api.post(`ad/categories?categoryName=${categoryName}`);
         return data
