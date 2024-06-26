@@ -47,9 +47,6 @@ export default function AdsListPage(props: any) {
         fetchInitialItems();
     };
 
-    console.log('adsList', adsList);
-    alert(adsList);
-
     const fetchInitialItems = () => {
         // Filter the ads based on current filters
         const filteredAds = adsList.filter((ad) => {
