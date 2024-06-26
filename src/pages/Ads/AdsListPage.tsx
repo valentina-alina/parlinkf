@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Carousel, Label, TextInput } from "flowbite-react";
-import fakerAdsList from './fakerAdsList';
 import fakerCategories from './fakerCategories';
 import { HiViewList, HiSearch } from "react-icons/hi";
 import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { getAds } from '../../services/api/ads';
 
 type Category = typeof fakerCategories[number]['name'];
 
@@ -28,23 +28,31 @@ export default function AdsListPage(props: any) {
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
     const [items, setItems] = useState<any[]>([]);
     const [hasMore, setHasMore] = useState(true);
+    const [adsList, setAdsList] = useState<any[]>([]);
+    const [categoryCounts, setCategoryCounts] = useState(initialCategoryCounts);
 
-    const list = fakerAdsList;
+    useEffect(() => {
+        fetchAds();
+    }, []);
 
     useEffect(() => {
         
         fetchInitialItems();
-    }, []);
+    }, [selectedCategories, localSearchQuery, adsList]);
 
-    useEffect(() => {
-        // Reset items when filters change
+    const fetchAds = async () => {
+        const ads = await getAds();
+        setAdsList(ads);
+        updateCategoryCounts(ads);
         fetchInitialItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedCategories, localSearchQuery]);
+    };
+
+    console.log('adsList', adsList);
+    alert(adsList);
 
     const fetchInitialItems = () => {
         // Filter the ads based on current filters
-        const filteredAds = list.filter((ad) => {
+        const filteredAds = adsList.filter((ad) => {
             const matchesCategory =
                 selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
             const matchesSearchQueryFromNavbar =
@@ -81,9 +89,8 @@ export default function AdsListPage(props: any) {
     };
 
     const fetchMoreData = () => {
-        
         const currentLength = items.length;
-        const filteredAds = list.filter((ad) => {
+        const filteredAds = adsList.filter((ad) => {
             const matchesCategory =
                 selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
             const matchesSearchQueryFromNavbar =
@@ -108,12 +115,16 @@ export default function AdsListPage(props: any) {
         }, 1500);
     };
 
-    const categoryCounts = list.reduce((acc, ad) => {
-        const category = ad.category as Category;
-        acc[category] = (acc[category] || 0) + 1;
-        acc['all'] = (acc['all'] || 0) + 1;
-        return acc;
-    }, { ...initialCategoryCounts });
+    const updateCategoryCounts = (ads: any[]) => {
+        const counts = ads.reduce((acc, ad) => {
+            const category = ad.category as Category;
+            acc[category] = (acc[category] || 0) + 1;
+            acc['all'] = (acc['all'] || 0) + 1;
+            return acc;
+        }, { ...initialCategoryCounts });
+
+        setCategoryCounts(counts);
+    };
 
     return (
         <>
@@ -190,7 +201,7 @@ export default function AdsListPage(props: any) {
             <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56">
                 <Carousel slide={false}>
                     {items.map((event) => (
-                        <div key={event.id} className={"p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover bg-no-repeat dark:text-white bg-[url('/src/assets/" + event.imageUrl + "')]"} >
+                        <div key={event.id} className={`p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover bg-no-repeat dark:text-white bg-[url('/src/assets/${event.imageUrl}')]`} >
                             <Link to={`/annonce/${event.id}`} className="link">
                                 <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
                                     <b>{event.start}</b><br />

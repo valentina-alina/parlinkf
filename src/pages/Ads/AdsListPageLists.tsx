@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Carousel, Label } from "flowbite-react";
-import fakerAdsList from './fakerAdsList';
+// import fakerAdsList from './fakerAdsList';
 import fakerCategories from './fakerCategories';
 import { HiViewList } from "react-icons/hi";
 import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { getAds } from '../../services/api/ads';
 
 type Category = typeof fakerCategories[number]['name'];
 
@@ -27,24 +28,30 @@ export default function AdsListPage(props: any) {
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
     const [items, setItems] = useState<any[]>([]);
-    const [hasMore, setHasMore] = useState(true);    
-
-    const list = fakerAdsList;
+    const [hasMore, setHasMore] = useState(true);
+    const [adsList, setAdsList] = useState<any[]>([]);
+    const [categoryCounts, setCategoryCounts] = useState(initialCategoryCounts);
 
     useEffect(() => {
-        
-        fetchInitialItems();
+        fetchAds();
     }, []);
 
     useEffect(() => {
-        // Reset items when filters change
+        
         fetchInitialItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedCategories]);
+    }, [selectedCategories, adsList]);
+
+
+    const fetchAds = async () => {
+        const ads = await getAds();
+        setAdsList(ads);
+        updateCategoryCounts(ads);
+        fetchInitialItems();
+    };
 
     const fetchInitialItems = () => {
         
-        const filteredAds = list.filter((ad) => {
+        const filteredAds = adsList.filter((ad) => {
             const matchesCategory =
                 selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
             const matchesSearchQueryFromNavbar =
@@ -75,7 +82,7 @@ export default function AdsListPage(props: any) {
     const fetchMoreData = () => {
         
         const currentLength = items.length;
-        const filteredAds = list.filter((ad) => {
+        const filteredAds = adsList.filter((ad) => {
             const matchesCategory =
                 selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
             const matchesSearchQueryFromNavbar =
@@ -96,12 +103,16 @@ export default function AdsListPage(props: any) {
         }, 1500);
     };
     
-    const categoryCounts = list.reduce((acc, ad) => {
-        const category = ad.category as Category;
-        acc[category] = (acc[category] || 0) + 1;
-        acc['all'] = (acc['all'] || 0) + 1;
-        return acc;
-    }, { ...initialCategoryCounts });
+    const updateCategoryCounts = (ads: any[]) => {
+        const counts = ads.reduce((acc, ad) => {
+            const category = ad.category as Category;
+            acc[category] = (acc[category] || 0) + 1;
+            acc['all'] = (acc['all'] || 0) + 1;
+            return acc;
+        }, { ...initialCategoryCounts });
+
+        setCategoryCounts(counts);
+    };
 
     return (
         <>
