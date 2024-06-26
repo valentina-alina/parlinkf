@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Carousel, Label, TextInput } from "flowbite-react";
 import fakerCategories from './fakerCategories';
@@ -10,6 +10,7 @@ import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { getAds, getAdsByParams } from '../../services/api/ads';
+import { debounce } from '../../services/utils/debounce';
 
 type Category = typeof fakerCategories[number]['name'];
 
@@ -21,8 +22,7 @@ const initialCategoryCounts: Record<Category, number> = {
     events: 0,
 };
 
-export default function AdsListPage(props: any) {
-    const searchQueryFromNavbar = props.searchQuery;
+const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
     const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
@@ -37,7 +37,7 @@ export default function AdsListPage(props: any) {
 
     useEffect(() => {
         fetchFilteredAds();
-    }, [selectedCategories, localSearchQuery, searchQueryFromNavbar]);
+    }, [selectedCategories, localSearchQuery, searchQuery]);
 
     const fetchAds = async () => {
         const ads = await getAds();
@@ -47,31 +47,36 @@ export default function AdsListPage(props: any) {
     };
 
     const fetchFilteredAds = async () => {
-        if (localSearchQuery || searchQueryFromNavbar) {
-            const query = localSearchQuery || searchQueryFromNavbar || '';
-            const ads = await getAdsByParams(query);
+        try {
+            const query = localSearchQuery || searchQuery || '';
+            const response = await getAdsByParams(query);
+
+            // Assuming response structure is { data: { ads: Array } }
+            const ads = response.data.ads;
+
+            // Check if ads is an array before proceeding
+            if (!Array.isArray(ads)) {
+                console.error('Expected an array of ads but received:', ads);
+                return;
+            }
+
             fetchInitialItems(ads);
-        } else {
-            fetchInitialItems(adsList);
+        } catch (error) {
+            console.error('Error fetching ads:', error);
         }
     };
 
     const fetchInitialItems = (ads: any[]) => {
-        // Filter the ads based on current filters
         const filteredAds = ads.filter((ad) => {
             const matchesCategory =
                 selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
-            const matchesSearchQueryFromNavbar =
-                !searchQueryFromNavbar ||
-                ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) ||
-                ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
-            const matchesLocalSearchQuery =
+            const matchesSearchQuery =
                 !localSearchQuery ||
                 ad.title.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
                 ad.city.toLowerCase().includes(localSearchQuery.toLowerCase());
-            return matchesCategory && matchesSearchQueryFromNavbar && matchesLocalSearchQuery;
+            return matchesCategory && matchesSearchQuery;
         });
-
+    
         setItems(filteredAds.slice(0, 10));
         setHasMore(filteredAds.length > 10);
     };
@@ -90,8 +95,13 @@ export default function AdsListPage(props: any) {
         }
     };
 
+    const debouncedHandleSearchChange = useCallback(debounce((query: string) => {
+        setLocalSearchQuery(query);
+    }, 500), []);
+
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLocalSearchQuery(event.target.value);
+        const { value } = event.target;
+        debouncedHandleSearchChange(value);
     };
 
     const fetchMoreData = () => {
@@ -99,23 +109,19 @@ export default function AdsListPage(props: any) {
         const filteredAds = adsList.filter((ad) => {
             const matchesCategory =
                 selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
-            const matchesSearchQueryFromNavbar =
-                !searchQueryFromNavbar ||
-                ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) ||
-                ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
-            const matchesLocalSearchQuery =
+            const matchesSearchQuery =
                 !localSearchQuery ||
                 ad.title.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
                 ad.city.toLowerCase().includes(localSearchQuery.toLowerCase());
-            return matchesCategory && matchesSearchQueryFromNavbar && matchesLocalSearchQuery;
+            return matchesCategory && matchesSearchQuery;
         });
-
+    
         const nextBatch = filteredAds.slice(currentLength, currentLength + 10);
         if (nextBatch.length === 0) {
             setHasMore(false);
             return;
         }
-
+    
         setTimeout(() => {
             setItems([...items, ...nextBatch]);
         }, 1500);
@@ -255,3 +261,5 @@ export default function AdsListPage(props: any) {
         </>
     );
 }
+
+export default AdsListPage;

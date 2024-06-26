@@ -10,7 +10,7 @@ import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getAds } from '../../services/api/ads';
+import { getAds, getAdsByParams } from '../../services/api/ads';
 
 type Category = typeof fakerCategories[number]['name'];
 
@@ -22,8 +22,8 @@ const initialCategoryCounts: Record<Category, number> = {
     events: 0,
 };
 
-export default function AdsListPage(props: any) {
-    const searchQueryFromNavbar = props.searchQuery;
+export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
+    // const searchQueryFromNavbar = props.searchQuery;
 
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
@@ -36,28 +36,46 @@ export default function AdsListPage(props: any) {
         fetchAds();
     }, []);
 
-    useEffect(() => {
-        
-        fetchInitialItems();
-    }, [selectedCategories, adsList]);
+    useEffect(() => {        
+        fetchFilteredAds();
+    }, [selectedCategories, searchQuery]);
 
 
     const fetchAds = async () => {
         const ads = await getAds();
         setAdsList(ads);
         updateCategoryCounts(ads);
-        fetchInitialItems();
+        fetchInitialItems(ads);
     };
 
-    const fetchInitialItems = () => {
-        
-        const filteredAds = adsList.filter((ad) => {
+    const fetchFilteredAds = async () => {
+        try {
+            const query = searchQuery || '';
+            const response = await getAdsByParams(query);
+
+            // Assuming response structure is { data: { ads: Array } }
+            const ads = response.data.ads;
+
+            // Check if ads is an array before proceeding
+            if (!Array.isArray(ads)) {
+                console.error('Expected an array of ads but received:', ads);
+                return;
+            }
+
+            fetchInitialItems(ads);
+        } catch (error) {
+            console.error('Error fetching ads:', error);
+        }
+    };
+
+    const fetchInitialItems = (ads: any[]) => {        
+        const filteredAds = ads.filter((ad) => {
             const matchesCategory =
                 selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
             const matchesSearchQueryFromNavbar =
-                !searchQueryFromNavbar ||
-                ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) ||
-                ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
+                !searchQuery ||
+                ad.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                ad.city.toLowerCase().includes(searchQuery.toLowerCase());
             return matchesCategory && matchesSearchQueryFromNavbar;
         });
 
@@ -79,16 +97,15 @@ export default function AdsListPage(props: any) {
         }
     };
 
-    const fetchMoreData = () => {
-        
+    const fetchMoreData = () => {        
         const currentLength = items.length;
         const filteredAds = adsList.filter((ad) => {
             const matchesCategory =
                 selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
             const matchesSearchQueryFromNavbar =
-                !searchQueryFromNavbar ||
-                ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) ||
-                ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
+                !searchQuery ||
+                ad.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                ad.city.toLowerCase().includes(searchQuery.toLowerCase());
             return matchesCategory && matchesSearchQueryFromNavbar;
         });
 
@@ -202,8 +219,8 @@ export default function AdsListPage(props: any) {
                 <div className='md:flex flex-wrap justify-between item-center gap-2'>
                     {items
                         .filter((event) => {
-                            if (searchQueryFromNavbar === '') { return event; }
-                            else if (event.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) || event.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase())) { return event }
+                            if (searchQuery === '') { return event; }
+                            else if (event.title.toLowerCase().includes(searchQuery.toLowerCase()) || event.city.toLowerCase().includes(searchQuery.toLowerCase())) { return event }
                         })
                         .map((event) => (
                             <Card key={event.id} className='w-full my-4 shadow-lg'>
