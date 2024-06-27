@@ -1,40 +1,34 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getAds } from '../../services/api/ads';
+import { getAds, getAdsByParams } from '../../services/api/ads';
 import MapButton from '../../components/Map/MapButton';
 import Sidebar from '../../components/Calendar/Sidebar';
 import FullCalendar from '../../components/Calendar/FullCalendar';
 import { EventInput } from '@fullcalendar/core';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Label, TextInput } from 'flowbite-react';
 import fakerCategories from '../Ads/fakerCategories';
 import { HiSearch } from "react-icons/hi";
+import { debounce } from '../../services/utils/debounce';
 
 type Category = typeof fakerCategories[number]['name'];
 
-export default function CalendarPage(props:any) {
-    const [ ads, setAds ] = useState<any>([]);
-    console.log('ads', ads);
-
-    useEffect(() => {
-        const loadAds = async() => {
-            const listAd = await getAds();
-            setAds(listAd);
-        }
-
-        loadAds();
-
-    }, [])
-
-    const searchQueryFromNavbar = props.searchQuery;
+export default function CalendarPage({ searchQuery }: { searchQuery: string }) {
     const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
-
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+    const [adsList, setAdsList] = useState<any[]>([]);
     const [showWeekNumbers, setShowWeekNumbers] = useState(true);
     const [mobileView, setMobileView] = useState(false);
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
 
+    useEffect(() => {
+        fetchAds();
+    }, []);
 
+    useEffect(() => {        
+        fetchFilteredAds();
+    }, [selectedCategories, localSearchQuery, searchQuery]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -48,6 +42,42 @@ export default function CalendarPage(props:any) {
 
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    const fetchAds = async () => {
+        const ads = await getAds();
+        setAdsList(ads);
+    };
+
+    const fetchFilteredAds = async () => {
+        try {
+            const query = localSearchQuery || searchQuery || '';
+            const response = await getAdsByParams(query);
+
+            const ads = response.data.ads;
+
+            if (!Array.isArray(ads)) {
+                console.error('Expected an array of ads but received:', ads);
+                return;
+            }
+
+            const adsWithParsedDates = ads.map((ad: any) => ({
+                ...ad,
+                startTime: new Date(ad.startTime),
+                endTime: new Date(ad.endTime),
+            }));
+
+            setAdsList(adsWithParsedDates);
+        } catch (error) {
+            console.error('Error fetching ads:', error);
+        }
+    };
+
+    const filteredEvents = adsList.filter((ad: any) => {
+        const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
+        const matchesSearchQueryFromNavbar = !searchQuery || ad.title.toLowerCase().includes(searchQuery.toLowerCase()) || ad.city.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesLocalSearchQuery = !localSearchQuery || ad.title.toLowerCase().includes(localSearchQuery.toLowerCase()) || ad.city.toLowerCase().includes(localSearchQuery.toLowerCase());
+        return matchesCategory && matchesSearchQueryFromNavbar && matchesLocalSearchQuery;
+    });
 
     const handleCategoryChange = (category: Category) => {
         if (category === 'all') {
@@ -63,22 +93,20 @@ export default function CalendarPage(props:any) {
         }
     };
 
+    const debouncedHandleSearchChange = useCallback(debounce((query: string) => {
+        setLocalSearchQuery(query);
+    }, 500), []);
+
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLocalSearchQuery(event.target.value);
+        const { value } = event.target;
+        debouncedHandleSearchChange(value);
     };
 
-    const filteredEvents = ads.filter((ad:any) => {
-        const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
-        const matchesSearchQueryFromNavbar = !searchQueryFromNavbar || ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) || ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
-        const matchesLocalSearchQuery = !localSearchQuery || ad.title.toLowerCase().includes(localSearchQuery.toLowerCase()) || ad.city.toLowerCase().includes(localSearchQuery.toLowerCase());
-        return matchesCategory && matchesSearchQueryFromNavbar && matchesLocalSearchQuery;
-    });
-
-    const eventInputs: EventInput[] = filteredEvents.map((event:any) => ({
+    const eventInputs: EventInput[] = filteredEvents.map((event: any) => ({
         id: String(event.id),
         title: event.title,
-        start: event.start,
-        end: event.end,
+        start: event.startTime,
+        end: event.endTime,
     }));
 
     const navigate = useNavigate();
@@ -132,9 +160,9 @@ export default function CalendarPage(props:any) {
                         Nous n'avons pas trouvé d'évènement.
                     </p>
                 ) : (
-                        <h1 className="font-titleTest text-3xl my-14">
-                            Calendrier des annonces
-                        </h1>
+                    <h1 className="font-titleTest text-3xl my-14">
+                        Calendrier des annonces
+                    </h1>
                 )
             }
 
@@ -151,21 +179,21 @@ export default function CalendarPage(props:any) {
             </div>
 
             <div className="flex flex-wrap gap-8 overflow-hidden">
-                    <div className={`w-full  ${mobileView ? 'p-0' : ''}`}>
-                        <FullCalendar
-                            mobileView={mobileView}
-                            showWeekNumbers={showWeekNumbers}
-                            eventInputs={eventInputs}
-                            handleEventClick={handleEventClick}
-                        />
-                    </div>
-                    <div className="w-full mt-10 sm:mt-0">
-                        <Sidebar
-                            events={filteredEvents}
-                        />
-                    </div>
-                    <MapButton />
+                <div className={`w-full ${mobileView ? 'p-0' : ''}`}>
+                    <FullCalendar
+                        mobileView={mobileView}
+                        showWeekNumbers={showWeekNumbers}
+                        eventInputs={eventInputs}
+                        handleEventClick={handleEventClick}
+                    />
                 </div>
+                <div className="w-full mt-10 sm:mt-0">
+                    <Sidebar
+                        events={filteredEvents}
+                    />
+                </div>
+                <MapButton />
+            </div>
         </>
-    )
+    );
 }

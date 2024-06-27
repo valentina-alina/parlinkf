@@ -133,7 +133,7 @@ export default function MapPage(props: any) {
                         {filteredAds.map(ad => (
                             <MarkerF
                                 key={ad.id}
-                                position={{ lat: ad.lat, lng: ad.lng }}
+                                position={{ lat: +ad.lat, lng: +ad.lng }}
                                 onClick={() => handleActiveMarker(ad.id)}>
                                 {activeMarker === ad.id ? (
                                     <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
@@ -143,7 +143,7 @@ export default function MapPage(props: any) {
                                         >
                                             <div>
                                                 <p className="font-bold">{ad.title}</p>
-                                                <p>{ad.postal_code} {ad.city}</p>
+                                                <p>{ad.postalCode} {ad.city}</p>
                                             </div>
                                         </button>
                                     </InfoWindowF>

@@ -15,11 +15,11 @@ export default class MapConfig {
         }
     }
 
-    defaultMapCenterAdDetail(ads:any) {
+    defaultMapCenterAdDetail(ads: any) {
         return {
             lat: ads.lat,
             lng: ads.lng,
-        }
+        };
     }
     
     defaultMapZoom(zoom: number) {

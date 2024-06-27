@@ -48,7 +48,7 @@ function App() {
       <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery}  />
       {/* <HeaderMenu/> */}
       <Routes>
-          <Route path="/" />
+          <Route path="/login" element={<LoginPage />} />
 
             <Route element={ <PrivateRoute /> }>
             <Route path='/user-create' element={ <UserCreatePage handleSubmitUser={function (_author: User): void {
@@ -57,7 +57,7 @@ function App() {
               <Route path='/gestion-utilisateurs' element={ <UserManagement handleSubmitUser={function (_author: User): void {
             throw new Error('Function not implemented.');
           } } /> } />
-              <Route path='/login' element={ <LoginPage /> } />
+              {/* <Route path='/login' element={ <LoginPage /> } /> */}
               <Route path='/mon-compte' element={ <UserProfilePage /> } />
               <Route path='/editer-mon-profil/:idProfile' element={ <UserEditProfilePage handleSubmitProfile={handleSubmitProfile} /> } />
               <Route path='/annonce/:idAd' element={ <AdsDetailPage /> } />

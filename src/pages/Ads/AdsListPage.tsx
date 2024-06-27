@@ -77,8 +77,8 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
             return matchesCategory && matchesSearchQuery;
         });
     
-        setItems(filteredAds.slice(0, 10));
-        setHasMore(filteredAds.length > 10);
+        setItems(filteredAds.slice(0, 12));
+        setHasMore(filteredAds.length > 12);
     };
 
     const handleCategoryChange = (category: Category) => {
@@ -213,7 +213,7 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
             <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56">
                 <Carousel slide={false}>
                     {items.map((event) => (
-                        <div key={event.id} className={`p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover bg-no-repeat dark:text-white bg-[url('/src/assets/${event.imageUrl}')]`} >
+                        <div key={event.id} className={`p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover bg-no-repeat dark:text-white bg-[url('/src/assets/${event.adPicture}')]`} >
                             <Link to={`/annonce/${event.id}`} className="link">
                                 <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
                                     <b>{event.start}</b><br />
@@ -250,7 +250,7 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
                                     <i className='flex justify-between items-center'>
                                         {event.city} <span className='text-blue-700 font-bold'> Nbp {event.attendees}</span>
                                     </i>
-                                    <img src={event.imageUrl} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
+                                    <img src={event.adPicture} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
                                 </div>
                             </Link>
                         </Card>

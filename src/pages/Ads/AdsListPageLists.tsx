@@ -79,8 +79,8 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             return matchesCategory && matchesSearchQueryFromNavbar;
         });
 
-        setItems(filteredAds.slice(0, 10));
-        setHasMore(filteredAds.length > 10);
+        setItems(filteredAds.slice(0, 8));
+        setHasMore(filteredAds.length > 8);
     };
 
     const handleCategoryChange = (category: Category) => {
@@ -194,7 +194,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56 ">
                 <Carousel slide={false}>
                 {items.map((event) => (
-                    <div key={event.id} className={"p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover  bg-no-repeat dark:text-white bg-[url('/src/assets/" + event.imageUrl + "')]"}>
+                    <div key={event.id} className={"p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover  bg-no-repeat dark:text-white bg-[url('/src/assets/" + event.adPicture + "')]"}>
                     <Link to={`/annonce/${event.id}`} className="link">
                         <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
                         <b>{event.start}</b><br />
@@ -239,7 +239,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                         </span>
                                         </div>
                                         <div>
-                                        <img src={event.imageUrl} alt="Ad Image" className="w-96 h-40 sm:w-80 sm:h-30 ml-3" />
+                                        <img src={event.adPicture} alt="Ad Image" className="w-96 h-40 sm:w-80 sm:h-30 ml-3" />
                                         </div> 
                                     </div>
                             

@@ -6,8 +6,8 @@ interface SidebarEventProps {
 }
 
 export function SidebarEvent({ event }: SidebarEventProps) {
-    const startDate = new Date(event.start);
-    const endDate = new Date(event.end);
+    const startDate = new Date(event.startTime);
+    const endDate = new Date(event.endTime);
 
     const day = startDate.getDate().toString().padStart(2, '0');
     const month = (startDate.getMonth() + 1).toString().padStart(2, '0');
@@ -42,7 +42,7 @@ export function SidebarEvent({ event }: SidebarEventProps) {
                         <i className='flex justify-between items-center'>
                             {event.city} <span className='text-blue-700 font-bold'> Nbp {event.attendees}</span>
                         </i>
-                        <img src={event.imageUrl} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
+                        <img src={event.adPicture} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
                     </div>
                 </button>
             </li>
