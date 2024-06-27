@@ -1,8 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getAds } from '../../services/api/ads';
-import { AdInterface } from '../../services/interfaces/Ad';
-import { AdWithoutCoordinatesInterface } from '../../services/interfaces/AdWithoutCoordinates';
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { MapProvider } from '../../providers/MapProvider';
 import { GoogleMap, MarkerF, InfoWindowF } from "@react-google-maps/api";
 import { useNavigate } from 'react-router-dom';
@@ -10,17 +8,75 @@ import fakerCategories from '../Ads/fakerCategories';
 import { TextInput } from 'flowbite-react';
 import { HiSearch } from "react-icons/hi";
 import MapConfig from '../../services/utils/MapConfig';
+import { debounce } from '../../services/utils/debounce';
+import { getAds, getAdsByParams } from '../../services/api/ads';
+import { AdWithoutCoordinatesInterface } from '../../services/interfaces/AdWithoutCoordinates';
 
 type Category = typeof fakerCategories[number]['name'];
 
-export default function MapPage(props: any) {
-    const searchQueryFromNavbar = props.searchQuery || '';
-
-    const [ads, setAds] = useState<AdInterface[]>([]);
+export default function MapPage({ searchQuery }: { searchQuery: string }) {
+    const [adsList, setAdsList] = useState<any[]>([]);
     const [activeMarker, setActiveMarker] = useState<number | null>(null);
     const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
+
+    useEffect(() => {
+        fetchAndSetAds();
+    }, []);
+
+    useEffect(() => {
+        fetchFilteredAds();
+    }, [selectedCategories, localSearchQuery, searchQuery]);
+
+    const fetchAndSetAds = async () => {
+        try {
+            const listAd = await getAds();
+            if (listAd) {
+                setAdsList(listAd.map((ad: AdWithoutCoordinatesInterface) => ({
+                    ...ad,
+                    lat: parseFloat(ad.lat),
+                    lng: parseFloat(ad.lng),
+                })));
+            }
+        } catch (error) {
+            console.error('Error fetching ads:', error);
+        }
+    };
+
+    const fetchFilteredAds = async () => {
+        try {
+            const query = localSearchQuery || searchQuery || '';
+            const response = await getAdsByParams(query);
+
+            // Assuming response structure is { data: { ads: Array } }
+            const ads = response.data.ads;
+
+            // Check if ads is an array before proceeding
+            if (!Array.isArray(ads)) {
+                console.error('Expected an array of ads but received:', ads);
+                return;
+            }
+
+            setAdsList(ads.map((ad: AdWithoutCoordinatesInterface) => ({
+                ...ad,
+                lat: parseFloat(ad.lat),
+                lng: parseFloat(ad.lng),
+            })));
+        } catch (error) {
+            console.error('Error fetching ads:', error);
+        }
+    };
+
+    const filteredAds = adsList.filter((ad) => {
+        const matchesCategory =
+            selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
+        const matchesSearchQuery =
+            !localSearchQuery ||
+            ad.title.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
+            ad.city.toLowerCase().includes(localSearchQuery.toLowerCase());
+        return matchesCategory && matchesSearchQuery;
+    });
 
     const handleCategoryChange = (category: Category) => {
         if (category === 'all') {
@@ -36,16 +92,14 @@ export default function MapPage(props: any) {
         }
     };
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLocalSearchQuery(event.target.value);
-    };
+    const debouncedHandleSearchChange = useCallback(debounce((query: string) => {
+        setLocalSearchQuery(query);
+    }, 500), []);
 
-    const filteredAds = ads.filter((ad) => {
-        const matchesCategory = isAllSelected || selectedCategories.includes(ad.category as Category);
-        const matchesSearchQueryFromNavbar = !searchQueryFromNavbar || ad.title.toLowerCase().includes(searchQueryFromNavbar.toLowerCase()) || ad.city.toLowerCase().includes(searchQueryFromNavbar.toLowerCase());
-        const matchesLocalSearchQuery = !localSearchQuery || ad.title.toLowerCase().includes(localSearchQuery.toLowerCase()) || ad.city.toLowerCase().includes(localSearchQuery.toLowerCase());
-        return matchesCategory && matchesSearchQueryFromNavbar && matchesLocalSearchQuery;
-    });
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = event.target;
+        debouncedHandleSearchChange(value);
+    };
 
     const handleActiveMarker = (adId: number) => {
         if (adId === activeMarker) {
@@ -56,31 +110,11 @@ export default function MapPage(props: any) {
 
     const navigate = useNavigate();
 
-    const handleViewDetail = (ad: AdInterface) => {
+    const handleViewDetail = (ad: AdWithoutCoordinatesInterface) => {
         navigate(`/annonce/${ad.id}`, { state: { ad } });
     };
 
-    useEffect(() => {
-        const fetchAndSetAds = async () => {
-            try {
-                const listAd = await getAds();
-                if (listAd) {
-                    setAds(listAd.map((ad: AdWithoutCoordinatesInterface) => ({
-                        ...ad,
-                        lat: parseFloat(ad.lat),
-                        lng: parseFloat(ad.lng),
-                    })));
-                }
-            } catch (error) {
-                console.error('Error fetching ads:', error);
-            }
-        };
-
-        fetchAndSetAds();
-    }, []);
-
     const mapConfig = new MapConfig();
-    console.log('mapConfig', mapConfig)
 
     return (
         <>
@@ -97,18 +131,15 @@ export default function MapPage(props: any) {
                         </div>
                     </div>
                 ))}
-                
             </div>
 
-            {
-                !filteredAds || filteredAds.length === 0 ? (
-                    <p className='font-bodyTest text-2xl my-32 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
-                ) : (
-                    <h1 className="font-titleTest text-3xl my-14">
-                        Voir les annonces sur la carte
-                    </h1>
-                )
-            }
+            {filteredAds.length === 0 ? (
+                <p className='font-bodyTest text-2xl my-32 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
+            ) : (
+                <h1 className="font-titleTest text-3xl my-14">
+                    Voir les annonces sur la carte
+                </h1>
+            )}
 
             <div className="sm:hidden w-50 my-16">
                 <TextInput
@@ -126,7 +157,7 @@ export default function MapPage(props: any) {
                 <div className="w-50 sm:w-full flex justify-center items-center">
                     <GoogleMap
                         mapContainerStyle={mapConfig.defaultMapContainerStyle('1200px', '80vh')}
-                        center={mapConfig.defaultMapCenter(ads)}
+                        center={mapConfig.defaultMapCenter(adsList)}
                         zoom={mapConfig.defaultMapZoom(6)}
                         options={mapConfig.defaultMapOptions(true,0,'auto','satellite')}
                     >
