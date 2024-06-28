@@ -3,23 +3,18 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Carousel, Label, TextInput } from "flowbite-react";
-import fakerCategories from './fakerCategories';
 import { HiViewList, HiSearch } from "react-icons/hi";
 import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getAds, getAdsByParams } from '../../services/api/ads';
+import { getAds, getAdsByParams, getCategories } from '../../services/api/ads';
 import { debounce } from '../../services/utils/debounce';
 
-type Category = typeof fakerCategories[number]['name'];
+type Category = string; // Adjust type based on your API response
 
 const initialCategoryCounts: Record<Category, number> = {
     all: 0,
-    poolcar: 0,
-    tutoring: 0,
-    childcare: 0,
-    events: 0,
 };
 
 const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
@@ -29,10 +24,12 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
     const [items, setItems] = useState<any[]>([]);
     const [hasMore, setHasMore] = useState(true);
     const [adsList, setAdsList] = useState<any[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [categoryCounts, setCategoryCounts] = useState(initialCategoryCounts);
 
     useEffect(() => {
         fetchAds();
+        fetchCategories();
     }, []);
 
     useEffect(() => {
@@ -138,42 +135,42 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
         setCategoryCounts(counts);
     };
 
+    const fetchCategories = async () => {
+        try {
+            const response = await getCategories();
+            const fetchedCategories = response.data.categories; // Adjust according to your API response structure
+    
+            setCategories(fetchedCategories);
+            console.log('Fetched categories:', fetchedCategories); // Verify the fetched categories
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+
     return (
         <>
             <div className='flex flex-row justify-around items-center gap-4 my-6 border-b-2 py-4 font-bodyTest'>
-                {fakerCategories.map((category) => (
-                    <div className="event_filter_wrapper relative group" key={category.id}>
+                {categories.map((category) => (
+                    <div className="event_filter_wrapper relative group" key={category}>
                         <div className='relative'>
                             <Link
                                 to=""
-                                onClick={() => handleCategoryChange(category.name as Category)}
+                                onClick={() => handleCategoryChange(category)}
                                 className='flex active:ring focus:outline-none focus:border-b-2 focus:border-b-blue-800'
                             >
                                 <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
                                     <Label
-                                        htmlFor={category.name}
-                                        className={`flex ${selectedCategories.includes(category.name as Category) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg' : 'flex active:relative active:text-white hover:relative hover:text-whit text-xs sm:text-lg'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg'}`}
+                                        htmlFor={category}
+                                        className={`flex ${selectedCategories.includes(category) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg' : 'flex active:relative active:text-white hover:relative hover:text-whit text-xs sm:text-lg'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg'}`}
                                     >
-                                        {category.label}
+                                        {category}
                                     </Label>
                                 </span>
                             </Link>
                         </div>
-                        {category.group && (
-                            <div className='absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 overflow-y-hidden'>
-                                {category.group.map((item) => (
-                                    <Link
-                                        key={item.id}
-                                        to=""
-                                        className='block px-4 py-2 text-sm text-gray-700 hover:bg-blue-700 hover:text-white'
-                                    >
-                                        {item.title}
-                                    </Link>
-                                ))}
-                            </div>
-                        )}
-                        <p className={`${selectedCategories.includes(category.name as Category) || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
-                            {categoryCounts[category.name as Category]}
+                        {/* Assuming no subcategories in this UI */}
+                        <p className={`${selectedCategories.includes(category) || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
+                            {categoryCounts[category]}
                         </p>
                     </div>
                 ))}

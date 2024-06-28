@@ -39,7 +39,7 @@ export async function getAdsByParams(search: string) {
     }
 }
 
-/*  export async function getAdsByCategories(categoryName: string) {
+/* export async function getAdsByCategories(categoryName: string) {
     try {
         const {data} = await api.post(`ad/categories?categoryName=${categoryName}`);
         return data
@@ -48,9 +48,20 @@ export async function getAdsByParams(search: string) {
             error: error
         }
     }
+} */
+
+export async function getCategories() {
+    try {
+        const response = await api.get('categories');
+        console.log('Fetched categories:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+        return [];
+    }
 }
 
-export async function postSubscribedProfilesById(id: any) {
+/*  export async function postSubscribedProfilesById(id: any) {
     try {
         const {data} = await api.post(`student/${id}`);
         return data
