@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Carousel, Label, TextInput } from "flowbite-react";
@@ -57,7 +55,6 @@ export default function AdsListPage(props: any) {
     };
 
     const fetchInitialItems = (ads: any[]) => {
-        // Filter the ads based on current filters
         const filteredAds = ads.filter((ad) => {
             const matchesCategory =
                 selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
@@ -134,7 +131,7 @@ export default function AdsListPage(props: any) {
 
     return (
         <>
-            <div className='flex flex-row justify-around items-center gap-4 my-6 border-b-2 py-4 font-bodyTest'>
+            <div className='flex flex-row justify-around items-center gap-4 mb-4 border-b-2 py-4 font-bodyTest'>
                 {fakerCategories.map((category) => (
                     <div className="event_filter_wrapper relative group" key={category.id}>
                         <div className='relative'>
@@ -181,18 +178,9 @@ export default function AdsListPage(props: any) {
                 </div>
             </div>
 
-            {
-                items.length === 0 ? (
-                    <>
-                        <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
-                        <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
-                    </>
-                ) : (
-                    <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
-                )
-            }
+            <h2 className="font-titleTest text-xl  sm:text-2xl mb-4">Fil des annonces : {items.length}</h2>
 
-            <div className="sm:hidden w-50 my-16">
+            <div className="sm:hidden w-50 my-4">
                 <TextInput
                     className="w-80"
                     id="search"
@@ -204,53 +192,66 @@ export default function AdsListPage(props: any) {
                 />
             </div>
 
-            <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56">
-                <Carousel slide={false}>
+            <div className="grid grid-cols-1 mb-2
+            ">
+                <Carousel>
                     {items.map((event) => (
-                        <div key={event.id} className={`p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover bg-no-repeat dark:text-white bg-[url('/src/assets/${event.imageUrl}')]`} >
-                            <Link to={`/annonce/${event.id}`} className="link">
-                                <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
-                                    <b>{event.start}</b><br />
-                                    <i>{event.title}</i>
-                                </div>
-                            </Link>
+                        <div key={event.id} className="relative h-64 md:h-96">
+                            <div 
+                                className="absolute inset-0 flex items-end justify-end p-5 bg-cover bg-center bg-no-repeat"
+                                style={{ backgroundImage: `url(${event.adPicture})` }}
+                            >
+                                <Link to={`/annonce/${event.id}`} className="link">
+                                    <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
+                                        <b>{event.start}</b><br />
+                                        <i>{event.title}</i>
+                                    </div>
+                                </Link>
+                            </div>
                         </div>
                     ))}
                 </Carousel>
             </div>
-            <InfiniteScroll
-                dataLength={items.length}
-                next={fetchMoreData}
-                hasMore={hasMore}
-                loader={<h4>Chargement...</h4>}
-                endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                        <b>La liste est complète!</b>
-                    </p>
-                }
-            >
-                <div className='md:flex flex-wrap justify-between item-center gap-2'>
-                    {items.map((event) => (
-                        <Card key={event.id} className='my-4 shadow-lg'>
-                            <Link to={`/annonce/${event.id}`} className="link text-blue-800 text-bodyTest">
-                                <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
-                                    <CiEdit />
+
+            {items.length === 0 ? (
+                <>
+                    <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
+                </>
+            ) : (
+                <InfiniteScroll
+                    dataLength={items.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore}
+                    loader={<h4>Chargement...</h4>}
+                    endMessage={
+                        <p style={{ textAlign: 'center' }}>
+                            <b>La liste est complète!</b>
+                        </p>
+                    }
+                >
+                    <div className='md:flex flex-wrap justify-between item-center gap-2'>
+                        {items.map((event) => (
+                            <Card key={event.id} className='my-4 shadow-lg'>
+                                <Link to={`/annonce/${event.id}`} className="link text-blue-800 text-bodyTest">
+                                    <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
+                                        <CiEdit />
+                                    </Link>
+                                    <div className='flex flex-col'>
+                                        <b>
+                                            {event.title}
+                                        </b>
+                                        <i className='tracking-wider'>{event.start}</i>
+                                        <i className='flex justify-between items-center'>
+                                            {event.city} <span className='text-blue-700 font-bold'> Nbp {event.attendees}</span>
+                                        </i>
+                                        <img src={event.adPicture} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
+                                    </div>
                                 </Link>
-                                <div className='flex flex-col'>
-                                    <b>
-                                        {event.title}
-                                    </b>
-                                    <i className='tracking-wider'>{event.start}</i>
-                                    <i className='flex justify-between items-center'>
-                                        {event.city} <span className='text-blue-700 font-bold'> Nbp {event.attendees}</span>
-                                    </i>
-                                    <img src={event.imageUrl} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
-                                </div>
-                            </Link>
-                        </Card>
-                    ))}
-                </div>
-            </InfiniteScroll>
+                            </Card>
+                        ))}
+                    </div>
+                </InfiniteScroll>
+            )}
             <MapButton />
         </>
     );

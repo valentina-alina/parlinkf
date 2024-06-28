@@ -11,6 +11,10 @@ import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { getAds } from '../../services/api/ads';
+import { MapProvider } from '../../providers/MapProvider';
+import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { HiPencilAlt } from "react-icons/hi";
+import MapConfig from '../../services/utils/MapConfig';
 
 type Category = typeof fakerCategories[number]['name'];
 
@@ -113,7 +117,7 @@ export default function AdsListPage(props: any) {
 
         setCategoryCounts(counts);
     };
-
+    const mapConfig = new MapConfig();
     return (
         <>
             <div className='flex flex-row justify-around items-center gap-4 my-6 border-b-2 py-4 font-bodyTest'>
@@ -174,18 +178,24 @@ export default function AdsListPage(props: any) {
                 )
             }
 
-            <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56 ">
-                <Carousel slide={false}>
-                {items.map((event) => (
-                    <div key={event.id} className={"p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover  bg-no-repeat dark:text-white bg-[url('/src/assets/" + event.imageUrl + "')]"}>
-                    <Link to={`/annonce/${event.id}`} className="link">
-                        <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
-                        <b>{event.start}</b><br />
-                        <i>{event.title}</i>
+<div className="grid grid-cols-1 mb-2
+            ">
+                <Carousel>
+                    {items.map((event) => (
+                        <div key={event.id} className="relative h-64 md:h-96">
+                            <div 
+                                className="absolute inset-0 flex items-end justify-end p-5 bg-cover bg-center bg-no-repeat"
+                                style={{ backgroundImage: `url(${event.adPicture})` }}
+                            >
+                                <Link to={`/annonce/${event.id}`} className="link">
+                                    <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
+                                        <b>{event.start}</b><br />
+                                        <i>{event.title}</i>
+                                    </div>
+                                </Link>
+                            </div>
                         </div>
-                    </Link>
-                    </div>
-                ))}
+                    ))}
                 </Carousel>
             </div>
             <InfiniteScroll
@@ -221,8 +231,22 @@ export default function AdsListPage(props: any) {
                                             <span className=" text-blue-700 flex gap-1 justify-end items-center font-bold">Nbp: {event.attendees} </span>
                                         </span>
                                         </div>
-                                        <div>
-                                        <img src={event.imageUrl} alt="Ad Image" className="w-96 h-40 sm:w-80 sm:h-30 ml-3" />
+                                        <div >
+                                        {/* <img src={event.adPicture} alt="Ad Image" className="w-96 h-40 sm:w-80 sm:h-30 ml-3" />
+                                         */}
+                                <MapProvider>
+                                    <div className="w-96 sm:w-full flex justify-center items-center">
+                                        <GoogleMap
+                                            mapContainerStyle={mapConfig.defaultMapContainerStyle('20vh','20vh')}
+                                            center={mapConfig.defaultMapCenterAdDetail({lat :46.66666554540158 , lng :0.3675645320510029})}
+                                            zoom={mapConfig.defaultMapZoom(18)}
+                                            options={mapConfig.defaultMapOptions(true,0,'auto','satellite')}
+                                        >
+                                            <MarkerF position={mapConfig.defaultMapCenterAdDetail({lat :46.66666554540158 , lng :0.3675645320510029})}>
+                                            </MarkerF>
+                                        </GoogleMap>
+                                    </div>
+                                </MapProvider>
                                         </div> 
                                     </div>
                             
