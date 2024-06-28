@@ -29,6 +29,16 @@ export default function AdsListPage(props: any) {
     const [adsList, setAdsList] = useState<any[]>([]);
     const [categoryCounts, setCategoryCounts] = useState(initialCategoryCounts);
 
+    const [role, setRole] = useState('');
+
+    useEffect(() => {
+      // Get the role from localStorage
+      const storedRole = localStorage.getItem('role');
+      if (storedRole) {
+        setRole(storedRole);
+      }
+    }, []);
+
     useEffect(() => {
         fetchAds();
     }, []);
@@ -127,6 +137,8 @@ export default function AdsListPage(props: any) {
         }, { ...initialCategoryCounts });
 
         setCategoryCounts(counts);
+        localStorage.getItem('refreshToken')
+    
     };
 
     return (
@@ -178,7 +190,7 @@ export default function AdsListPage(props: any) {
                 </div>
             </div>
 
-            <h2 className="font-titleTest text-xl  sm:text-2xl mb-4">Fil des annonces : {items.length}</h2>
+            <h2 className="font-titleTest text-xl  sm:text-2xl mb-4"> {role} Fil d'annonces : {items.length}</h2>
 
             <div className="sm:hidden w-50 my-4">
                 <TextInput
