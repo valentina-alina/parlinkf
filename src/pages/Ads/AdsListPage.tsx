@@ -8,16 +8,16 @@ import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getAds, getAdsByParams, getCategories } from '../../services/api/ads';
+import { getAds, getAdsByParams, getCategories, getSubCategories } from '../../services/api/ads';
 import { debounce } from '../../services/utils/debounce';
 
-type Category = string; // Adjust type based on your API response
+type Category = string;
 
 const initialCategoryCounts: Record<Category, number> = {
     all: 0,
 };
 
-const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
+export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
@@ -26,6 +26,7 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
     const [adsList, setAdsList] = useState<any[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [categoryCounts, setCategoryCounts] = useState(initialCategoryCounts);
+    const [subCategories, setSubCategories] = useState<Record<Category, string[]>>({});
 
     useEffect(() => {
         fetchAds();
@@ -48,18 +49,16 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
             const query = localSearchQuery || searchQuery || '';
             const response = await getAdsByParams(query);
 
-            // Assuming response structure is { data: { ads: Array } }
             const ads = response.data.ads;
 
-            // Check if ads is an array before proceeding
             if (!Array.isArray(ads)) {
-                console.error('Expected an array of ads but received:', ads);
+                console.error('Attendait une liste d\'annonces mais a reçu:', ads);
                 return;
             }
 
             fetchInitialItems(ads);
         } catch (error) {
-            console.error('Error fetching ads:', error);
+            console.error('Erreur lors de la récupération des annonces:', error);
         }
     };
 
@@ -73,7 +72,7 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
                 ad.city.toLowerCase().includes(localSearchQuery.toLowerCase());
             return matchesCategory && matchesSearchQuery;
         });
-    
+
         setItems(filteredAds.slice(0, 12));
         setHasMore(filteredAds.length > 12);
     };
@@ -89,6 +88,32 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
                     ? prevCategories.filter((c) => c !== category)
                     : [...prevCategories, category]
             );
+        }
+    };
+
+    const handleCategoryHover = async (category: Category) => {
+        try {
+            const response = await getSubCategories(category);
+            if (response && response.data && Array.isArray(response.data.subCategories)) {
+                setSubCategories((prevSubCategories) => ({
+                ...prevSubCategories,
+                [category]: response.data.subCategories,
+                }));
+            } else {
+                console.warn(`Unexpected subcategories response for ${category}:`, response);
+                // Handle the case where the response is an empty array or not as expected
+                setSubCategories((prevSubCategories) => ({
+                    ...prevSubCategories,
+                    [category]: [],
+                }));
+            }
+        } catch (error) {
+            console.error(`Error fetching subcategories for ${category}:`, error);
+            // Handle the error case by setting the subcategories to an empty array
+            setSubCategories((prevSubCategories) => ({
+            ...prevSubCategories,
+            [category]: [],
+            }));
         }
     };
 
@@ -112,13 +137,13 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
                 ad.city.toLowerCase().includes(localSearchQuery.toLowerCase());
             return matchesCategory && matchesSearchQuery;
         });
-    
+
         const nextBatch = filteredAds.slice(currentLength, currentLength + 10);
         if (nextBatch.length === 0) {
             setHasMore(false);
             return;
         }
-    
+
         setTimeout(() => {
             setItems([...items, ...nextBatch]);
         }, 1500);
@@ -138,10 +163,10 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
     const fetchCategories = async () => {
         try {
             const response = await getCategories();
-            const fetchedCategories = response.data.categories; // Adjust according to your API response structure
-    
+            const fetchedCategories = response.data.categories;
+
             setCategories(fetchedCategories);
-            console.log('Fetched categories:', fetchedCategories); // Verify the fetched categories
+            console.log('Fetched categories:', fetchedCategories);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
@@ -156,6 +181,7 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
                             <Link
                                 to=""
                                 onClick={() => handleCategoryChange(category)}
+                                onMouseEnter={() => handleCategoryHover(category)}
                                 className='flex active:ring focus:outline-none focus:border-b-2 focus:border-b-blue-800'
                             >
                                 <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
@@ -168,7 +194,19 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
                                 </span>
                             </Link>
                         </div>
-                        {/* Assuming no subcategories in this UI */}
+                        {subCategories[category] && (
+                            <div className="absolute left-0 mt-2 bg-white shadow-lg p-2 rounded-md w-60 z-10 hidden group-hover:block">
+                                {subCategories[category].map((subcategory, index) => (
+                                    <Link
+                                        to=""
+                                        key={index}
+                                        className="block px-3 py-1 text-sm text-gray-800 hover:bg-gray-200"
+                                    >
+                                        {subcategory}
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
                         <p className={`${selectedCategories.includes(category) || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
                             {categoryCounts[category]}
                         </p>
@@ -195,7 +233,7 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
                 )
             }
 
-            <div className="sm:hidden w-50 my-16">
+            <div className='flex justify-end my-3'>
                 <TextInput
                     className="w-80"
                     id="search"
@@ -258,5 +296,3 @@ const AdsListPage = ({ searchQuery }: { searchQuery: string }) => {
         </>
     );
 }
-
-export default AdsListPage;

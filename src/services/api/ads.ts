@@ -58,13 +58,13 @@ export async function getCategories() {
     }
 }
 
-export async function getSubCategories() {
+export async function getSubCategories(categoryName: string) {
     try {
-        const response = await api.get('subCategories');
-        console.log('Sous-catégories récupérées:', response.data);
+        const response = await api.get(`subCategories/${categoryName}`);
+        console.log(`Sous-catégories récupérées pour la catégorie ${categoryName}:`, response.data);
         return response.data;
     } catch (error) {
-        console.error('Erreur lors de la récupération des sous-catégories:', error);
+        console.error(`Erreur lors de la récupération des sous-catégories pour la catégorie ${categoryName}:`, error);
         return [];
     }
 }

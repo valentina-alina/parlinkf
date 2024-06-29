@@ -3,37 +3,32 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Carousel, Label } from "flowbite-react";
-// import fakerAdsList from './fakerAdsList';
-import fakerCategories from './fakerCategories';
 import { HiViewList } from "react-icons/hi";
 import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getAds, getAdsByParams } from '../../services/api/ads';
+import { getAds, getAdsByParams, getCategories, getSubCategories } from '../../services/api/ads';
 
-type Category = typeof fakerCategories[number]['name'];
+type Category = string;
 
 const initialCategoryCounts: Record<Category, number> = {
     all: 0,
-    poolcar: 0,
-    tutoring: 0,
-    childcare: 0,
-    events: 0,
 };
 
 export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
-    // const searchQueryFromNavbar = props.searchQuery;
-
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
     const [items, setItems] = useState<any[]>([]);
     const [hasMore, setHasMore] = useState(true);
     const [adsList, setAdsList] = useState<any[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [categoryCounts, setCategoryCounts] = useState(initialCategoryCounts);
+    const [subCategories, setSubCategories] = useState<Record<Category, string[]>>({});
 
     useEffect(() => {
         fetchAds();
+        fetchCategories();
     }, []);
 
     useEffect(() => {        
@@ -58,13 +53,13 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
 
             // Check if ads is an array before proceeding
             if (!Array.isArray(ads)) {
-                console.error('Expected an array of ads but received:', ads);
+                console.error('Attendait une liste d\'annonces mais a reçu:', ads);
                 return;
             }
 
             fetchInitialItems(ads);
         } catch (error) {
-            console.error('Error fetching ads:', error);
+            console.error('Erreur lors de la récupération des annonces:', error);
         }
     };
 
@@ -79,8 +74,8 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             return matchesCategory && matchesSearchQueryFromNavbar;
         });
 
-        setItems(filteredAds.slice(0, 8));
-        setHasMore(filteredAds.length > 8);
+        setItems(filteredAds.slice(0, 6));
+        setHasMore(filteredAds.length > 6);
     };
 
     const handleCategoryChange = (category: Category) => {
@@ -94,6 +89,32 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 ? prevCategories.filter((c) => c !== category)
                 : [...prevCategories, category]
             );
+        }
+    };
+
+    const handleCategoryHover = async (category: Category) => {
+        try {
+            const response = await getSubCategories(category);
+            if (response && response.data && Array.isArray(response.data.subCategories)) {
+                setSubCategories((prevSubCategories) => ({
+                ...prevSubCategories,
+                [category]: response.data.subCategories,
+                }));
+            } else {
+                console.warn(`Unexpected subcategories response for ${category}:`, response);
+                // Handle the case where the response is an empty array or not as expected
+                setSubCategories((prevSubCategories) => ({
+                    ...prevSubCategories,
+                    [category]: [],
+                }));
+            }
+        } catch (error) {
+            console.error(`Error fetching subcategories for ${category}:`, error);
+            // Handle the error case by setting the subcategories to an empty array
+            setSubCategories((prevSubCategories) => ({
+            ...prevSubCategories,
+            [category]: [],
+            }));
         }
     };
 
@@ -131,42 +152,55 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         setCategoryCounts(counts);
     };
 
+    const fetchCategories = async () => {
+        try {
+            const response = await getCategories();
+            const fetchedCategories = response.data.categories;
+
+            setCategories(fetchedCategories);
+            console.log('Fetched categories:', fetchedCategories);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+
     return (
         <>
             <div className='flex flex-row justify-around items-center gap-4 my-6 border-b-2 py-4 font-bodyTest'>
-                {fakerCategories.map((category) => (
-                    <div className="event_filter_wrapper relative group" key={category.id}>
+                {categories.map((category) => (
+                    <div className="event_filter_wrapper relative group" key={category}>
                         <div className='relative'>
                             <Link
                                 to=""
-                                onClick={() => handleCategoryChange(category.name as Category)}
+                                onClick={() => handleCategoryChange(category)}
+                                onMouseEnter={() => handleCategoryHover(category)}
                                 className='flex active:ring focus:outline-none focus:border-b-2 focus:border-b-blue-800'
                             >
                                 <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
                                     <Label
-                                        htmlFor={category.name}
-                                        className={`flex ${selectedCategories.includes(category.name as Category) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-lg'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-lg'}`}
+                                        htmlFor={category}
+                                        className={`flex ${selectedCategories.includes(category) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-lg'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-lg'}`}
                                     >
-                                        {category.label}
+                                        {category}
                                     </Label>
                                 </span>
                             </Link>
                         </div>
-                        {category.group && (
-                            <div className='absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
-                                {category.group.map((item) => (
+                        {subCategories[category] && (
+                            <div className="absolute left-0 mt-2 bg-white shadow-lg p-2 rounded-md w-60 z-10 hidden group-hover:block">
+                                {subCategories[category].map((subcategory, index) => (
                                     <Link
-                                        key={item.id}
                                         to=""
-                                        className='block px-4 py-2 text-sm text-gray-700 hover:bg-blue-700 hover:text-white'
+                                        key={index}
+                                        className="block px-3 py-1 text-sm text-gray-800 hover:bg-gray-200"
                                     >
-                                        {item.title}
+                                        {subcategory}
                                     </Link>
                                 ))}
                             </div>
                         )}
-                        <p className={`${selectedCategories.includes(category.name as Category) || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
-                            {categoryCounts[category.name as Category]}
+                        <p className={`${selectedCategories.includes(category) || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
+                            {categoryCounts[category]}
                         </p>
                     </div>
                 ))}
