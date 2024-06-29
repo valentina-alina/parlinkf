@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useApi } from '../../hooks/useApi';
-// import fakeAd from '../../pages/Ads/fakerAds';
 
 const api = useApi();
 
@@ -10,20 +9,18 @@ export async function getAds() {
         const response = await api.get('ad');
         const data = response.data;
 
-        console.log('Fetched ads:', data);
+        console.log('Annonces récupérées:', data);
 
         if (data && data.data && data.data.ads) {
-            const ads = data.data.ads; // Extract ads array from response
-
-            // You can perform any additional processing here if needed
+            const ads = data.data.ads;
 
             return ads;
         } else {
-            console.error('Unexpected response format:', data);
+            console.error('Format de réponse inattendu:', data);
             return [];
         }
     } catch (error) {
-        console.error('Error fetching ads:', error);
+        console.error('Erreur lors de la récupération des annonces:', error);
         return [];
     }
 }
@@ -53,10 +50,21 @@ export async function getAdsByParams(search: string) {
 export async function getCategories() {
     try {
         const response = await api.get('categories');
-        console.log('Fetched categories:', response.data);
+        console.log('Catégories récupérées:', response.data);
         return response.data;
     } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error('Erreur lors de la récupération des catégories:', error);
+        return [];
+    }
+}
+
+export async function getSubCategories() {
+    try {
+        const response = await api.get('subCategories');
+        console.log('Sous-catégories récupérées:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des sous-catégories:', error);
         return [];
     }
 }

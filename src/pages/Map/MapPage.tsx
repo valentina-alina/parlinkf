@@ -157,7 +157,7 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
                 <div className="w-50 sm:w-full flex justify-center items-center">
                     <GoogleMap
                         mapContainerStyle={mapConfig.defaultMapContainerStyle('1200px', '80vh')}
-                        center={mapConfig.defaultMapCenter(adsList)}
+                        center={mapConfig.defaultMapCenter()}
                         zoom={mapConfig.defaultMapZoom(6)}
                         options={mapConfig.defaultMapOptions(true,0,'auto','satellite')}
                     >

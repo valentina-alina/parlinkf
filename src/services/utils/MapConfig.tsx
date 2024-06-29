@@ -8,10 +8,10 @@ export default class MapConfig {
         }
     }
     
-    defaultMapCenter(ads:any) {
+    defaultMapCenter() {
         return {
-            lat: ads.length > 0 ? ads[0].lat : 0,
-            lng: ads.length > 0 ? ads[0].lng : 0,
+            lat: 46.492820,
+            lng: 2.600390,
         }
     }
 
