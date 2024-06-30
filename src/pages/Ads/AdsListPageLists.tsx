@@ -51,10 +51,8 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             const query = searchQuery || '';
             const response = await getAdsByParams(query);
 
-            // Assuming response structure is { data: { ads: Array } }
             const ads = response.data.ads;
 
-            // Check if ads is an array before proceeding
             if (!Array.isArray(ads)) {
                 console.error('Attendait une liste d\'annonces mais a reçu:', ads);
                 return;

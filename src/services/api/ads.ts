@@ -36,16 +36,16 @@ export async function getAdsByParams(search: string) {
     }
 }
 
-/* export async function getAdsByCategories(categoryName: string) {
+export async function getAdsByCategories(categoryName: string) {
     try {
-        const {data} = await api.post(`ad/categories?categoryName=${categoryName}`);
-        return data
+        const response = await api.post(`ad/categories?categoryName=${categoryName}`);
+        console.log(`Annonces récupérées pour la catégorie ${categoryName}:`, response.data);
+        return response.data
     } catch (error) {
-        return {
-            error: error
-        }
+        console.error(`Erreur lors de la récupération des annonces pour la catégorie ${categoryName}:`, error);
+        return [];
     }
-} */
+}
 
 export async function getCategories() {
     try {
