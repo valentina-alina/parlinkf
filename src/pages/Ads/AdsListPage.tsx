@@ -195,12 +195,12 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                             </Link>
                         </div>
                         {subCategories[category] && (
-                            <div className="absolute left-0 mt-2 bg-white shadow-lg p-2 rounded-md w-60 z-10 hidden group-hover:block">
+                            <div className="absolute right-0 mt-2 bg-white shadow-lg p-2 rounded-md w-60 z-10 hidden group-hover:block">
                                 {subCategories[category].map((subcategory, index) => (
                                     <Link
                                         to=""
                                         key={index}
-                                        className="block px-3 py-1 text-sm text-gray-800 hover:bg-gray-200"
+                                        className="block px-3 py-1 text-sm text-gray-800 hover:bg-blue-700 hover:text-white"
                                     >
                                         {subcategory}
                                     </Link>
@@ -233,7 +233,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 )
             }
 
-            <div className='flex justify-end my-3'>
+            <div className='sm:hidden w-50 my-16'>
                 <TextInput
                     className="w-80"
                     id="search"
@@ -265,14 +265,14 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 hasMore={hasMore}
                 loader={<h4>Chargement...</h4>}
                 endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                        <b>La liste est complète!</b>
+                    <p className='text-center mt-6 text-blue-800'>
+                        <b>Fin de la liste!</b>
                     </p>
                 }
             >
-                <div className='md:flex flex-wrap justify-between item-center gap-2'>
+                <div className='md:flex flex-wrap justify-between item-center gap-2 mt-8'>
                     {items.map((event) => (
-                        <Card key={event.id} className='my-4 shadow-lg'>
+                        <Card key={event.id} className='my-4 shadow-lg w-80 h-96'>
                             <Link to={`/annonce/${event.id}`} className="link text-blue-800 text-bodyTest">
                                 <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
                                     <CiEdit />

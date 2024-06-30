@@ -98,7 +98,6 @@ export default function AdsDetailPage() {
                                         <GoogleMap
                                             mapContainerStyle={mapConfig.defaultMapContainerStyle('400px','30vh')}
                                             center={mapConfig.defaultMapCenterAdDetail(ads)}
-                                            /* center={{ lat: 46.66666554540158, lng: 0.3675645320510029}} */
                                             zoom={mapConfig.defaultMapZoom(18)}
                                             options={mapConfig.defaultMapOptions(true,0,'auto','satellite')}
                                         >
