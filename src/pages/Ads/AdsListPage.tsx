@@ -246,20 +246,31 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 />
             </div>
 
-            <div className="grid h-40 grid-cols-1 gap-4 sm:h-40 md:h-56">
-                <Carousel slide={false}>
+            <div className="grid grid-cols-1 mb-2
+            ">
+                <Carousel>
                     {items.map((event) => (
-                        <div key={event.id} className={`p-5 flex h-full w-full lg:items-start items-end justify-end bg-gray-400 dark:bg-gray-700 bg-center bg-cover bg-no-repeat dark:text-white bg-[url('/src/assets/${event.adPicture}')]`} >
-                            <Link to={`/annonce/${event.id}`} className="link">
-                                <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
-                                    <b>{event.start}</b><br />
-                                    <i>{event.title}</i>
-                                </div>
-                            </Link>
+                        <div key={
+                            event.id
+                        } className="relative h-64 md:h-96">
+                            <div 
+                                className="absolute inset-0 flex items-end justify-end p-5 bg-cover bg-center bg-no-repeat"
+                                style={{ backgroundImage: `url(${event.adPicture})` }}
+                            >
+                                <Link to={`/annonce/${
+                                    event.id
+                                }`} className="link">
+                                    <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
+                                        <b>{event.start}</b><br />
+                                        <i>{event.title}</i>
+                                    </div>
+                                </Link>
+                            </div>
                         </div>
                     ))}
                 </Carousel>
-            </div>
+            </div> 
+            
             <InfiniteScroll
                 dataLength={items.length}
                 next={fetchMoreData}
