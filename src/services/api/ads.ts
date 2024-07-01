@@ -38,9 +38,7 @@ export async function getAdsByParams(search: string) {
 
 export async function getAdsByCategories(categoryName: string) {
     try {
-        const url = `ad/categories?categoryName=${categoryName}`;
-        console.log(`Fetching URL: ${api.defaults.baseURL}/${url}`);
-        const response = await api.get(url);
+        const response = await api.get(`ad/categories?categoryName=${categoryName}`);
         console.log(`Annonces récupérées pour la catégorie ${categoryName}:`, response.data);
         return response.data;
     } catch (error) {

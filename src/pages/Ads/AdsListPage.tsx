@@ -10,6 +10,7 @@ import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { getAds, getAdsByParams, getCategories, getSubCategories } from '../../services/api/ads';
 import { debounce } from '../../services/utils/debounce';
+import { ThreeDots } from 'react-loader-spinner'
 
 type Category = string;
 
@@ -263,7 +264,18 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 dataLength={items.length}
                 next={fetchMoreData}
                 hasMore={hasMore}
-                loader={<h4>Chargement...</h4>}
+                loader={
+                    <ThreeDots
+                    visible={true}
+                    height="60"
+                    width="60"
+                    color="#1A56DB"
+                    radius="6"
+                    ariaLabel="three-dots-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    />
+                }
                 endMessage={
                     <p className='text-center mt-6 text-blue-800'>
                         <b>Fin de la liste!</b>
