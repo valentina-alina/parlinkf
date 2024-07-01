@@ -8,7 +8,7 @@ import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getAds, getAdsByParams, getCategories, getSubCategories } from '../../services/api/ads';
+import { getAds, getAdsByParams, getCategories, getSubCategories, getAdsByCategories } from '../../services/api/ads';
 import { debounce } from '../../services/utils/debounce';
 import { ThreeDots } from 'react-loader-spinner';
 
@@ -29,6 +29,8 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const [categoryCounts, setCategoryCounts] = useState(initialCategoryCounts);
     const [subCategories, setSubCategories] = useState<Record<Category, string[]>>({});
 
+    console.log('categoryCounts', categoryCounts)
+
     useEffect(() => {
         fetchAds();
         fetchCategories();
@@ -48,25 +50,36 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const fetchFilteredAds = async () => {
         try {
             const query = localSearchQuery || searchQuery || '';
-            const response = await getAdsByParams(query);
+            let response;
 
-            const ads = response.data.ads;
+            if (isAllSelected || selectedCategories.length === 0) {
+                response = await getAdsByParams(query);
+            } else {
+                const categoryAds = await Promise.all(
+                    selectedCategories.map(category => getAdsByCategories(category))
+                );
+                const ads = categoryAds.flatMap(category => category.data.ads);
+                response = { data: { ads } };
+            }
 
-            if (!Array.isArray(ads)) {
-                console.error('Attendait une liste d\'annonces mais a reçu:', ads);
+            const fetchedAds = response.data.ads;
+
+            if (!Array.isArray(fetchedAds)) {
+                console.error('Expected an array of ads but received:', fetchedAds);
                 return;
             }
 
-            fetchInitialItems(ads);
+            setItems(fetchedAds.slice(0, 12)); // Display the first batch
+            setHasMore(fetchedAds.length > 12); // Check if there are more ads to load
         } catch (error) {
-            console.error('Erreur lors de la récupération des annonces:', error);
+            console.error('Error fetching ads:', error);
         }
     };
 
     const fetchInitialItems = (ads: any[]) => {
         const filteredAds = ads.filter((ad) => {
             const matchesCategory =
-                selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
+                isAllSelected || selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
             const matchesSearchQuery =
                 !localSearchQuery ||
                 ad.title.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
@@ -78,7 +91,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         setHasMore(filteredAds.length > 12);
     };
 
-    const handleCategoryChange = (category: Category) => {
+    const handleCategoryChange = async (category: Category) => {
         if (category === 'all') {
             setSelectedCategories([]);
             setIsAllSelected(true);
@@ -90,6 +103,8 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                     : [...prevCategories, category]
             );
         }
+
+        await fetchFilteredAds();
     };
 
     const handleCategoryHover = async (category: Category) => {
@@ -97,12 +112,11 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             const response = await getSubCategories(category);
             if (response && response.data && Array.isArray(response.data.subCategories)) {
                 setSubCategories((prevSubCategories) => ({
-                ...prevSubCategories,
-                [category]: response.data.subCategories,
+                    ...prevSubCategories,
+                    [category]: response.data.subCategories,
                 }));
             } else {
                 console.warn(`Réponse inattendue pour les sous-catégories de la catégorie ${category}:`, response);
-                // Handle the case where the response is an empty array or not as expected
                 setSubCategories((prevSubCategories) => ({
                     ...prevSubCategories,
                     [category]: [],
@@ -110,10 +124,9 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             }
         } catch (error) {
             console.error(`Erreur lors de la récupération des sous-catégories de la catégorie ${category}:`, error);
-            // Handle the error case by setting the subcategories to an empty array
             setSubCategories((prevSubCategories) => ({
-            ...prevSubCategories,
-            [category]: [],
+                ...prevSubCategories,
+                [category]: [],
             }));
         }
     };
@@ -131,7 +144,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         const currentLength = items.length;
         const filteredAds = adsList.filter((ad) => {
             const matchesCategory =
-                selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
+                isAllSelected || selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
             const matchesSearchQuery =
                 !localSearchQuery ||
                 ad.title.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
@@ -166,7 +179,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             const response = await getCategories();
             const fetchedCategories = response.data.categories;
 
-            setCategories(fetchedCategories);
+            setCategories(['all', ...fetchedCategories]); // Prepend "all" to the categories
             console.log('Catégories récupérées:', fetchedCategories);
         } catch (error) {
             console.error('Erreur lors de la récupération des catégories:', error);
@@ -188,14 +201,14 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                 <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
                                     <Label
                                         htmlFor={category}
-                                        className={`flex ${selectedCategories.includes(category) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg' : 'flex active:relative active:text-white hover:relative hover:text-whit text-xs sm:text-lg'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg'}`}
+                                        className={`flex ${selectedCategories.includes(category) || (category === 'all' && isAllSelected) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg'}`}
                                     >
-                                        {category}
+                                        {category === 'all' ? 'Toutes' : category}
                                     </Label>
                                 </span>
                             </Link>
                         </div>
-                        {subCategories[category] && (
+                        {subCategories[category] && subCategories[category].length > 0 && (
                             <div className="absolute right-0 mt-2 bg-white shadow-lg p-2 rounded-md w-60 z-10 hidden group-hover:block">
                                 {subCategories[category].map((subcategory, index) => (
                                     <Link
@@ -208,8 +221,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                 ))}
                             </div>
                         )}
-                        <p className={`${selectedCategories.includes(category) || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
-                            {categoryCounts[category]}
+                        <p className={`${selectedCategories.includes(category) || (category === 'all' && isAllSelected) ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
                         </p>
                     </div>
                 ))}
