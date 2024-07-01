@@ -12,6 +12,7 @@ import { getAds, getAdsByParams, getCategories, getSubCategories } from '../../s
 import { MapProvider } from '../../providers/MapProvider';
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import MapConfig from '../../services/utils/MapConfig';
+import { ThreeDots } from 'react-loader-spinner';
 
 type Category = string;
 
@@ -247,7 +248,20 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                     dataLength={items.length}
                     next={fetchMoreData}
                     hasMore={hasMore}
-                    loader={<h4>Chargement...</h4>}
+                    loader={
+                        <div className="flex justify-center items-center w-full">
+                            <ThreeDots
+                            visible={true}
+                            height="80"
+                            width="80"
+                            color="#1A56DB"
+                            radius="8"
+                            ariaLabel="three-dots-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                            />
+                        </div>
+                    }
                     endMessage={
                         <p className='text-center mt-6 text-blue-800'>
                             <b>Fin de la liste!</b>
