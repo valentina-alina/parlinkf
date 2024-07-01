@@ -103,7 +103,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 [category]: response.data.subCategories,
                 }));
             } else {
-                console.warn(`Unexpected subcategories response for ${category}:`, response);
+                console.warn(`Réponse inattendue pour les sous-catégories de la catégorie ${category}:`, response);
                 // Handle the case where the response is an empty array or not as expected
                 setSubCategories((prevSubCategories) => ({
                     ...prevSubCategories,
@@ -111,7 +111,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 }));
             }
         } catch (error) {
-            console.error(`Error fetching subcategories for ${category}:`, error);
+            console.error(`Erreur lors de la récupération des sous-catégories de la catégorie ${category}:`, error);
             // Handle the error case by setting the subcategories to an empty array
             setSubCategories((prevSubCategories) => ({
             ...prevSubCategories,
@@ -160,9 +160,9 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             const fetchedCategories = response.data.categories;
 
             setCategories(fetchedCategories);
-            console.log('Fetched categories:', fetchedCategories);
+            console.log('Catégories récupérées:', fetchedCategories);
         } catch (error) {
-            console.error('Error fetching categories:', error);
+            console.error('Erreur lors de la récupération des catégories:', error);
         }
     };
 
