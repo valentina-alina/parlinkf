@@ -26,6 +26,7 @@ import LoginPage from './pages/Auth/LoginPage';
 import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
 import { User } from './services/interfaces/User';
 import UserManagement from './pages/User/UserManagement';
+import RequireAuth from './components/requireAuth';
 // import HeaderMenu from './components/Navbar/HeaderMenu';
 
 function App() {
@@ -51,12 +52,16 @@ function App() {
           <Route path="/" />
 
             <Route element={ <PrivateRoute /> }>
-            <Route path='/user-create' element={ <UserCreatePage handleSubmitUser={function (_author: User): void {
+            
+             {/* // FIXME: gerer l'acces a cette page si seulement user role= admin */} 
+        {/* we want to protect these routes */}
+           <Route element={<RequireAuth allowedRoles={"admin"} />}>
+               <Route path='/gestion-utilisateurs' element={ <UserManagement handleSubmitUser={function (_author: User): void {
             throw new Error('Function not implemented.');
           } } /> } />
-              <Route path='/gestion-utilisateurs' element={ <UserManagement handleSubmitUser={function (_author: User): void {
-            throw new Error('Function not implemented.');
-          } } /> } />
+
+     </Route>
+
               <Route path='/login' element={ <LoginPage /> } />
               <Route path='/mon-compte' element={ <UserProfilePage /> } />
               <Route path='/editer-mon-profil/:idProfile' element={ <UserEditProfilePage handleSubmitProfile={handleSubmitProfile} /> } />

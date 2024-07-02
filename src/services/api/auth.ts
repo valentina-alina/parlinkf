@@ -10,7 +10,7 @@ interface AuthSignin {
 
 export async function signin(body:AuthSignin) {
   try {
-    const {data} = await api.post(`/user/login`, body);
+    const {data} = await api.post(`/auth/login`, body);
     return data 
   } catch (error) {
     return {

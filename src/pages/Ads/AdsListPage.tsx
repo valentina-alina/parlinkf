@@ -245,9 +245,11 @@ export default function AdsListPage(props: any) {
                         {items.map((event) => (
                             <Card key={event.id} className='my-4 shadow-lg'>
                                 <Link to={`/annonce/${event.id}`} className="link text-blue-800 text-bodyTest">
+                                   {/* FIXME: afficher edit que pour mes annonces ou enlever 'ici et mettre sur la page mes annonces */}
                                     <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
                                         <CiEdit />
                                     </Link>
+
                                     <div className='flex flex-col'>
                                         <b>
                                             {event.title}
