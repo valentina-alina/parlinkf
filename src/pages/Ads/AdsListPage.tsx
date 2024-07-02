@@ -65,14 +65,14 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             const fetchedAds = response.data.ads;
 
             if (!Array.isArray(fetchedAds)) {
-                console.error('Expected an array of ads but received:', fetchedAds);
+                console.error('Attendait une liste d\'annonces mais a reçu:', fetchedAds);
                 return;
             }
 
-            setItems(fetchedAds.slice(0, 12)); // Display the first batch
-            setHasMore(fetchedAds.length > 12); // Check if there are more ads to load
+            setItems(fetchedAds.slice(0, 12));
+            setHasMore(fetchedAds.length > 12);
         } catch (error) {
-            console.error('Error fetching ads:', error);
+            console.error('Erreur lors de la récupération des annonces:', error);
         }
     };
 
@@ -152,7 +152,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             return matchesCategory && matchesSearchQuery;
         });
 
-        const nextBatch = filteredAds.slice(currentLength, currentLength + 10);
+        const nextBatch = filteredAds.slice(currentLength, currentLength + 12);
         if (nextBatch.length === 0) {
             setHasMore(false);
             return;
@@ -179,7 +179,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             const response = await getCategories();
             const fetchedCategories = response.data.categories;
 
-            setCategories(['all', ...fetchedCategories]); // Prepend "all" to the categories
+            setCategories(['all', ...fetchedCategories]);
             console.log('Catégories récupérées:', fetchedCategories);
         } catch (error) {
             console.error('Erreur lors de la récupération des catégories:', error);

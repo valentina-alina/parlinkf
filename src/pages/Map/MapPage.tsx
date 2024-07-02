@@ -8,7 +8,7 @@ import { Label, TextInput } from 'flowbite-react';
 import { HiSearch } from "react-icons/hi";
 import MapConfig from '../../services/utils/MapConfig';
 import { debounce } from '../../services/utils/debounce';
-import { getAds, getAdsByParams, getCategories, getSubCategories } from '../../services/api/ads';
+import { getAds, getAdsByCategories, getAdsByParams, getCategories, getSubCategories } from '../../services/api/ads';
 import { AdWithoutCoordinatesInterface } from '../../services/interfaces/AdWithoutCoordinates';
 
 type Category = string;
@@ -49,16 +49,26 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
     const fetchFilteredAds = async () => {
         try {
             const query = localSearchQuery || searchQuery || '';
-            const response = await getAdsByParams(query);
+            let response = await getAdsByParams(query);
 
-            const ads = response.data.ads;
+            if (isAllSelected || selectedCategories.length === 0) {
+                response = await getAdsByParams(query);
+            } else {
+                const categoryAds = await Promise.all(
+                    selectedCategories.map(category => getAdsByCategories(category))
+                );
+                const ads = categoryAds.flatMap(category => category.data.ads);
+                response = { data: { ads } };
+            }
 
-            if (!Array.isArray(ads)) {
-                console.error('Attendait une liste d\'annonces mais a reçu:', ads);
+            const fetchedAds = response.data.ads;
+
+            if (!Array.isArray(fetchedAds)) {
+                console.error('Attendait une liste d\'annonces mais a reçu:', fetchedAds);
                 return;
             }
 
-            setAdsList(ads.map((ad: AdWithoutCoordinatesInterface) => ({
+            setAdsList(fetchedAds.map((ad: AdWithoutCoordinatesInterface) => ({
                 ...ad,
                 lat: parseFloat(ad.lat),
                 lng: parseFloat(ad.lng),
@@ -68,17 +78,7 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
         }
     };
 
-    const filteredAds = adsList.filter((ad) => {
-        const matchesCategory =
-            selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
-        const matchesSearchQuery =
-            !localSearchQuery ||
-            ad.title.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
-            ad.city.toLowerCase().includes(localSearchQuery.toLowerCase());
-        return matchesCategory && matchesSearchQuery;
-    });
-
-    const handleCategoryChange = (category: Category) => {
+    const handleCategoryChange = async (category: Category) => {
         if (category === 'all') {
             setSelectedCategories([]);
             setIsAllSelected(true);
@@ -90,15 +90,8 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
                     : [...prevCategories, category]
             );
         }
-    };
 
-    const debouncedHandleSearchChange = useCallback(debounce((query: string) => {
-        setLocalSearchQuery(query);
-    }, 500), []);
-
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
-        debouncedHandleSearchChange(value);
+        await fetchFilteredAds();
     };
 
     const handleCategoryHover = async (category: Category) => {
@@ -127,12 +120,21 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
         }
     };
 
+    const debouncedHandleSearchChange = useCallback(debounce((query: string) => {
+        setLocalSearchQuery(query);
+    }, 500), []);
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = event.target;
+        debouncedHandleSearchChange(value);
+    };
+
     const fetchCategories = async () => {
         try {
             const response = await getCategories();
             const fetchedCategories = response.data.categories;
 
-            setCategories(fetchedCategories);
+            setCategories(['all', ...fetchedCategories]);
             console.log('Catégories récupérées:', fetchedCategories);
         } catch (error) {
             console.error('Erreur lors de la récupération des catégories:', error);
@@ -169,14 +171,14 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
                                     <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
                                         <Label
                                             htmlFor={category}
-                                            className={`flex ${selectedCategories.includes(category) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-lg'} ${isAllSelected ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-lg'}`}
+                                            className={`flex ${selectedCategories.includes(category) || (category === 'all' && isAllSelected) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg'}`}
                                         >
-                                            {category}
+                                            {category === 'all' ? 'Toutes' : category}
                                         </Label>
                                     </span>
                                 </Link>
                             </div>
-                            {subCategories[category] && (
+                            {subCategories[category] && subCategories[category].length > 0 && (
                                 <div className="absolute right-0 mt-2 bg-white shadow-lg p-2 rounded-md w-60 z-10 hidden group-hover:block">
                                     {subCategories[category].map((subcategory, index) => (
                                         <Link
@@ -189,13 +191,13 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
                                     ))}
                                 </div>
                             )}
-                            <p className={`${selectedCategories.includes(category) || isAllSelected ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
+                            <p className={`${selectedCategories.includes(category) || (category === 'all' && isAllSelected) ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
                             </p>
                         </div>
                     ))}
             </div>
 
-            {filteredAds.length === 0 ? (
+            {adsList.length === 0 ? (
                 <p className='font-bodyTest text-2xl my-32 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
             ) : (
                 <h1 className="font-titleTest text-3xl my-14">
@@ -223,7 +225,7 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
                         zoom={mapConfig.defaultMapZoom(6)}
                         options={mapConfig.defaultMapOptions(true,0,'auto','satellite')}
                     >
-                        {filteredAds.map(ad => (
+                        {adsList.map(ad => (
                             <MarkerF
                                 key={ad.id}
                                 position={{ lat: +ad.lat, lng: +ad.lng }}
