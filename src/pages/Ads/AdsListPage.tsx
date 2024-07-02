@@ -8,7 +8,7 @@ import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getAds, getAdsByParams, getCategories, getSubCategories, getAdsByCategories } from '../../services/api/ads';
+import { getAds, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
 import { debounce } from '../../services/utils/debounce';
 import { ThreeDots } from 'react-loader-spinner';
 
@@ -105,6 +105,23 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         }
 
         await fetchFilteredAds();
+    };
+
+    const handleSubCategoryChange = async (subCategory: string) => {
+        try {
+            const response = await getAdsBySubCategories(subCategory);
+            const fetchedAds = response.data.ads;
+
+            if (!Array.isArray(fetchedAds)) {
+                console.error('Attendait une liste d\'annonces mais a reçu:', fetchedAds);
+                return;
+            }
+
+            setItems(fetchedAds.slice(0, 12));
+            setHasMore(fetchedAds.length > 12);
+        } catch (error) {
+            console.error(`Erreur lors de la récupération des annonces pour la sous-catégorie ${subCategory}:`, error);
+        }
     };
 
     const handleCategoryHover = async (category: Category) => {
@@ -215,6 +232,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                         to=""
                                         key={index}
                                         className="block px-3 py-1 text-sm text-gray-800 hover:bg-blue-700 hover:text-white"
+                                        onClick={() => handleSubCategoryChange(subcategory)}
                                     >
                                         {subcategory}
                                     </Link>

@@ -47,6 +47,17 @@ export async function getAdsByCategories(categoryName: string) {
     }
 }
 
+export async function getAdsBySubCategories(subCategoryName: string) {
+    try {
+        const response = await api.get(`ad/categories?subCategoryName=${subCategoryName}`);
+        console.log(`Annonces récupérées pour la sous-catégorie ${subCategoryName}:`, response.data);
+        return response.data;
+    } catch (error) {
+        console.error(`Erreur lors de la récupération des annonces pour la sous-catégorie ${subCategoryName}:`, error);
+        return [];
+    }
+}
+
 export async function getCategories() {
     try {
         const response = await api.get('categories');
