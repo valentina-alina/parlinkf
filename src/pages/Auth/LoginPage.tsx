@@ -51,7 +51,7 @@ export default function LoginPage() {
     <>
       <div className="flex justify-center items-center">
         <div className="md:basis-4/12">
-          <img src={Logo} className="scale-75 mx-10" alt="logo" />
+          <img src={Logo} className="scale-75 mx-0 sm:mx-10" alt="logo" />
         </div>
         <div className="md:basis-8/12">
           <h1 className="font-titleTest text-3xl my-8">Connectez-vous</h1><br />

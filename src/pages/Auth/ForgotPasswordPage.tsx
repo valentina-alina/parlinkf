@@ -7,11 +7,9 @@ export default function ForgotPasswordPage() {
     return (
         <>
             <div className="flex justify-center items-center">
-
-            <div className="md:basis-4/12">
-                    <img src={Logo} className="scale-75 m-x-10" alt="logo" />
+                <div className="md:basis-4/12">
+                    <img src={Logo} className="scale-75 mx-0 sm:mx-10" alt="logo" />
                 </div>
-
                 <div className="md:basis-8/12">
                     <form>
                         <h1 className="font-titleTest text-3xl my-3"> Changer de mot de passe </h1><br/><br/> 
