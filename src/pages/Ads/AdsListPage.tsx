@@ -30,7 +30,6 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const [role, setRole] = useState('');
 
     console.log('categoryCounts', categoryCounts);
-    console.log('categories', categories);
     console.log('role', role);
 
 
