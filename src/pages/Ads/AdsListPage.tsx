@@ -202,6 +202,18 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         localStorage.getItem('refreshToken')
     };
 
+    const fetchCategories = async () => {
+        try {
+            const response = await getCategories();
+            const fetchedCategories = response.data.categories;
+
+            setCategories(['all', ...fetchedCategories]);
+            console.log('Catégories récupérées:', fetchedCategories);
+        } catch (error) {
+            console.error('Erreur lors de la récupération des catégories:', error);
+        }
+    };
+
     return (
         <>
             <div className='flex flex-row justify-around items-center gap-4 my-6 border-b-2 py-4 font-bodyTest'>
