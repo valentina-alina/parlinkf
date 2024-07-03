@@ -27,11 +27,12 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const [categories, setCategories] = useState<Category[]>([]);
     const [categoryCounts, setCategoryCounts] = useState(initialCategoryCounts);
     const [subCategories, setSubCategories] = useState<Record<Category, string[]>>({});
-
-    console.log('categoryCounts', categoryCounts)
-    console.log('categories', categories)
-
     const [role, setRole] = useState('');
+
+    console.log('categoryCounts', categoryCounts);
+    console.log('categories', categories);
+    console.log('role', role);
+
 
     useEffect(() => {
       // Get the role from localStorage
@@ -264,7 +265,18 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 </div>
             </div>
 
-            <h2 className="font-titleTest text-xl  sm:text-2xl mb-4"> {role} Fil d'annonces : {items.length}</h2>
+            <h2 className="font-titleTest text-xl  sm:text-2xl mb-4">
+                {
+                    items.length === 0 ? (
+                        <>
+                            <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
+                            <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
+                        </>
+                    ) : (
+                        <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
+                    )
+                }
+            </h2>
 
             <div className="sm:hidden w-50 my-4">
                 <TextInput
