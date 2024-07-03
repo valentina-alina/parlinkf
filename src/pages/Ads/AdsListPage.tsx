@@ -336,7 +336,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             >
                 <div className='md:flex flex-wrap justify-between item-center gap-2 mt-8'>
                     {items.map((event) => (
-                        <Card key={event.id} className='my-4 shadow-lg sm:w-80 sm:h-96'>
+                        <Card key={event.id} className='my-4 shadow-lg sm:w-80 sm:h-80'>
                             <Link to={`/annonce/${event.id}`} className="link text-blue-800 text-bodyTest">
                                 <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
                                     <CiEdit />
