@@ -6,6 +6,8 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Footer, FooterCopyright, FooterIcon, FooterLink, FooterLinkGroup, FooterTitle } from "flowbite-react";
 import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
+import { ListGroup, MegaMenu,Navbar, TextInput } from "flowbite-react";
+import { Dropdown } from "flowbite-react";
 
 const cssClasIcons = "w-[35px] h-[40px]  ";
 const navigationItems = [
@@ -13,7 +15,8 @@ const navigationItems = [
     { path: '/ads-list', label: 'Accueil', icon: <AiOutlineHome className={cssClasIcons} /> },
     { path: '/ajouter-annonce', label: 'Ajouter', icon: <IoMdAddCircle className={cssClasIcons} /> },
     { path: '/chat', label: 'Chat', icon: <IoChatboxEllipsesOutline className={cssClasIcons} /> },
-    { path: '/gestion-utilisateurs', label: 'Compte', icon: <FaRegUserCircle className={cssClasIcons} /> },
+    // FIXME: gerer la gestion des utilisateurs+ la page en mode mobile dans le cas ou pas
+    // { path: '/gestion-utilisateurs', label: 'Compte', icon: <FaRegUserCircle className={cssClasIcons} /> },
 ];
 
 export default function FooterNav() {
@@ -79,7 +82,9 @@ export default function FooterNav() {
                 </div>
             </Footer>
             <div className="fixed lg:hidden bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600 tablet p-3 scale-110">
+                
                 <div className="grid h-full max-w-lg grid-cols-5 font-medium">
+              
                 {navigationItems.map((item, index) => (
                     <Link key={index} to={item.path}>
                     <button type="button" className="inline-flex flex-col items-center justify-center text-gray-800 dark:text-white hover:text-blue-800 dark:hover:text-blue-800">
@@ -88,7 +93,70 @@ export default function FooterNav() {
                     </button>
                     </Link>
                 ))}
+{/*             
+            <Dropdown label="" dismissOnClick={false} renderTrigger={() =>   <FaRegUserCircle  className={cssClasIcons} 
+                               /> }>
+      <Dropdown.Item> <Link to="/mes-annonces">
+                                                Mes annonces
+                                            </Link></Dropdown.Item>
+      <Dropdown.Item><Link to="/mes-inscriptions">
+                                                Mes inscriptions
+                                            </Link></Dropdown.Item>
+      <Dropdown.Item><Link to="/gestion-utilisateurs">
+                                                Gestion utilisateurs
+                                            </Link></Dropdown.Item>
+      <Dropdown.Item>  <Link to="/mon-compte">
+                                                Fermeture de compte
+                                            </Link></Dropdown.Item>
+    </Dropdown> */}
+                <MegaMenu.Dropdown
+                                toggle={
+                                 <FaRegUserCircle  className={cssClasIcons} 
+                               /> 
+                               
+                            } 
+                                
+                            >
+                                <div className="flex justify-center">
+                                    <ListGroup className="w-48">
+                                        <ListGroup.Item>
+                                            <Link to="/mes-annonces">
+                                                Mes annonces
+                                            </Link>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item>
+                                        <Link to="/mes-inscriptions">
+                                                Mes inscriptions
+                                            </Link>
+                                        </ListGroup.Item>
+
+                                        {/* FIXME: gerer le role admin: visible si role = admin dans token */}
+                                        {/* {isAdmin && ( */}
+                                            <ListGroup.Item>
+                                            <Link to="/gestion-utilisateurs">
+                                                Gestion utilisateurs
+                                            </Link>
+                                        </ListGroup.Item>
+                                    {/* // ) } */}
+                                       
+                                        <ListGroup.Item>
+                                        <Link to="/mon-compte">
+                                                Fermeture de compte
+                                            </Link>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            <p>
+                                                Déconnexion
+                                            </p>
+                                        </ListGroup.Item>
+                                    </ListGroup>
+                                </div>
+                            </MegaMenu.Dropdown>
                 </div>
+               
+                            
+                        
+
             </div>
         </>
     );

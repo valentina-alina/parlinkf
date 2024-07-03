@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -30,6 +29,17 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const [subCategories, setSubCategories] = useState<Record<Category, string[]>>({});
 
     console.log('categoryCounts', categoryCounts)
+    console.log('categories', categories)
+
+    const [role, setRole] = useState('');
+
+    useEffect(() => {
+      // Get the role from localStorage
+        const storedRole = localStorage.getItem('role');
+        if (storedRole) {
+            setRole(storedRole);
+        }
+    }, []);
 
     useEffect(() => {
         fetchAds();
@@ -189,18 +199,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         }, { ...initialCategoryCounts });
 
         setCategoryCounts(counts);
-    };
-
-    const fetchCategories = async () => {
-        try {
-            const response = await getCategories();
-            const fetchedCategories = response.data.categories;
-
-            setCategories(['all', ...fetchedCategories]);
-            console.log('Catégories récupérées:', fetchedCategories);
-        } catch (error) {
-            console.error('Erreur lors de la récupération des catégories:', error);
-        }
+        localStorage.getItem('refreshToken')
     };
 
     return (
@@ -253,18 +252,9 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 </div>
             </div>
 
-            {
-                items.length === 0 ? (
-                    <>
-                        <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
-                        <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
-                    </>
-                ) : (
-                    <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
-                )
-            }
+            <h2 className="font-titleTest text-xl  sm:text-2xl mb-4"> {role} Fil d'annonces : {items.length}</h2>
 
-            <div className='sm:hidden w-50 my-16'>
+            <div className="sm:hidden w-50 my-4">
                 <TextInput
                     className="w-80"
                     id="search"
@@ -280,16 +270,12 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             ">
                 <Carousel>
                     {items.map((event) => (
-                        <div key={
-                            event.id
-                        } className="relative h-64 md:h-96">
+                        <div key={event.id} className="relative h-64 md:h-96">
                             <div 
                                 className="absolute inset-0 flex items-end justify-end p-5 bg-cover bg-center bg-no-repeat"
                                 style={{ backgroundImage: `url(${event.adPicture})` }}
                             >
-                                <Link to={`/annonce/${
-                                    event.id
-                                }`} className="link">
+                                <Link to={`/annonce/${event.id}`} className="link">
                                     <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
                                         <b>{event.start}</b><br />
                                         <i>{event.title}</i>

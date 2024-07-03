@@ -311,9 +311,6 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                                 <span className=" text-blue-700 flex gap-1 justify-end items-center font-bold">Nbp: {event.attendees} </span>
                                             </span>
                                             </div>
-                                            {/* <div>
-                                                <img src={event.adPicture} alt="Ad Image" className="w-96 h-40 sm:w-80 sm:h-30 ml-3" />
-                                            </div> */}
                                             <div className="w-96 sm:w-full flex justify-center items-center">
                                                 {event.lat && event.lng ? (
                                                     <GoogleMap
