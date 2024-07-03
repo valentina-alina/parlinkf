@@ -8,7 +8,7 @@ import { Label, TextInput } from 'flowbite-react';
 import { HiSearch } from "react-icons/hi";
 import MapConfig from '../../services/utils/MapConfig';
 import { debounce } from '../../services/utils/debounce';
-import { getAds, getAdsByCategories, getAdsByParams, getCategories, getSubCategories } from '../../services/api/ads';
+import { getAds, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
 import { AdWithoutCoordinatesInterface } from '../../services/interfaces/AdWithoutCoordinates';
 
 type Category = string;
@@ -92,6 +92,23 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
         }
 
         await fetchFilteredAds();
+    };
+
+    const handleSubCategoryChange = async (subCategory: string) => {
+        try {
+            const response = await getAdsBySubCategories(subCategory);
+            const fetchedAds = response.data.ads;
+
+            if (!Array.isArray(fetchedAds)) {
+                console.error('Attendait une liste d\'annonces mais a reçu:', fetchedAds);
+                return;
+            }
+
+            setAdsList(fetchedAds);
+
+        } catch (error) {
+            console.error(`Erreur lors de la récupération des annonces pour la sous-catégorie ${subCategory}:`, error);
+        }
     };
 
     const handleCategoryHover = async (category: Category) => {
@@ -185,6 +202,7 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
                                             to=""
                                             key={index}
                                             className="block px-3 py-1 text-sm text-gray-800 hover:bg-blue-700 hover:text-white"
+                                            onClick={() => handleSubCategoryChange(subcategory)}
                                         >
                                             {subcategory}
                                         </Link>
