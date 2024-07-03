@@ -5,7 +5,8 @@ import { Link, Navigate} from 'react-router-dom';
 import { MdAddToPhotos } from "react-icons/md";
 import Logo from '../../assets/logo.png';
 import { HiSearch } from "react-icons/hi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 // import NavbarLogo from "./NavbarLogo";
 
 interface NavbarProps {
@@ -14,8 +15,24 @@ interface NavbarProps {
 }
 
 export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarProps){
+    
     const [showCalendrierLink, setShowCalendrierLink] = useState(true);
+    
     const auth = { token: true};
+    // const accessToken=localStorage.getItem('accessToken');
+    // const tokenDecode = accessToken?jwtDecode(accessToken):undefined;
+    // const  role = tokenDecode.role?tokenDecode.role:"nada";
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (accessToken) {
+            const tokenDecode = jwtDecode(accessToken);
+            if (tokenDecode.role === 'admin') {
+                setIsAdmin(true);
+            }
+        }
+    }, []);
 
     return(
         <>
@@ -108,7 +125,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                         </Link>
                         <Link to="/ajouter-annonce">
                             <span className='before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative flex gap-2 p-1 mt-2'>
-                                <span className="relative text-white m-1">ajout annonce</span> <span>
+                                <span className="relative text-white m-1">ajout annonce </span> <span>
                                     <MdAddToPhotos className="relative text-white h-5 w-5" />
                                 </span>
                             </span>
@@ -154,11 +171,16 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                                 Mes inscriptions
                                             </Link>
                                         </ListGroup.Item>
-                                        <ListGroup.Item>
+
+                                        {/* FIXME: gerer le role admin: visible si role = admin dans token */}
+                                        {/* {isAdmin && ( */}
+                                            <ListGroup.Item>
                                             <Link to="/gestion-utilisateurs">
                                                 Gestion utilisateurs
                                             </Link>
                                         </ListGroup.Item>
+                                    {/* // ) } */}
+                                       
                                         <ListGroup.Item>
                                         <Link to="/mon-compte">
                                                 Fermeture de compte
