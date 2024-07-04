@@ -80,13 +80,13 @@ export async function getSubCategories(categoryName: string) {
     }
 }
 
-/*  export async function postSubscribedProfilesById(id: any) {
+export async function getAdById(id: any) {
     try {
-        const {data} = await api.post(`student/${id}`);
+        const {data} = await api.post(`ad/${id}`);
         return data
     } catch (error) {
         return {
             error: error
         }
     }
-} */
+}
