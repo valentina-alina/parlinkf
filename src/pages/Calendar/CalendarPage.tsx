@@ -222,7 +222,7 @@ export default function CalendarPage({ searchQuery }: { searchQuery: string }) {
                                     <Link
                                         to=""
                                         key={index}
-                                        className="block px-3 py-1 text-sm text-gray-800 hover:bg-blue-700 hover:text-white"
+                                        className="block px-3 py-1 text-sm text-gray-800 hover:bg-blue-700 hover:text-white ms-14 sm:ms-0"
                                         onClick={() => handleSubCategoryChange(subcategory)}
                                     >
                                         {subcategory}
