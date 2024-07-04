@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Card, Carousel, Label, TextInput } from "flowbite-react";
@@ -317,8 +319,9 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                     style={{ backgroundImage: `url(${event.adPicture})` }}
                                 >                                
                                     <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
-                                        <b>{event.start}</b><br />
-                                        <i>{event.title}</i>
+                                        <b>{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</b><br />
+                                        <i>{event.title}</i><br />
+                                        <b>{event.city}</b>
                                     </div>
                                 </div>
                             </Link>
