@@ -254,12 +254,12 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                             </Link>
                         </div>
                         {subCategories[category] && subCategories[category].length > 0 && (
-                            <div className="absolute right-0 mt-2 bg-white shadow-lg p-2 rounded-md w-60 z-10 hidden group-hover:block">
+                            <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md w-60 z-10 hidden group-hover:block">
                                 {subCategories[category].map((subcategory, index) => (
                                     <Link
                                         to=""
                                         key={index}
-                                        className="block px-3 py-1 text-sm text-gray-800 hover:bg-blue-700 hover:text-white"
+                                        className="block px-3 py-1 text-sm text-gray-800 hover:bg-blue-700 hover:text-white ms-14 sm:ms-0"
                                         onClick={() => handleSubCategoryChange(subcategory)}
                                     >
                                         {subcategory}
