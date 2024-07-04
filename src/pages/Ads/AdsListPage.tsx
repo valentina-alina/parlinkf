@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Card, Carousel, Label, TextInput } from "flowbite-react";
@@ -231,6 +233,20 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         }
     };
 
+    /* const startDate = ads ? new Date(ads.startTime) : new Date();
+    const endDate = ads ? new Date(ads.endTime) : new Date();
+
+    const day = startDate.getDate().toString().padStart(2, '0');
+    const month = (startDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = startDate.getFullYear();
+    const hour = startDate.getHours().toString().padStart(2, '0');
+    const minute = startDate.getMinutes().toString().padStart(2, '0');
+
+    const endHour = endDate.getHours().toString().padStart(2, '0');
+    const endMinute = endDate.getMinutes().toString().padStart(2, '0');
+
+    const formattedDate = `Le ${day}/${month}/${year} de ${hour}h${minute} à ${endHour}h${endMinute}`; */
+
     return (
         <>
             <div className='flex flex-row justify-around items-center gap-4 my-6 border-b-2 py-4 font-bodyTest'>
@@ -317,8 +333,9 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                     style={{ backgroundImage: `url(${event.adPicture})` }}
                                 >                                
                                     <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
-                                        <b>{event.start}</b><br />
-                                        <i>{event.title}</i>
+                                        <b>{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</b><br />
+                                        <i>{event.title}</i><br />
+                                        <b>{event.city}</b>
                                     </div>
                                 </div>
                             </Link>
