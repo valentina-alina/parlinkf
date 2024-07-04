@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getAds, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
+import { getAds, getAdById, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
 import MapButton from '../../components/Map/MapButton';
 import Sidebar from '../../components/Calendar/Sidebar';
 import FullCalendar from '../../components/Calendar/FullCalendar';
 import { EventInput } from '@fullcalendar/core';
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Label, TextInput } from 'flowbite-react';
 // import fakerCategories from '../Ads/fakerCategories';
 import { HiSearch } from "react-icons/hi";
@@ -23,11 +23,18 @@ export default function CalendarPage({ searchQuery }: { searchQuery: string }) {
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
     const [categories, setCategories] = useState<Category[]>([]);
     const [subCategories, setSubCategories] = useState<Record<Category, string[]>>({});
+    const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
         fetchAds();
         fetchCategories();
     }, []);
+
+    useEffect(() => {
+        if (id) {
+            fetchAdDetails(id);
+        }
+    }, [id]);
 
     useEffect(() => {        
         fetchFilteredAds();
@@ -174,6 +181,16 @@ export default function CalendarPage({ searchQuery }: { searchQuery: string }) {
             console.log('Catégories récupérées:', fetchedCategories);
         } catch (error) {
             console.error('Erreur lors de la récupération des catégories:', error);
+        }
+    };
+
+    const fetchAdDetails = async (id: string) => {
+        try {
+            const adDetails = await getAdById(id);
+            console.log('Détails de l\'annonce:', adDetails);
+
+        } catch (error) {
+            console.error(`Erreur lors de la récupération des détails de l'annonce avec l'id ${id}:`, error);
         }
     };
 

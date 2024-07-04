@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Card, Carousel, Label } from "flowbite-react";
 import { HiViewList } from "react-icons/hi";
 import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { getAds, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
+import { getAds, getAdById, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
 import { MapProvider } from '../../providers/MapProvider';
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import MapConfig from '../../services/utils/MapConfig';
@@ -29,6 +29,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const [categories, setCategories] = useState<Category[]>([]);
     const [categoryCounts, setCategoryCounts] = useState(initialCategoryCounts);
     const [subCategories, setSubCategories] = useState<Record<Category, string[]>>({});
+    const { id } = useParams<{ id: string }>();
 
     console.log('categoryCounts', categoryCounts)
 
@@ -36,6 +37,12 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         fetchAds();
         fetchCategories();
     }, []);
+
+    useEffect(() => {
+        if (id) {
+            fetchAdDetails(id);
+        }
+    }, [id]);
 
     useEffect(() => {        
         fetchFilteredAds();
@@ -196,6 +203,16 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         }
     };
 
+    const fetchAdDetails = async (id: string) => {
+        try {
+            const adDetails = await getAdById(id);
+            console.log('Détails de l\'annonce:', adDetails);
+
+        } catch (error) {
+            console.error(`Erreur lors de la récupération des détails de l'annonce avec l'id ${id}:`, error);
+        }
+    };
+
     const mapConfig = new MapConfig();
 
     return (
@@ -266,19 +283,19 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                             <div key={
                                     event.id
                                 } className="relative h-64 md:h-96">
-                                <div 
-                                    className="absolute inset-0 flex items-end justify-end p-5 bg-cover bg-center bg-no-repeat"
-                                    style={{ backgroundImage: `url(${event.adPicture})` }}
-                                >
-                                    <Link to={`/annonce/${
+                                <Link to={`/annonce/${
                                         event.id
                                     }`} className="link">
+                                    <div 
+                                        className="absolute inset-0 flex items-end justify-end p-5 bg-cover bg-center bg-no-repeat"
+                                        style={{ backgroundImage: `url(${event.adPicture})` }}
+                                    >                                    
                                         <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
                                             <b>{event.start}</b><br />
                                             <i>{event.title}</i>
                                         </div>
-                                    </Link>
-                                </div>
+                                    </div>
+                                </Link>
                             </div>
                         ))}
                     </Carousel>

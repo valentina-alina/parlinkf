@@ -3,12 +3,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MapProvider } from '../../providers/MapProvider';
 import { GoogleMap, MarkerF, InfoWindowF } from "@react-google-maps/api";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Label, TextInput } from 'flowbite-react';
 import { HiSearch } from "react-icons/hi";
 import MapConfig from '../../services/utils/MapConfig';
 import { debounce } from '../../services/utils/debounce';
-import { getAds, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
+import { getAds, getAdById, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
 import { AdWithoutCoordinatesInterface } from '../../services/interfaces/AdWithoutCoordinates';
 
 type Category = string;
@@ -21,11 +21,18 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
     const [categories, setCategories] = useState<Category[]>([]);
     const [subCategories, setSubCategories] = useState<Record<Category, string[]>>({});
+    const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
         fetchAndSetAds();
         fetchCategories();
     }, []);
+
+    useEffect(() => {
+        if (id) {
+            fetchAdDetails(id);
+        }
+    }, [id]);
 
     useEffect(() => {
         fetchFilteredAds();
@@ -169,6 +176,16 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
 
     const handleViewDetail = (ad: AdWithoutCoordinatesInterface) => {
         navigate(`/annonce/${ad.id}`, { state: { ad } });
+    };
+
+    const fetchAdDetails = async (id: string) => {
+        try {
+            const adDetails = await getAdById(id);
+            console.log('Détails de l\'annonce:', adDetails);
+
+        } catch (error) {
+            console.error(`Erreur lors de la récupération des détails de l'annonce avec l'id ${id}:`, error);
+        }
     };
 
     const mapConfig = new MapConfig();
