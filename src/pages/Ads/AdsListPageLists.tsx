@@ -343,7 +343,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                             <div className='col-span-2 flex flex-col '>
                                             <p className="text-start text-blue-600 p-1">{event.start}</p>
                                             <p className="text-center p-1"><b >{event.title}</b> </p>
-                                            <p className="text-justify visible max-sm:hidden mb-1">{event.description}</p>
+                                            <p className="text-justify visible max-sm:hidden mb-1 line-clamp-1">{event.description}</p>
                                             <span className="grid grid-cols-2 ">
                                                 <i className="text-start">{event.city}</i>
                                                 <span className=" text-blue-700 flex gap-1 justify-end items-center font-bold">Nbp: {event.attendees} </span>

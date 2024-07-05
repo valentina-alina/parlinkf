@@ -24,10 +24,16 @@ export default {
       'sans': ['ui-sans-serif', 'system-ui'],
       'serif': ['ui-serif', 'Georgia'],
     },
-    extend: {},
+    extend: {
+      lineClamp: {
+        8: '8',
+        10: '10',
+      }
+    },
   },
   plugins: [
     require('flowbite/plugin'),
+    require('@tailwindcss/line-clamp'),
     /* require('daisyui'), */
   ],
 }
