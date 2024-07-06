@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import NotFoundPage from './services/utils/NotFoundPage';
