@@ -54,7 +54,7 @@ export default function LoginPage() {
           <img src={Logo} className="scale-75 mx-0 sm:mx-10" alt="logo" />
         </div>
         <div className="md:basis-8/12">
-          <h1 className="font-titleTest text-3xl my-8">Connectez-vous</h1><br />
+          <h1 data-cy="cypress-title" className="font-titleTest text-3xl my-8">Connectez-vous</h1><br />
           {loginFailed && <p className="text-red-500 text-sm">Identifiants incorects</p>}
           <form onSubmit={handleSubmit}>
             <div className="mb-5">

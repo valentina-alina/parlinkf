@@ -37,7 +37,6 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
 
 
     useEffect(() => {
-      // Get the role from localStorage
         const storedRole = localStorage.getItem('role');
         if (storedRole) {
             setRole(storedRole);
@@ -232,20 +231,6 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             console.error(`Erreur lors de la récupération des détails de l'annonce avec l'id ${id}:`, error);
         }
     };
-
-    /* const startDate = ads ? new Date(ads.startTime) : new Date();
-    const endDate = ads ? new Date(ads.endTime) : new Date();
-
-    const day = startDate.getDate().toString().padStart(2, '0');
-    const month = (startDate.getMonth() + 1).toString().padStart(2, '0');
-    const year = startDate.getFullYear();
-    const hour = startDate.getHours().toString().padStart(2, '0');
-    const minute = startDate.getMinutes().toString().padStart(2, '0');
-
-    const endHour = endDate.getHours().toString().padStart(2, '0');
-    const endMinute = endDate.getMinutes().toString().padStart(2, '0');
-
-    const formattedDate = `Le ${day}/${month}/${year} de ${hour}h${minute} à ${endHour}h${endMinute}`; */
 
     return (
         <>
