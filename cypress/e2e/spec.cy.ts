@@ -1,3 +1,8 @@
+import { faker } from '@faker-js/faker';
+
+const email = faker.internet.email();
+const password = faker.internet.password();
+
 describe('Should display my website', () => {
   beforeEach(() => {
     cy.visit('/login');
@@ -23,6 +28,18 @@ describe('Should display my website', () => {
     cy.get('input[role="password"').type('password');
 
     cy.get('[data-cy="login"]').click();
+
+    cy.wait(20000);
+  })
+
+  it('Should redirect to login', () => {
+    cy.log('Checking form data and click');
+
+    cy.get('input[role="email"').type(email);
+    cy.get('input[role="password"').type(password);
+
+    cy.get('[data-cy="login"]').click();
+    cy.url().should('include', '/login')
 
     cy.wait(20000);
   })
