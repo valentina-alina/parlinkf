@@ -15,4 +15,15 @@ describe('Should display my website', () => {
 
     cy.wait(20000);
   })
+
+  it('Should check form data and click', () => {
+    cy.log('Checking form data and click');
+
+    cy.get('input[role="email"').type('valu@email.fr');
+    cy.get('input[role="password"').type('password');
+
+    cy.get('[data-cy="login"]').click();
+
+    cy.wait(20000);
+  })
 })
