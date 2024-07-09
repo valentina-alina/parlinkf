@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 
 const email = faker.internet.email();
 const password = faker.internet.password();
+const slowLoader = 30000;
 
 describe('Should display my website', () => {
   beforeEach(() => {
@@ -9,38 +10,45 @@ describe('Should display my website', () => {
   })
   it('Should display content CONNECTEZ-VOUS', () => {
     cy.log('Checking if content is displayed');
-    cy.contains(/Connectez-vous/);
-
-    cy.wait(20000);
+    cy.contains(/Connectez-vous/, { timeout: slowLoader});
   })
 
   it('Should login title be visible', () => {
     cy.log('Checking login title is visible');
-    cy.get('[data-cy="cypress-title"]').should('be.visible').should('have.text', 'Connectez-vous');
+    cy.get('[data-cy="cypress-title"]', { timeout: slowLoader})
+      .should('be.visible')
+      .should('have.text', 'Connectez-vous');
+  })
+  
+  it('Should fail to login', () => {
+    cy.log('Checking form data and click');
 
-    cy.wait(20000);
+    cy.get('input[role="email"', { timeout: slowLoader})
+      .type(email);
+    cy.get('input[role="password"', { timeout: slowLoader})
+      .type(password);
+
+    cy.get('[data-cy="login"]', { timeout: slowLoader})
+      .click();
   })
 
   it('Should check form data and click', () => {
     cy.log('Checking form data and click');
 
-    cy.get('input[role="email"').type('valu@email.fr');
-    cy.get('input[role="password"').type('password');
+    cy.get('input[role="email"', { timeout: slowLoader})
+      .type('valu@email.fr');
+    cy.get('input[role="password"', { timeout: slowLoader})
+      .type('password');
 
-    cy.get('[data-cy="login"]').click();
-    cy.url().should('match', /\/ads-list$/);
-
-    cy.wait(20000);
+    cy.get('[data-cy="login"]', { timeout: slowLoader})
+      .click();
+    cy.url()
+      .should('match', /\/ads-list$/);
+    cy.get('[data-cy="ads"]', { timeout: slowLoader })
+      .should('exist')
+      .and(($el) => {
+        expect($el.text()).to.include('Fil des annonces');
+      });
   })
 
-  it('Should fail to login', () => {
-    cy.log('Checking form data and click');
-
-    cy.get('input[role="email"').type(email);
-    cy.get('input[role="password"').type(password);
-
-    cy.get('[data-cy="login"]').click();
-
-    cy.wait(20000);
-  })
 })

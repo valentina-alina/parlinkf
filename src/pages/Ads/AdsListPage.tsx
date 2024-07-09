@@ -290,7 +290,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                             <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
                         </>
                     ) : (
-                        <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
+                        <h2 data-cy="ads" className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
                     )
                 }
             </h2>
