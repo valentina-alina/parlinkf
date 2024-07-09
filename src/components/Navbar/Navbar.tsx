@@ -24,6 +24,8 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
     // const  role = tokenDecode.role?tokenDecode.role:"nada";
     const [isAdmin, setIsAdmin] = useState(false);
 
+    console.log('isAdmin', isAdmin)
+
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
@@ -123,7 +125,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                 <path fill-rule="evenodd" d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z" clip-rule="evenodd"/>
                             </svg>
                         </Link>
-                        <Link to="/ajouter-annonce">
+                        <Link data-cy="create-ad" to="/ajouter-annonce">
                             <span className='before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative flex gap-2 p-1 mt-2'>
                                 <span className="relative text-white m-1">ajout annonce </span> <span>
                                     <MdAddToPhotos className="relative text-white h-5 w-5" />

@@ -239,6 +239,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                     <div className="event_filter_wrapper relative group" key={category}>
                         <div className='relative'>
                             <Link
+                                data-cy="category"
                                 to=""
                                 onClick={() => handleCategoryChange(category)}
                                 onMouseEnter={() => handleCategoryHover(category)}
