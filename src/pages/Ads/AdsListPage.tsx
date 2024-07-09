@@ -276,7 +276,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                     <Link className='text-blue-800' to="/ads-list">
                         <MdOutlineApps className='w-8 h-8 tex-blue-800' />
                     </Link>
-                    <Link className='text-blue-800' to="/ads-list2">
+                    <Link data-cy="adslist" className='text-blue-800' to="/ads-list2">
                         <HiViewList className='w-8 h-8' />
                     </Link>
                 </div>

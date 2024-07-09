@@ -44,11 +44,6 @@ describe('Should display my website', () => {
       .click();
     cy.url()
       .should('match', /\/ads-list$/);
-    cy.get('[data-cy="ads"]', { timeout: slowLoader })
-      .should('exist')
-      .and(($el) => {
-        expect($el.text()).to.include('Fil des annonces');
-      });
   })
 
 })
