@@ -10,10 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { signin } from '../../services/api/auth';
 
 
-interface AuthSignin {
+/* interface AuthSignin {
   email: string;
   password: string;
-}
+} */
 
 export default function LoginPage() {
   const navigate = useNavigate();

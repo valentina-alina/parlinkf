@@ -1,8 +1,8 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from 'react-router-dom';
 import { Label } from "flowbite-react";
 
-const CategoryLink = ({ label, handleCategoryChange, selectedCategories }) => (
+const CategoryLink = ({ label, handleCategoryChange, selectedCategories }:any) => (
   <div className="event_filter_wrapper ">
     <Link
       to=""

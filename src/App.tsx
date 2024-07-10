@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import NotFoundPage from './services/utils/NotFoundPage';
@@ -49,7 +50,7 @@ function App() {
 
         <Route element={<PrivateRoute />}>
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
-            <Route path="/gestion-utilisateurs" element={<UserManagement handleSubmitUser={(user: User) => { /* Implémentation */ }} />} />
+            <Route path="/gestion-utilisateurs" element={<UserManagement handleSubmitUser={(_user: User) => { /* Implémentation */ }} />} />
           </Route>
           
           <Route path="/mon-compte" element={<UserProfilePage />} />
