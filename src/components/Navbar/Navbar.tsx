@@ -6,8 +6,12 @@ import { MdAddToPhotos } from "react-icons/md";
 import Logo from '../../assets/logo.png';
 import { HiSearch } from "react-icons/hi";
 import { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 // import NavbarLogo from "./NavbarLogo";
+
+interface CustomPayLoad extends JwtPayload {
+    role?: string;
+}
 
 interface NavbarProps {
     searchQuery: string;
@@ -29,7 +33,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
-            const tokenDecode = jwtDecode(accessToken);
+            const tokenDecode = jwtDecode(accessToken) as CustomPayLoad;
             if (tokenDecode.role === 'admin') {
                 setIsAdmin(true);
             }

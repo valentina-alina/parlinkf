@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useApi } from "../../hooks/useApi.ts";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -21,7 +22,7 @@ export async function signin(body:AuthSignin) {
 
 
 
-export async function refreshToken() {
+export async function refreshToken(id: number, body: any) {
   const refreshToken = localStorage.getItem('refreshToken')
   const headers = { Authorization : "Bearer " + refreshToken }
   console.log('headers', headers)

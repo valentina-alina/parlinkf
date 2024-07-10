@@ -48,7 +48,6 @@ console.log('color', color)
     Gestion des utilisateurs 
   </h5>
 
-
     <div className=' flex flex-col gap-4 w-full md:w-1/2 lg:w-1/2 mx-auto'>
       <Accordion  collapseAll className='w-full '>
         <Accordion.Panel className=''>
@@ -66,38 +65,39 @@ console.log('color', color)
             <UserCreatePage handleSubmitUser={handleSubmitUser} />
           </Accordion.Content>
         </Accordion.Panel>
-        { users.map((user) => (
-          
-          <Accordion.Panel key={user.id} className=''>
-        <Accordion.Title className=" hover:bg-violet-100">
-  <div className=" lg:w-[500px]  grid grid-cols-3 gap-4 ">
-    <span className='flex gap-5 col-span-2' ><Avatar className='w-auto' img={user.file} alt={`${user.firstname} ${user.lastname}`} rounded size="sm" />
-    <p className="truncate text-left text-sm font-medium text-gray-900 dark:text-white">{`${user.firstname} ${user.lastname}`}</p>
-    </span>
-    <Link to={`/delete-user/${user.id}`} className={`flex justify-end  ${(user.delete === '1')?"text-red-800":(user.delete === '2')?"text-green-800":"text-gray-400"}`}>
+        <div>
+          { users.map((user) => (            
+            <Accordion.Panel key={user.id} className=''>
+              <Accordion.Title className=" hover:bg-violet-100">
+                <div className=" lg:w-[500px]  grid grid-cols-3 gap-4 ">
+                  <span className='flex gap-5 col-span-2' ><Avatar className='w-auto' img={user.file} alt={`${user.firstname} ${user.lastname}`} rounded size="sm" />
+                  <p className="truncate text-left text-sm font-medium text-gray-900 dark:text-white">{`${user.firstname} ${user.lastname}`}</p>
+                  </span>
+                  <Link to={`/delete-user/${user.id}`} className={`flex justify-end  ${(user.delete === '1')?"text-red-800":(user.delete === '2')?"text-green-800":"text-gray-400"}`}>
 
-    <Tooltip content={`${(user.delete === '1')?"demande":(user.delete === '2')?"non-conforme":"suppresion"}`} style="light">
-       <AiTwotoneDelete />
-      </Tooltip>
-    
-    </Link>
-  </div>
-</Accordion.Title>
-            <Accordion.Content >
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
-              </div>
-              <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                {user.phone}
-              </div>
-              <ul className="truncate text-sm text-gray-500 dark:text-gray-400">
-                Enfants :
-                <li>Léa classe : CM1</li>
-                <li>Leo classe : CP</li>
-              </ul>
-            </Accordion.Content>
-          </Accordion.Panel>
-        ))}
+                  <Tooltip content={`${(user.delete === '1')?"demande":(user.delete === '2')?"non-conforme":"suppresion"}`} style="light">
+                    <AiTwotoneDelete />
+                    </Tooltip>
+                  
+                  </Link>
+                </div>
+              </Accordion.Title>
+              <Accordion.Content >
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
+                </div>
+                <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                  {user.phone}
+                </div>
+                <ul className="truncate text-sm text-gray-500 dark:text-gray-400">
+                  Enfants :
+                  <li>Léa classe : CM1</li>
+                  <li>Leo classe : CP</li>
+                </ul>
+              </Accordion.Content>
+            </Accordion.Panel>
+          ))}
+        </div>
       </Accordion>
     </div>
     
