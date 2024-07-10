@@ -10,7 +10,7 @@ export default function UserProfileMenu() {
                     <HiUserCircle className="mr-3 h-4 w-4" />
                         À propos de vous
                 </Button>
-                <Link to="/mon-compte">
+                <Link to="/my-account">
                     <Button color="gray" className="sm:w-96 -z-10">
                         <HiAdjustments className="mr-3 h-4 w-4" />
                             Mon compte

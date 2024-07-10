@@ -46,9 +46,8 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                 <Navbar fluid rounded className="hidden sm:block w-full">
                     
                     <Navbar.Brand>
-                        <Link to="/ads-list">
+                        <Link to="/ads-grid">
                             <img src={Logo} alt="logo ParLink" className="ml-8 h-6 sm:h-9 scale-150"></img>
-                            {/* <NavbarLogo /> */}
                         </Link>
                     </Navbar.Brand>
 
@@ -71,7 +70,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                     <Navbar.Collapse>
                         {showCalendrierLink ? (
                             <Link
-                                to="/calendrier"
+                                to="/calendar"
                                 onClick={() => setShowCalendrierLink(false)}
                             >
                                 <svg
@@ -92,7 +91,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                             </Link>
                         ) : (
                             <Link
-                                to="/ads-list"
+                                to="/ads-grid"
                                 onClick={() => setShowCalendrierLink(true)}
                             >
                                 <svg
@@ -112,7 +111,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                 </svg>
                             </Link>
                         )}
-                        <Link to="/fichiers">
+                        <Link to="/files">
                             <svg
                                 className="w-6 h-6 text-gray-800 dark:text-white scale-125 mt-3 hover:text-blue-800 dark:hover:text-blue-800"
                                 aria-hidden="true"
@@ -125,7 +124,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                 <path fill-rule="evenodd" d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z" clip-rule="evenodd"/>
                             </svg>
                         </Link>
-                        <Link data-cy="create-ad" to="/ajouter-annonce">
+                        <Link data-cy="create-ad" to="/new-ad">
                             <span className='before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative flex gap-2 p-1 mt-2'>
                                 <span className="relative text-white m-1">ajout annonce </span> <span>
                                     <MdAddToPhotos className="relative text-white h-5 w-5" />
@@ -164,12 +163,12 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                 <div className="flex justify-center">
                                     <ListGroup className="w-48">
                                         <ListGroup.Item>
-                                            <Link to="/mes-annonces">
+                                            <Link to="/my-ads">
                                                 Mes annonces
                                             </Link>
                                         </ListGroup.Item>
                                         <ListGroup.Item>
-                                        <Link to="/mes-inscriptions">
+                                        <Link to="/my-subscriptions">
                                                 Mes inscriptions
                                             </Link>
                                         </ListGroup.Item>
@@ -177,14 +176,13 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                         {/* FIXME: gerer le role admin: visible si role = admin dans token */}
                                         {/* {isAdmin && ( */}
                                             <ListGroup.Item>
-                                            <Link to="/gestion-utilisateurs">
+                                            <Link to="/users-handling">
                                                 Gestion utilisateurs
                                             </Link>
                                         </ListGroup.Item>
                                     {/* // ) } */}
-                                       
                                         <ListGroup.Item>
-                                        <Link to="/mon-compte">
+                                        <Link to="/my-account">
                                                 Fermeture de compte
                                             </Link>
                                         </ListGroup.Item>
@@ -204,12 +202,12 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                     <Navbar.Brand className="bg-white p-5">
                         
                         <div className="mt-2 flex gap-4 w-full justify-center">
-                            <Link to="/ads-list">
+                            <Link to="/ads-grid">
                                 <img src={Logo} alt="logo ParLink" className="flex mr-32 h-7 sm:h-9 scale-150" />
                             </Link>
                             {showCalendrierLink ? (
                                 <Link
-                                    to="/calendrier"
+                                    to="/calendar"
                                     onClick={() => setShowCalendrierLink(false)}
                                 >
                                     <svg
@@ -230,7 +228,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                 </Link>
                             ) : (
                                 <Link
-                                    to="/ads-list"
+                                    to="/ads-grid"
                                     onClick={() => setShowCalendrierLink(true)}
                                 >
                                     <svg
@@ -250,7 +248,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                     </svg>
                                 </Link>
                             )}
-                            <Link to="/fichiers">
+                            <Link to="/files">
                                 <svg
                                     className="w-6 h-6 text-gray-800 dark:text-white scale-150 hover:text-blue-800 dark:hover:text-blue-800"
                                     aria-hidden="true"
@@ -263,7 +261,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                     <path fill-rule="evenodd" d="M3 6a2 2 0 0 1 2-2h5.532a2 2 0 0 1 1.536.72l1.9 2.28H3V6Zm0 3v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Z" clip-rule="evenodd"/>
                                 </svg>
                             </Link>
-                            <Link to="/carte">
+                            <Link to="/map">
                                 <svg className="w-6 h-6 text-gray-800 dark:text-white scale-150 hover:text-blue-800 dark:hover:text-blue-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                     <path fill-rule="evenodd" d="M11.906 1.994a8.002 8.002 0 0 1 8.09 8.421 7.996 7.996 0 0 1-1.297 3.957.996.996 0 0 1-.133.204l-.108.129c-.178.243-.37.477-.573.699l-5.112 6.224a1 1 0 0 1-1.545 0L5.982 15.26l-.002-.002a18.146 18.146 0 0 1-.309-.38l-.133-.163a.999.999 0 0 1-.13-.202 7.995 7.995 0 0 1 6.498-12.518ZM15 9.997a3 3 0 1 1-5.999 0 3 3 0 0 1 5.999 0Z" clip-rule="evenodd"/>
                                 </svg>

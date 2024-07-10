@@ -8,7 +8,7 @@ export default function UserProfileMenu() {
             <ButtonGroup className="flex justify-center items-center ml-5 sm:ml-0 sm:my-40" outline={false} pill={false}>
                 <Button color="gray" className="sm:w-96">
                     <HiUserCircle className="mr-3 h-4 w-4" />
-                    <Link to="/editer-mon-profil">
+                    <Link to="/edit-my-profile">
                         À propos de vous
                     </Link>
                 </Button>

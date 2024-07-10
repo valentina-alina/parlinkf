@@ -50,22 +50,22 @@ function App() {
 
         <Route element={<PrivateRoute />}>
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
-            <Route path="/gestion-utilisateurs" element={<UserManagement handleSubmitUser={(_user: User) => { /* Implémentation */ }} />} />
+            <Route path="/users-handling" element={<UserManagement handleSubmitUser={(_user: User) => { /* Implémentation */ }} />} />
           </Route>
           
-          <Route path="/mon-compte" element={<UserProfilePage />} />
+          <Route path="/my-account" element={<UserProfilePage />} />
           <Route path="/editer-mon-profil/:idProfile" element={<UserEditProfilePage handleSubmitProfile={handleSubmitProfile} />} />
-          <Route path="/annonce/:idAd" element={<AdsDetailPage />} />
-          <Route path="/mes-annonces/:idUser" element={<AdSubscriptionPage />} />
-          <Route path="/ajouter-annonce" element={<AdCreatePage />} />
-          <Route path="/edit-annonce/:adId" element={<AdsEditPage />} />
-          <Route path="/calendrier" element={<CalendarPage searchQuery={searchQuery} />} />
-          <Route path="/carte" element={<MapPage searchQuery={searchQuery} />} />
-          <Route path="/confidentialite" element={<ConfidentialityPage />} />
-          <Route path="/mentions-legales" element={<LegalPage />} />
+          <Route path="/ad/:idAd" element={<AdsDetailPage />} />
+          <Route path="/my-ads/:idUser" element={<AdSubscriptionPage />} />
+          <Route path="/new-ad" element={<AdCreatePage />} />
+          <Route path="/edit-ad/:adId" element={<AdsEditPage />} />
+          <Route path="/calendar" element={<CalendarPage searchQuery={searchQuery} />} />
+          <Route path="/map" element={<MapPage searchQuery={searchQuery} />} />
+          <Route path="/confidentiality" element={<ConfidentialityPage />} />
+          <Route path="/legal" element={<LegalPage />} />
           <Route path="/contact" element={<ContactPage handleSubmitContactForm={handleSubmitContactForm} />} />
-          <Route path="/ads-list" element={<AdsListPage searchQuery={searchQuery} />} />
-          <Route path="/ads-list2" element={<AdsListPageLists searchQuery={searchQuery} />} />
+          <Route path="/ads-grid" element={<AdsListPage searchQuery={searchQuery} />} />
+          <Route path="/ads-list" element={<AdsListPageLists searchQuery={searchQuery} />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

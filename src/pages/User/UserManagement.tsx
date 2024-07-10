@@ -1,22 +1,25 @@
-// // la page de creation des comptes
-import React, { useState, useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+//? la page de creation des comptes
+import { useState/* , useEffect */ } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
-import { Button, Card, FloatingLabel, Tabs, Accordion, List, Avatar } from 'flowbite-react';
-import { MdAddToPhotos } from 'react-icons/md';
+import { /* Button, Card, FloatingLabel, Tabs,  */Accordion, /* List,  */Avatar } from 'flowbite-react';
+// import { MdAddToPhotos } from 'react-icons/md';
 import { AiTwotoneDelete } from 'react-icons/ai';
 import profileFaker from './profileFaker';
 import UserCreatePage from './UserCreatePage';
-import { User } from '../../services/interfaces/User';
-import ControlButtonNumber from '../../services/utils/ControlButtonNumber';
+// import { User } from '../../services/interfaces/User';
+// import ControlButtonNumber from '../../services/utils/ControlButtonNumber';
 import { IoPersonAdd } from "react-icons/io5";
 import { Tooltip } from "flowbite-react";
 
 const users = profileFaker;
 
-const UserManagement = ({ handleSubmitUser }) => {
+const UserManagement = ({ handleSubmitUser }:any) => {
   const [childCounterFromControlButton, setChildCounterFromControlButton] = useState(0);
+  console.log('childCounterFromControlButton', childCounterFromControlButton)
+  console.log('setChildCounterFromControlButton', setChildCounterFromControlButton)
 
   const validationSchema = Yup.object({
     nom: Yup.string().required('Le prénom est requis'),
@@ -36,7 +39,9 @@ const UserManagement = ({ handleSubmitUser }) => {
       alert("Nouveau utilisateur ajouté");
     },
   });
+  console.log('formik', formik)
 const color ="text-red-800";
+console.log('color', color)
   return (
     <> 
   <h5 className="text-2xl font-bold tracking-tight text-blue-800 dark:text-white my-3">
