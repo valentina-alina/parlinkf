@@ -233,7 +233,7 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
             </div>
 
             {adsList.length === 0 ? (
-                <p className='font-bodyTest text-2xl my-32 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
+                <p data-cy="no-ads" className='font-bodyTest text-2xl my-32 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
             ) : (
                 <h1 className="font-titleTest text-3xl my-14">
                     Voir les annonces sur la carte

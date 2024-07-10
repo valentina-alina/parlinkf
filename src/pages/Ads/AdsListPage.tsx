@@ -37,7 +37,6 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
 
 
     useEffect(() => {
-      // Get the role from localStorage
         const storedRole = localStorage.getItem('role');
         if (storedRole) {
             setRole(storedRole);
@@ -240,6 +239,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                     <div className="event_filter_wrapper relative group" key={category}>
                         <div className='relative'>
                             <Link
+                                data-cy="category"
                                 to=""
                                 onClick={() => handleCategoryChange(category)}
                                 onMouseEnter={() => handleCategoryHover(category)}
@@ -256,7 +256,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                             </Link>
                         </div>
                         {subCategories[category] && subCategories[category].length > 0 && (
-                            <div className="absolute right-0 mt-2 bg-white shadow-lg p-2 rounded-md w-60 z-10 hidden group-hover:block">
+                            <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md w-60 z-10 hidden group-hover:block">
                                 {subCategories[category].map((subcategory, index) => (
                                     <Link
                                         to=""
@@ -277,7 +277,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                     <Link className='text-blue-800' to="/ads-list">
                         <MdOutlineApps className='w-8 h-8 tex-blue-800' />
                     </Link>
-                    <Link className='text-blue-800' to="/ads-list2">
+                    <Link data-cy="adslist" className='text-blue-800' to="/ads-list2">
                         <HiViewList className='w-8 h-8' />
                     </Link>
                 </div>
@@ -291,7 +291,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                             <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
                         </>
                     ) : (
-                        <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
+                        <h2 data-cy="ads" className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
                     )
                 }
             </h2>
