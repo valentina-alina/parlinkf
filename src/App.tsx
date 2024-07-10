@@ -54,7 +54,7 @@ function App() {
           </Route>
           
           <Route path="/my-account" element={<UserProfilePage />} />
-          <Route path="/editer-mon-profil/:idProfile" element={<UserEditProfilePage handleSubmitProfile={handleSubmitProfile} />} />
+          <Route path="/edit-my-profile/:idProfile" element={<UserEditProfilePage handleSubmitProfile={handleSubmitProfile} />} />
           <Route path="/ad/:idAd" element={<AdsDetailPage />} />
           <Route path="/my-ads/:idUser" element={<AdSubscriptionPage />} />
           <Route path="/new-ad" element={<AdCreatePage />} />
