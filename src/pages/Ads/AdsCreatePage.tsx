@@ -1,28 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, /* TextInput,  */Select, Card, FileInput, Label, FloatingLabel,Textarea  } from "flowbite-react";
 // import { Link } from "react-router-dom";
+import { FormEvent } from 'react';
+
+interface FormDataSubmitedObject {
+  [key: string]: any;
+  files?: string;
+}
 
 export default function AdCreatePage() {
 
-  const extractFormData = (formData:any) => {
-    const formDatasSubmitedObject = {};
+  const extractFormData = (formData: FormData): FormDataSubmitedObject => {
+    const formDatasSubmitedObject: FormDataSubmitedObject = {};
     for (const [key, value] of formData.entries()) {
       formDatasSubmitedObject[key] = value;
     }
-    formDatasSubmitedObject.files = formData.get('files').name;
+    const file = formData.get('files') as File | null;
+    if (file) {
+      formDatasSubmitedObject.files = file.name;
+    }
     return formDatasSubmitedObject;
   };
 
-  const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const formData = new FormData(e.currentTarget);
     const formDatasSubmitedObject = extractFormData(formData);
 
 
 
     const tsContent = `export const formData = ${JSON.stringify(formDatasSubmitedObject, null, 2)};`;
     const file = new Blob([tsContent], { type: 'application/typescript' });
-    const formDataToSend = new FormData(e.target);
+    const formDataToSend = new FormData(e.currentTarget);
     formDataToSend.append('file', file, 'formData.ts');
 
     try {

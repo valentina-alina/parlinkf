@@ -1,4 +1,4 @@
-import { Child } from "./Child";
+// import { Child } from "./Child";
 // import { Subject } from "./Subject";
 
 export interface User {
@@ -10,7 +10,7 @@ export interface User {
     password:string;
     createdate:string;
     updatedate:string;
-    children: [Child];
+    // children: [Child];
     // subject: [Subject];
     // profile:Profile
 
