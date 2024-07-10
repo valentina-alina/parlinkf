@@ -259,10 +259,10 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                         </div>
                     ))}
                     <div className='flex justify-end items-center max-sm:hidden'>
-                        <Link className='text-blue-800' to="/ads-list">
+                        <Link className='text-blue-800' to="/ads-grid">
                             <MdOutlineApps className='w-8 h-8 tex-blue-800' />
                         </Link>
-                        <Link className='text-blue-800' to="/ads-list2">
+                        <Link className='text-blue-800' to="/ads-list">
                             <HiViewList className='w-8 h-8' />
                         </Link>
                     </div>
@@ -285,7 +285,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                             <div key={
                                     event.id
                                 } className="relative h-64 md:h-96">
-                                <Link to={`/annonce/${
+                                <Link to={`/ad/${
                                         event.id
                                     }`} className="link">
                                     <div 
@@ -335,8 +335,8 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                             })
                             .map((event) => (
                                 <Card key={event.id} className='w-full my-4 shadow-lg'>
-                                    <Link to={`/annonce/${event.id}`} className="w-full link text-blue-800 text-bodyTest">
-                                        <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
+                                    <Link to={`/ad/${event.id}`} className="w-full link text-blue-800 text-bodyTest">
+                                        <Link to={`/edit-ad/${event.id}`} className="link text-red-800 text-bodyTest">
                                             <CiEdit />
                                         </Link>
                                         <div className=" grid grid-cols-1 md:grid-cols-3" color="violet-900">
@@ -360,7 +360,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                                         <MarkerF key={event.id} position={{ lat: Number(event.lat), lng: Number(event.lng) }} />
                                                     </GoogleMap>
                                                 ) : (
-                                                    <p>Coordinates not available</p>
+                                                    <p>Coordonnées indisponibles</p>
                                                 )}
                                             </div>
                                         </div>

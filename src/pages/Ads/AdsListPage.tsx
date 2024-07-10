@@ -275,10 +275,10 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                     </div>
                 ))}
                 <div className='flex justify-end items-center max-sm:hidden'>
-                    <Link className='text-blue-800' to="/ads-list">
+                    <Link className='text-blue-800' to="/ads-grid">
                         <MdOutlineApps className='w-8 h-8 tex-blue-800' />
                     </Link>
-                    <Link data-cy="adslist" className='text-blue-800' to="/ads-list2">
+                    <Link data-cy="adslist" className='text-blue-800' to="/ads-list">
                         <HiViewList className='w-8 h-8' />
                     </Link>
                 </div>
@@ -314,7 +314,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 <Carousel>
                     {items.map((event) => (
                         <div key={event.id} className="relative h-64 md:h-96">
-                            <Link to={`/annonce/${event.id}`} className="link">
+                            <Link to={`/ad/${event.id}`} className="link">
                                 <div 
                                     className="absolute inset-0 flex items-end justify-end p-5 bg-cover bg-center bg-no-repeat"
                                     style={{ backgroundImage: `url(${event.adPicture})` }}
@@ -358,8 +358,8 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 <div className='md:flex flex-wrap justify-between item-center gap-2 mt-8'>
                     {items.map((event) => (
                         <Card key={event.id} className='my-4 shadow-lg sm:w-80 sm:h-80'>
-                            <Link to={`/annonce/${event.id}`} className="link text-blue-800 text-bodyTest">
-                                <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
+                            <Link to={`/ad/${event.id}`} className="link text-blue-800 text-bodyTest">
+                                <Link to={`/edit-ad/${event.id}`} className="link text-red-800 text-bodyTest">
                                     <CiEdit />
                                 </Link>
                                 <div className='flex flex-col'>

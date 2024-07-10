@@ -45,7 +45,7 @@ console.log('color', color)
   return (
     <> 
   <h5 className="text-2xl font-bold tracking-tight text-blue-800 dark:text-white my-3">
- Gestion des utilisateurs 
+    Gestion des utilisateurs 
   </h5>
 
 
@@ -54,9 +54,9 @@ console.log('color', color)
         <Accordion.Panel className=''>
           <Accordion.Title className='hover:bg-vlue-700 text-left bg-blue-700 text-white'>
           <span className=" relative flex gap-2 p-1 text-xl  font-bold tracking-tight  text-white dark:text-white">
-             <span ><IoPersonAdd /> </span> <span >Ajouter un utilisateur </span>
-           </span>
-               {/* <span className='before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative flex gap-2 p-1 mt-2'>
+              <span ><IoPersonAdd /> </span> <span >Ajouter un utilisateur </span>
+          </span>
+              {/* <span className='before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative flex gap-2 p-1 mt-2'>
                                 <span className="relative text-white m-1">Ajouter un utilisateur </span> <span>
                                     <IoPersonAdd  className="relative text-white h-5 w-5" />
                                 </span>
