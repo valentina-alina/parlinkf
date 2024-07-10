@@ -23,7 +23,14 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
     // const tokenDecode = accessToken?jwtDecode(accessToken):undefined;
     // const  role = tokenDecode.role?tokenDecode.role:"nada";
     const [isAdmin, setIsAdmin] = useState(false);
+ 
 
+    const handleLogout = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      event.preventDefault();
+      localStorage.removeItem('accessToken');
+      history.go("/login");
+     
+    };
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
@@ -187,9 +194,9 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                             </Link>
                                         </ListGroup.Item>
                                         <ListGroup.Item>
-                                            <p>
-                                                Déconnexion
-                                            </p>
+                                        <Link  to="#" onClick={handleLogout} >
+                                      Déconnection
+                                            </Link>                                     
                                         </ListGroup.Item>
                                     </ListGroup>
                                 </div>
@@ -205,11 +212,11 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                             <Link to="/ads-list">
                                 <img src={Logo} alt="logo ParLink" className="flex mr-32 h-7 sm:h-9 scale-150" />
                             </Link>
-                            <Link to="/annonces">
+                            {/* <Link to="/annonces">
                                 <svg className="w-6 h-6 text-gray-800 dark:text-white scale-150 hover:text-blue-800 dark:hover:text-blue-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                     <path fill-rule="evenodd" d="M8 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1h2a2 2 0 0 1 2 2v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2Zm6 1h-4v2H9a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2h-1V4Zm-3 8a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Zm2 5a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Z" clip-rule="evenodd"/>
                                 </svg>
-                            </Link>  
+                            </Link>   */}
                             {showCalendrierLink ? (
                                 <Link
                                     to="/calendrier"

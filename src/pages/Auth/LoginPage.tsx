@@ -54,7 +54,7 @@ export default function LoginPage() {
           <img src={Logo} className="scale-75 mx-0 sm:mx-10" alt="logo" />
         </div>
         <div className="md:basis-8/12">
-          <h1 className="font-titleTest text-3xl my-8">Connectez-vous</h1><br />
+          <h1 className="font-titleTest text-3xl my-8" data-cy="cypress-title">Connectez-vous</h1><br />
           {loginFailed && <p className="text-red-500 text-sm">Identifiants incorects</p>}
           <form onSubmit={handleSubmit}>
             <div className="mb-5">
@@ -68,6 +68,7 @@ export default function LoginPage() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder=""
                 required
+                role="email" 
               />
               {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
             </div>
@@ -81,12 +82,13 @@ export default function LoginPage() {
                 name="password"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
+                role="password" 
               />
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
             <button
               type="submit"
-              className="text-white bg-blue-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="text-white bg-blue-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:hover:bg-blue-700 dark:focus:ring-blue-800" data-cy='login'
             >
               Connexion
             </button>
