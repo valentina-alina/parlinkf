@@ -1,11 +1,11 @@
-import { Button } from "flowbite-react";
+import { Button, ButtonGroup } from "flowbite-react";
 import { Link } from "react-router-dom";
 import { HiAdjustments, HiUserCircle } from "react-icons/hi";
 
 export default function UserProfileMenu() {
     return (
         <>
-            <Button.Group className="flex justify-center items-center mr-5 sm:mr-0 sm:my-40">
+            <ButtonGroup className="flex justify-center items-center mr-5 sm:mr-0 sm:my-40" outline={false} pill={false}>
                 <Button color="gray" className="sm:w-96 bg-blue-700 text-white" disabled>
                     <HiUserCircle className="mr-3 h-4 w-4" />
                         À propos de vous
@@ -16,7 +16,7 @@ export default function UserProfileMenu() {
                             Mon compte
                     </Button>
                 </Link>
-            </Button.Group>
+            </ButtonGroup>
         </>
     )
 }

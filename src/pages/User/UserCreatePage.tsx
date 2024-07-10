@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { User } from '../../services/interfaces/User';
@@ -10,6 +10,7 @@ import subject from './subjectFaker';
 import profileFaker from './profileFaker';
 
 const users = profileFaker;
+console.log('users', users)
 
 interface PropUserPage {
   handleSubmitUser: (author: User) => void;
@@ -17,6 +18,7 @@ interface PropUserPage {
 
 export default function UserCreatePage(props: PropUserPage) {
   const handleSubmitUser = props.handleSubmitUser;
+  console.log('handleSubmitUser', handleSubmitUser)
 
   const [childCounterFromControlButton, setChildCounterFromControlButton] = useState<number>(0);
 

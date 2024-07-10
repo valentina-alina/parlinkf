@@ -24,10 +24,12 @@ export async function signin(body:AuthSignin) {
 export async function refreshToken() {
   const refreshToken = localStorage.getItem('refreshToken')
   const headers = { Authorization : "Bearer " + refreshToken }
+  console.log('headers', headers)
 
 
   try {
     const response = await api.get(`posts/${id}`, body);
+    console.log('response', response)
     // simulation of success api response
     return {
       datas: body,
