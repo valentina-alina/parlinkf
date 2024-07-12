@@ -38,7 +38,7 @@ export default function LoginPage() {
           localStorage.setItem('accessToken', response.data.access_token);
           localStorage.setItem('refreshToken', response.data.refresh_token);
           setLoginFailed(false);
-          navigate('/ads-list');
+          navigate('/ads-grid');
         }
       } catch (error) {
         console.error('Login failed', error);
