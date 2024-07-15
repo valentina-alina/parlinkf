@@ -47,12 +47,9 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
             ? 
             
             <div className="sticky top-0 scale-110 mb-8 flex justify-center items-center z-50">
-                <Navbar fluid rounded className="hidden sm:block w-full">
-                    
-                    <Navbar.Brand>
-                        <Link to="/ads-grid">
-                            <img src={Logo} alt="logo ParLink" className="ml-8 h-6 sm:h-9 scale-150"></img>
-                        </Link>
+                <Navbar fluid rounded className="hidden sm:block w-full">                    
+                    <Navbar.Brand to="/ads-grid">
+                        <img src={Logo} alt="logo ParLink" className="ml-8 h-6 sm:h-9 scale-150"></img>
                     </Navbar.Brand>
 
                     <div className="max-w-md ml-10 sm:ml-16 mr-10 sm:mr-16">
@@ -203,12 +200,10 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                 </Navbar>
 
                 <Navbar fluid rounded className="w-screen sm:hidden">
-                    <Navbar.Brand className="bg-white p-5">
+                    <Navbar.Brand className="bg-white p-5" to="/ads-grid">
                         
                         <div className="mt-2 flex gap-4 w-full justify-center">
-                            <Link to="/ads-grid">
-                                <img src={Logo} alt="logo ParLink" className="flex mr-32 h-7 sm:h-9 scale-150" />
-                            </Link>
+                            <img src={Logo} alt="logo ParLink" className="flex mr-32 h-7 sm:h-9 scale-150" />
                             {showCalendrierLink ? (
                                 <Link
                                     to="/calendar"
