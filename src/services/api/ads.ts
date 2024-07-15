@@ -7,7 +7,7 @@ const api = useApi();
 
 
 
-export async function create(body:AdInterface) {
+export async function createAd(body) {
     try {
       const {data} = await api.post(`/ad`, body);
       return data 

@@ -20,7 +20,7 @@ const fetchCategories = async () => {
       const fetchedCategories = response.data.categories;
 
       setCategories([ ...fetchedCategories]);
-      console.log('Catégories récupérées:', fetchedCategories);
+    //   console.log('Catégories récupérées:', fetchedCategories);
   } catch (error) {
       console.error('Erreur lors de la récupération des catégories:', error);
   }
@@ -37,7 +37,7 @@ const fetchSubCategories = async (category: Category) => {
               ...prevSubCategories,
               [category]: response.data.subCategories,
           }));
-          console.log('fetchSC',[categories[0]],[selectedCategory],subCategories[selectedCategory])
+ 
       } else {
           console.warn(`Réponse inattendue pour les sous-catégories de la catégorie ${category}:`, response);
           setSubCategories((prevSubCategories) => ({
@@ -60,32 +60,20 @@ const [selectedCategory, setSelectedCategory] = useState(categories[0]);
 const handleCategoryChange = async (e:any) => {
 
   setSelectedCategory(e.target.value);
-
-  console.log("selectedCateg",selectedCategory)
-
 fetchSubCategories(selectedCategory)
 
-
-
-  console.log("subcategories",subCategories[selectedCategory])
 }
-
-
-
-
 
 
 
   
 // ------------------------------------fin categorie block----------------
 
-
-
-
-
-
    const extractFormData = (formData) => {
     const formDatasSubmitedObject = {};
+
+   
+
     for (let [key, value] of formData.entries()) {
       formDatasSubmitedObject[key] = value;
     }
@@ -109,7 +97,9 @@ fetchSubCategories(selectedCategory)
     const file = new Blob([tsContent], { type: 'application/typescript' });
     const formDataToSend = new FormData(e.target);
     formDataToSend.append('file', file, 'formData.ts');
-    console.log("formDataToSend",tsContent)
+
+    // console.log("formDataToSend",tsContent)
+
     const response = await create(tsContent);
     alert(`Formulaire soumis`);
  
