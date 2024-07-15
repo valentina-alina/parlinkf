@@ -2,10 +2,39 @@ import { Button, TextInput, Select, Card, FileInput, Label, FloatingLabel, Texta
 import { getCategories, getSubCategories, createAd } from '../../services/api/ads';
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { create } from "cypress/types/lodash";
+import axios from "axios";
+import opencage from 'opencage-api-client';
+
+const GEOCODE_API_KEY = 'e2c967f4b31e4029b33f65b54548601c';
+
 type Category = string;
+export default function AdCreatePage() {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [subCategories, setSubCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [coordinates, setCoordinates] = useState({ lat: '1', lng: '1' });
+
+  const handleGeocode = (address:any) => {
+    axios.get(`https://api.opencagedata.com/geocode/v1/json`, { params: {
+        q: address,
+        key: GEOCODE_API_KEY
+      }
+    })
+    .then(response => {
+      const { lat, lng } = response.data.results[0].geometry;
+      setCoordinates({ lat, lng });
+      // console.log(lat, lng);
+    })
+    .catch(error => {
+      console.error('Error fetching geocode:', error);
+    });
+  };
 
 const extractFormData = (formData) => {
+  const adressEntiere=formData.get('address')+','+formData.get('city')+','+formData.get('country')
+  console.log(adressEntiere)
+  const coordninates = handleGeocode(adressEntiere)
+  console.log(coordninates)
   const formDatasSubmitedObject = {
     title: formData.get('title'),
     description: formData.get('description'),
@@ -16,8 +45,8 @@ const extractFormData = (formData) => {
     postalCode: "00135-0498", // Ajouter le champ postalCode si disponible
     city: formData.get('city'),
     country: formData.get('country'),
-    lat: "45645", // Ajouter la logique pour obtenir la latitude réelle
-    lng: "45454", // Ajouter la logique pour obtenir la longitude réelle
+    lat: `${coordinates.lat}`, // Ajouter la logique pour obtenir la latitude réelle
+    lng: `${coordinates.lng}`, // Ajouter la logique pour obtenir la longitude réelle
     attendees: parseInt(formData.get('attendees')),
     transport: "van", // Ajouter le champ transport si disponible
     conform: true, // Ajouter le champ conform si disponible
@@ -51,10 +80,8 @@ const getSubCategoryId = (subCategoryName) => {
   return "0677791e-8949-4fad-9c30-262a8c0327dc"; // Exemple d'ID de sous-catégorie
 };
 
-export default function AdCreatePage() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [subCategories, setSubCategories] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+
+
 
   useEffect(() => {
     fetchCategories();
@@ -97,8 +124,8 @@ export default function AdCreatePage() {
     e.preventDefault();
     const formData = new FormData(e.target);
     const formDatasSubmitedObject = extractFormData(formData);
+    console.log(formDatasSubmitedObject)
 
-    const tsContent = `export const formData = ${JSON.stringify(formDatasSubmitedObject, null, 2)};`;
    
     try {
       const response = await createAd(formDatasSubmitedObject);
@@ -127,7 +154,7 @@ export default function AdCreatePage() {
       />
     );
   };
-
+  
   return (
     <div className="flex justify-center">
       <Card className="w-full md:max-w-md md:mx-auto hover:bg-transparent">
