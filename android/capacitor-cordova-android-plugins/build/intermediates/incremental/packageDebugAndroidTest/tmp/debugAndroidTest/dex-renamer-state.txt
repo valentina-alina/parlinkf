@@ -1,0 +1,7 @@
+#Sat Jul 13 07:18:31 CEST 2024
+base.0=C\:\\wamp\\www\\alt\\school\\front\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\dex\\debugAndroidTest\\mergeExtDexDebugAndroidTest\\classes.dex
+base.1=C\:\\wamp\\www\\alt\\school\\front\\android\\capacitor-cordova-android-plugins\\build\\intermediates\\dex\\debugAndroidTest\\mergeProjectDexDebugAndroidTest\\0\\classes.dex
+path.0=classes.dex
+path.1=0/classes.dex
+renamed.0=classes.dex
+renamed.1=classes2.dex
