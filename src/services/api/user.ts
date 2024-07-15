@@ -3,14 +3,33 @@ import { useApi } from "../../hooks/useApi.ts";
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const api = useApi();
 
-interface AuthSignin {
-  email: string,
-  password: string
+
+export async function register(body:any) {
+  try {
+    const {data} = await api.post(`/user/register`, body);
+    return data 
+  } catch (error) {
+    return {
+      error: error
+    };
+  }
 }
 
-export async function signin(body:AuthSignin) {
+export async function updateUserPswd( body: any) {
   try {
-    const {data} = await api.post(`/auth/login`, body);
+    const { data } = await api.put(`/auth/mdp`, body);
+    return data;
+  } catch (error) {
+    return {
+      error: error
+    };
+  }
+}
+
+export async function registerClient(body:any) {
+  try {
+    const {data} = await api.post(`/auth/register`, body);
+
     return data 
   } catch (error) {
     return {

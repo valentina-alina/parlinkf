@@ -8,7 +8,7 @@ import { Footer, FooterCopyright, FooterIcon, FooterLink, FooterLinkGroup, Foote
 import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
 import { ListGroup, MegaMenu,Navbar, TextInput } from "flowbite-react";
 import { Dropdown } from "flowbite-react";
-
+// todo onclick={history.back()}  pour bouton back
 const cssClasIcons = "w-[35px] h-[40px]  ";
 const navigationItems = [
     { path: '/', label: 'Retour', icon: <IoArrowUndoOutline className={cssClasIcons} /> },

@@ -6,8 +6,11 @@ import { User } from '../../services/interfaces/User';
 import ChildForm from '../../components/Child/ChildForm';
 import ControlButtonNumber from '../../services/utils/ControlButtonNumber';
 import { Button, FloatingLabel, Dropdown } from "flowbite-react";
+// GET subject from bdd 
 import subject from './subjectFaker';
 import profileFaker from './profileFaker';
+
+import { register } from '../../services/api/user'; 
 
 const users = profileFaker;
 
@@ -56,7 +59,7 @@ export default function UserCreatePage(props: PropUserPage) {
       role: 'parent',
     },
     validationSchema: validationSchema,
-    onSubmit: values => {
+    onSubmit: async (values) => {
       const userFormData = {
         user: {
           firstName: values.nom,
@@ -64,11 +67,29 @@ export default function UserCreatePage(props: PropUserPage) {
           role: values.role,
           email: values.email,
         },
-        subject: selectedSubjects,
-        children: children
+        subjects: selectedSubjects,
+        children: children.map(child => ({
+          firstName: child.firstName,
+          lastName: child.lastName,
+          school: child.school,
+          class: child.class,
+        }))
       };
+
       console.log(userFormData);
-      alert(`Nouveau utilisateur ajouté\n${JSON.stringify(userFormData, null, 2)}`);
+
+      try {
+        const response = await register(userFormData);
+
+        if (response.data) {
+          alert('Nouveau utilisateur ajouté avec succès');
+        } else {
+          alert('Erreur lors de l\'ajout de l\'utilisateur');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur lors de l\'ajout de l\'utilisateur');
+      }
     },
   });
 
@@ -119,8 +140,6 @@ export default function UserCreatePage(props: PropUserPage) {
           <FloatingLabel variant="outlined" label="&#9993; name@email.com" sizing="sm" id="email" name="email" onChange={formik.handleChange} value={formik.values.email} />
           {formik.touched.email && formik.errors.email ? (<div>{formik.errors.email}</div>) : null}
           <span className='flex items-center '><span> Nb. enfants</span> <ControlButtonNumber handleChildCounter={handleUpdateChildCounter} /></span>
-
-          
 
           {Array.from({ length: childCounterFromControlButton }, (_, index) => (
             <ChildForm key={index} index={index} onChange={handleChildFormChange} />

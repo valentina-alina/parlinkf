@@ -7,26 +7,78 @@
 } */
 
 export interface AdInterface {
-    id: number;
+
     title: string;
     description: string;
-    startTime: Date;
-    endTime: Date;
-    duration: number;
-    address: string;
-    postalCode: string;
-    city: string;
-    country: string;
-    attendees: number;
-    lat: string;
-    lng: string;
+    startTime?: Date;
+    endTime?: Date;
+    duration?: number;
+    address?: string;
+    postalCode?: string;
+    city?: string;
+    country?: string;
+    attendees?: number;
+    lat?: string;
+    lng?: string;
     category: string;
     transport: ["car", "van"];
     conform: boolean;
     status: ["cancel", "report"];
     adPicture: string;
     userId: string;
-    categoryId: string;
-    subCategoryId: string;
+    categoryId?: string;
+    subCategoryId?: string;
     // comments: Comment[] | null;
 }
+// 
+// interface Transport {
+//     car: 'car',
+//     van: 'van'
+//   };
+//   interface AdStatus {
+//     cancel: 'cancel',
+//     report: 'report'
+//   };
+
+// interface BodyAdCreate {
+
+//      title: string;
+//     description: string;
+ 
+//     startTime?: Date;
+
+//     endTime?: Date;
+
+//     duration?: number;
+
+//     address?: string;
+
+//     postalCode?: string;
+
+//     city?: string;
+
+//     country?: string;
+
+//     attendees?: number;
+
+//     lat: string;
+
+//      lng: string;
+//     transport?: Transport;
+
+//     conform?: boolean;
+
+//     status?: AdStatus;
+
+//     adPicture?: string;
+
+//     userId: string;
+
+//     categoryId?: string;
+
+//     subCategoryId?: string;
+
+//     adHasFile?: null; 
+
+//     userHasAd?: null;
+// }

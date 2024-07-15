@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 
 import { signin } from '../../services/api/auth';
+import { Card } from 'flowbite-react';
 
 
 interface AuthSignin {
@@ -49,12 +50,9 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="flex justify-center items-center">
-        <div className="md:basis-4/12">
-          <img src={Logo} className="scale-75 mx-0 sm:mx-10" alt="logo" />
-        </div>
-        <div className="md:basis-8/12">
-          <h1 className="font-titleTest text-3xl my-8" data-cy="cypress-title">Connectez-vous</h1><br />
+      <div className="flex justify-center">
+      <Card className="w-full md:max-w-md md:mx-auto hover:bg-transparent">     
+          <h1 className="font-titleTest text-3xl my-8" data-cy="cypress-title">Connexion</h1><br />
           {loginFailed && <p className="text-red-500 text-sm">Identifiants incorects</p>}
           <form onSubmit={handleSubmit}>
             <div className="mb-5">
@@ -108,8 +106,12 @@ export default function LoginPage() {
               </div>
             </div>
           </form>
+          <div className="text-left">
+                <Link to="/createAdmin" className="ms-2 text-sm text-blue-400 dark:text-blue-300 hover:underline">Creer un compte Client</Link>
+          </div>
+
+          </Card>
         </div>
-      </div>
     </>
   );
 }
