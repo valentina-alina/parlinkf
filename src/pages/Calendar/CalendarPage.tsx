@@ -169,7 +169,7 @@ export default function CalendarPage({ searchQuery }: { searchQuery: string }) {
 
     const handleEventClick = (eventClickInfo: any) => {
         const eventId = eventClickInfo.event.id;
-        navigate(`/annonce/${eventId}`);
+        navigate(`/ad/${eventId}`);
     };
 
     const fetchCategories = async () => {
