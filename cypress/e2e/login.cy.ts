@@ -36,9 +36,9 @@ describe('Should display my website', () => {
     cy.log('Checking form data and click');
 
     cy.get('input[role="email"', { timeout: slowLoader})
-      .type('valu@email.fr');
+      .type('a-ortiz@email.com');
     cy.get('input[role="password"', { timeout: slowLoader})
-      .type('password');
+      .type('contrasena');
 
     cy.get('[data-cy="login"]', { timeout: slowLoader})
       .click();

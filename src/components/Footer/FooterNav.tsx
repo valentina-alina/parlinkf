@@ -93,22 +93,6 @@ export default function FooterNav() {
                         </button>
                         </Link>
                     ))}
-                    {/*             
-                        <Dropdown label="" dismissOnClick={false} renderTrigger={() =>   <FaRegUserCircle  className={cssClasIcons} 
-                                            /> }>
-                        <Dropdown.Item> <Link to="/my-ads">
-                                                                Mes annonces
-                                                            </Link></Dropdown.Item>
-                        <Dropdown.Item><Link to="/my-subscriptions">
-                                                                Mes inscriptions
-                                                            </Link></Dropdown.Item>
-                        <Dropdown.Item><Link to="/users-handlingg">
-                                                                Gestion utilisateurs
-                                                            </Link></Dropdown.Item>
-                        <Dropdown.Item>  <Link to="/my-account">
-                                                                Fermeture de compte
-                                                            </Link></Dropdown.Item>
-                    </Dropdown> */}
                     <MegaMenu.Dropdown
                         toggle={
                             <FaRegUserCircle  className={cssClasIcons} 

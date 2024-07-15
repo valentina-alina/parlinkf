@@ -8,9 +8,9 @@ describe('Should display my ads', () => {
         cy.log('Checking if content is displayed');
 
         cy.get('input[role="email"', { timeout: slowLoadResult})
-            .type('valu@email.fr');
+            .type('a-ortiz@email.com');
         cy.get('input[role="password"', { timeout: slowLoadResult})
-            .type('password');
+            .type('contrasena');
         cy.get('[data-cy="login"]', { timeout: slowLoadResult})
             .click();
 
