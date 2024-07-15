@@ -175,7 +175,7 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
     const navigate = useNavigate();
 
     const handleViewDetail = (ad: AdWithoutCoordinatesInterface) => {
-        navigate(`/annonce/${ad.id}`, { state: { ad } });
+        navigate(`/ad/${ad.id}`, { state: { ad } });
     };
 
     const fetchAdDetails = async (id: string) => {
