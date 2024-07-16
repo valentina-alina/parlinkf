@@ -4,12 +4,12 @@ import './App.css';
 import NotFoundPage from './services/utils/NotFoundPage';
 import PrivateRoute from './services/utils/PrivateRoute';
 import Navbar from './components/Navbar/Navbar';
-import UserProfilePage from './pages/User/UserProfilePage';
-import UserEditProfilePage from './pages/User/UserEditProfilePage';
+// import UserProfilePage from './pages/User/UserProfilePage';
+// import UserEditProfilePage from './pages/User/UserEditProfilePage';
 import AdsDetailPage from './pages/Ads/AdsDetailPage';
-import ConfidentialityPage from './pages/Confidentiality/ConfidentialityPage';
-import LegalPage from './pages/Legal/LegalPage';
-import ContactPage from './pages/Contact/ContactPage';
+// import ConfidentialityPage from './pages/Confidentiality/ConfidentialityPage';
+// import LegalPage from './pages/Legal/LegalPage';
+// import ContactPage from './pages/Contact/ContactPage';
 import CalendarPage from './pages/Calendar/CalendarPage';
 import MapPage from './pages/Map/MapPage';
 import AdsListPage from './pages/Ads/AdsListPage';
@@ -20,12 +20,19 @@ import AdCreatePage from './pages/Ads/AdsCreatePage';
 import AdsEditPage from './pages/Ads/AdsEditPage';
 import LoginPage from './pages/Auth/LoginPage';
 import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
-import UserManagement from './pages/User/UserManagement';
+// import UserManagement from './pages/User/UserManagement';
 import RequireAuth from './components/requireAuth';
-import { useState } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { ProfileInterface } from './services/interfaces/Profile';
 import { ContactInterface } from './services/interfaces/Contact';
 import { User } from './services/interfaces/User';
+
+const ConfidentialityPage = lazy(() => import('./pages/Confidentiality/ConfidentialityPage'));
+const LegalPage = lazy(() => import('./pages/Legal/LegalPage'));
+const ContactPage = lazy(() => import('./pages/Contact/ContactPage'));
+const UserManagement = lazy(() => import('./pages/User/UserManagement'));
+const UserProfilePage = lazy(() => import('./pages/User/UserProfilePage'));
+const UserEditProfilePage = lazy(() => import('./pages/User/UserEditProfilePage'));
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -47,27 +54,63 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password-page" element={<ForgotPasswordPage />} />
-
+      
         <Route element={<PrivateRoute />}>
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
-            <Route path="/users-handling" element={<UserManagement handleSubmitUser={(_user: User) => { /* Implémentation */ }} />} />
+            <Route path="/users-handling" element=
+            {
+              <Suspense fallback={<div>Chargement...</div>}>
+                <UserManagement handleSubmitUser={(_user: User) => { /* Implémentation */ }} />
+              </Suspense>
+            }
+          />
           </Route>
           
-          <Route path="/my-account" element={<UserProfilePage />} />
-          <Route path="/edit-my-profile/:idProfile" element={<UserEditProfilePage handleSubmitProfile={handleSubmitProfile} />} />
+          <Route path="/my-account" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <UserProfilePage />
+            </Suspense>
+            }
+          />
+          <Route path="/edit-my-profile/:idProfile" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <UserEditProfilePage handleSubmitProfile={handleSubmitProfile}  />
+            </Suspense>
+            }
+          />
           <Route path="/ad/:idAd" element={<AdsDetailPage />} />
           <Route path="/my-ads/:idUser" element={<AdSubscriptionPage />} />
           <Route path="/new-ad" element={<AdCreatePage />} />
           <Route path="/edit-ad/:adId" element={<AdsEditPage />} />
           <Route path="/calendar" element={<CalendarPage searchQuery={searchQuery} />} />
           <Route path="/map" element={<MapPage searchQuery={searchQuery} />} />
-          <Route path="/confidentiality" element={<ConfidentialityPage />} />
-          <Route path="/legal" element={<LegalPage />} />
-          <Route path="/contact" element={<ContactPage handleSubmitContactForm={handleSubmitContactForm} />} />
+          <Route path="/confidentiality" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <ConfidentialityPage />
+            </Suspense>
+            }
+          />
+          <Route path="/legal" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <LegalPage />
+            </Suspense>
+            }
+          />
+          <Route path="/contact" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <ContactPage  handleSubmitContactForm={handleSubmitContactForm} />
+            </Suspense>
+            }
+          />
           <Route path="/ads-grid" element={<AdsListPage searchQuery={searchQuery} />} />
           <Route path="/ads-list" element={<AdsListPageLists searchQuery={searchQuery} />} />
         </Route>
-
+      
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <FooterNav />
@@ -76,4 +119,3 @@ function App() {
 }
 
 export default App;
-
