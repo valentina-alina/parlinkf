@@ -33,7 +33,7 @@ export function useApi() {
 
                 if(refreshToken) {
                     try {
-                        const result = await refreshAutToken(refreshToken);
+                        const result = await refreshAuthToken(refreshToken);
 
                         localStorage.setItem("accessToken", result.data.tokens.accessToken);
                         localStorage.setItem("refreshToken", result.data.tokens.refreshToken);
@@ -60,7 +60,7 @@ export function useApi() {
     return api;
 }
 
-async function refreshAutToken(refreshToken: string) {
+async function refreshAuthToken(refreshToken: string) {
     const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/refresh_token`, {
         refreshToken: refreshToken
     });
