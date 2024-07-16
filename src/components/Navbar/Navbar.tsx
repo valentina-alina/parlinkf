@@ -23,11 +23,15 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
     const [showCalendrierLink, setShowCalendrierLink] = useState(true);
     
     const auth = { token: true};
-    // const accessToken=localStorage.getItem('accessToken');
-    // const tokenDecode = accessToken?jwtDecode(accessToken):undefined;
-    // const  role = tokenDecode.role?tokenDecode.role:"nada";
     const [isAdmin, setIsAdmin] = useState(false);
+    console.log('isAdmin', isAdmin)
+ 
 
+    const handleLogout = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        event.preventDefault();
+        localStorage.removeItem('accessToken');
+        location.href = "/";
+    };
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
@@ -187,8 +191,8 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                         </ListGroup.Item>
                                         <ListGroup.Item>
                                         <Link  to="#" onClick={handleLogout} >
-                                        Déconnection
-                                            </Link>                                     
+                                            Déconnection
+                                        </Link>                                     
                                         </ListGroup.Item>
                                     </ListGroup>
                                 </div>

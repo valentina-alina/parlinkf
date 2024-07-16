@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useApi } from '../../hooks/useApi';
-import { AdInterface } from '../interfaces/Ad';
 
 const api = useApi();
 
@@ -17,19 +16,6 @@ export async function createAd(body: any) {
         };
     }
 }
-
-
-
-export async function createAd(body) {
-    try {
-      const {data} = await api.post(`/ad`, body);
-      return data 
-    } catch (error) {
-      return {
-        error: error
-      };
-    }
-  }
 
 export async function getAds() {
     try {
@@ -109,7 +95,6 @@ export async function getSubCategories(categoryName: string) {
     }
 } 
 
-export async function getAdById(id: any) {
 export async function getAdById(id: any) {
     try {
         const {data} = await api.post(`ad/${id}`);

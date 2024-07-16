@@ -38,6 +38,12 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
     }, [id]);
 
     useEffect(() => {
+        if (id) {
+            fetchAdDetails(id);
+        }
+    }, [id]);
+
+    useEffect(() => {
         fetchFilteredAds();
     }, [selectedCategories, localSearchQuery, searchQuery]);
 
@@ -215,16 +221,6 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
         } catch (error) {
             console.error('Erreur lors de la récupération du géocode:', error);
             return { lat: 0, lng: 0 }; // Fallback to (0,0) if geocoding fails
-        }
-    };
-
-    const fetchAdDetails = async (id: string) => {
-        try {
-            const adDetails = await getAdById(id);
-            console.log('Détails de l\'annonce:', adDetails);
-
-        } catch (error) {
-            console.error(`Erreur lors de la récupération des détails de l'annonce avec l'id ${id}:`, error);
         }
     };
 
