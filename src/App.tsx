@@ -48,9 +48,11 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/forgot-password-page" element={<ForgotPasswordPage />} />
 
-        <Route element={<PrivateRoute />}>
+        <Route path="/forgot-password-page" element={<ForgotPswdPage />} />
+          <Route path="/createAdmin" element={<ClientAdminCreatePage handleSubmitUser={(_user: User) => { /* Implémentation */ }}/>}/>
+
+          <Route element={<PrivateRoute />}>
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
             <Route path="/users-handling" element=
             {
@@ -105,7 +107,6 @@ function App() {
           <Route path="/ads-grid" element={<AdsListPage searchQuery={searchQuery} />} />
           <Route path="/ads-list" element={<AdsListPageLists searchQuery={searchQuery} />} />
         </Route>
-      
       
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
