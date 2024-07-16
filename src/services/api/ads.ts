@@ -4,6 +4,19 @@ import { useApi } from '../../hooks/useApi';
 
 const api = useApi();
 
+
+
+export async function createAd(body: any) {
+    try {
+        const {data} = await api.post(`/ad`, body);
+        return data 
+    } catch (error) {
+        return {
+        error: error
+        };
+    }
+}
+
 export async function getAds() {
     try {
         const response = await api.get('ad');
@@ -69,16 +82,18 @@ export async function getCategories() {
     }
 }
 
+
 export async function getSubCategories(categoryName: string) {
     try {
         const response = await api.get(`subCategories/${categoryName}`);
-        console.log(`Sous-catégories récupérées pour la catégorie ${categoryName}:`, response.data);
-        return response.data;
+        // console.log(`Sous-catégories récupérées pour la catégorie ${categoryName}:`,response.data);
+        return response.data
+;
     } catch (error) {
         console.error(`Erreur lors de la récupération des sous-catégories pour la catégorie ${categoryName}:`, error);
         return [];
     }
-}
+} 
 
 export async function getAdById(id: any) {
     try {
@@ -88,5 +103,25 @@ export async function getAdById(id: any) {
         return {
             error: error
         }
-    }
+    }}
+
+    export async function getCategoriesByName(name: string) {
+        try {
+            const {data} = await api.get(`categories/name/${name}`);
+            return data
+        } catch (error) {
+            return {
+                error: error
+            }
+        }}
+
+        export async function getSubCategoriesByName(name: string) {
+            try {
+                const {data} = await api.get(`subCategories/name/${name}`);
+                return data
+            } catch (error) {
+                return {
+                    error: error
+                }
+            }
 }

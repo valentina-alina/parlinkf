@@ -30,6 +30,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^6.22.3",
+    "sweetalert2": "^11.12.2",
     "yup": "^1.4.0"
   },
   "devDependencies": {
@@ -44,6 +45,7 @@
     "autoprefixer": "^10.4.19",
     "cypress": "^13.13.0",
     "daisyui": "^4.11.1",
+    "dotenv-webpack": "^8.1.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",

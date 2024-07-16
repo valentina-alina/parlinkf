@@ -6,8 +6,7 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Footer, FooterCopyright, FooterIcon, FooterLink, FooterLinkGroup, FooterTitle } from "flowbite-react";
 import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
-import { ListGroup, MegaMenu, /* Navbar, TextInput */ } from "flowbite-react";
-// import { Dropdown } from "flowbite-react";
+import { ListGroup, MegaMenu } from "flowbite-react";
 
 const cssClasIcons = "w-[35px] h-[40px]  ";
 const navigationItems = [

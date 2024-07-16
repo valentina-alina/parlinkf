@@ -23,4 +23,4 @@
   },
   "include": ["cypress","src"],
   "references": [{ "path": "./tsconfig.node.json" }]
-}
+} 

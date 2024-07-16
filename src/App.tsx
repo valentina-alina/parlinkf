@@ -4,12 +4,7 @@ import './App.css';
 import NotFoundPage from './services/utils/NotFoundPage';
 import PrivateRoute from './services/utils/PrivateRoute';
 import Navbar from './components/Navbar/Navbar';
-// import UserProfilePage from './pages/User/UserProfilePage';
-// import UserEditProfilePage from './pages/User/UserEditProfilePage';
 import AdsDetailPage from './pages/Ads/AdsDetailPage';
-// import ConfidentialityPage from './pages/Confidentiality/ConfidentialityPage';
-// import LegalPage from './pages/Legal/LegalPage';
-// import ContactPage from './pages/Contact/ContactPage';
 import CalendarPage from './pages/Calendar/CalendarPage';
 import MapPage from './pages/Map/MapPage';
 import AdsListPage from './pages/Ads/AdsListPage';
@@ -19,13 +14,13 @@ import AdSubscriptionPage from './pages/Ads/AdSubscriptionPage';
 import AdCreatePage from './pages/Ads/AdsCreatePage';
 import AdsEditPage from './pages/Ads/AdsEditPage';
 import LoginPage from './pages/Auth/LoginPage';
-import ForgotPasswordPage from './pages/Auth/ForgotPasswordPage';
-// import UserManagement from './pages/User/UserManagement';
+import ForgotPswdPage from './pages/Auth/ForgotPasswordPage';
 import RequireAuth from './components/requireAuth';
 import { Suspense, lazy, useState } from 'react';
 import { ProfileInterface } from './services/interfaces/Profile';
 import { ContactInterface } from './services/interfaces/Contact';
 import { User } from './services/interfaces/User';
+import ClientAdminCreatePage from './pages/User/ClientAdminCreatePage';
 
 const ConfidentialityPage = lazy(() => import('./pages/Confidentiality/ConfidentialityPage'));
 const LegalPage = lazy(() => import('./pages/Legal/LegalPage'));
@@ -54,7 +49,7 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password-page" element={<ForgotPasswordPage />} />
-      
+
         <Route element={<PrivateRoute />}>
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
             <Route path="/users-handling" element=
@@ -110,6 +105,7 @@ function App() {
           <Route path="/ads-grid" element={<AdsListPage searchQuery={searchQuery} />} />
           <Route path="/ads-list" element={<AdsListPageLists searchQuery={searchQuery} />} />
         </Route>
+      
       
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

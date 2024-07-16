@@ -38,6 +38,12 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
     }, [id]);
 
     useEffect(() => {
+        if (id) {
+            fetchAdDetails(id);
+        }
+    }, [id]);
+
+    useEffect(() => {
         fetchFilteredAds();
     }, [selectedCategories, localSearchQuery, searchQuery]);
 

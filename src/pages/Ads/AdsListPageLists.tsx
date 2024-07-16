@@ -31,11 +31,11 @@ const getCoordinates = async (address: string): Promise<{ lat: number, lng: numb
             const { lat, lng } = data.results[0].geometry.location;
             return { lat, lng };
         } else {
-            console.error(`No results found for address: ${address}`);
+            console.error(`Pas de résultat trouvé pour l'adresse: ${address}`);
             return null;
         }
     } catch (error) {
-        console.error(`Error fetching coordinates for address ${address}:`, error);
+        console.error(`Erreur lors de la récupération des coordonnées pour l'adresse ${address}:`, error);
         return null;
     }
 };
