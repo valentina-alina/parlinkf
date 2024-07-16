@@ -16,7 +16,7 @@ export default function Sidebar({ events }: SidebarProps) {
                 <ul className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     {events.map((event: AdWithoutCoordinatesInterface) => (
                         <Card key={event.id} className='my-4 shadow-lg'>
-                            <Link to={`/edit-annonce/${event.id}`} className="link text-red-800 text-bodyTest">
+                            <Link to={`/edit-ad/${event.id}`} className="link text-red-800 text-bodyTest">
                                 <CiEdit />
                             </Link>
                             <SidebarEvent key={event.id} event={event} />
