@@ -22,6 +22,24 @@ const initialCategoryCounts: Record<Category, number> = {
     all: 0,
 };
 
+const getCoordinates = async (address: string): Promise<{ lat: number, lng: number } | null> => {
+    try {
+        const GeocodeApiKey = 'd5192c485eda412caca23991c255a796';
+        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GeocodeApiKey}`);
+        const data = await response.json();
+        if (data.results.length > 0) {
+            const { lat, lng } = data.results[0].geometry.location;
+            return { lat, lng };
+        } else {
+            console.error(`No results found for address: ${address}`);
+            return null;
+        }
+    } catch (error) {
+        console.error(`Error fetching coordinates for address ${address}:`, error);
+        return null;
+    }
+};
+
 export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
@@ -54,8 +72,20 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const fetchAds = async () => {
         const ads = await getAds();
         setAdsList(ads);
-        updateCategoryCounts(ads);
-        fetchInitialItems(ads);
+        const adsWithCoordinates = await Promise.all(ads.map(async (ad:any) => {
+            if (!ad.lat || !ad.lng) {
+                const address = `${ad.postalCode} ${ad.city}, ${ad.country}`;
+                const coordinates = await getCoordinates(address);
+                if (coordinates) {
+                    ad.lat = coordinates.lat;
+                    ad.lng = coordinates.lng;
+                }
+            }
+            return ad;
+        }));
+        setAdsList(adsWithCoordinates);
+        updateCategoryCounts(adsWithCoordinates);
+        fetchInitialItems(adsWithCoordinates);
     };
 
     const fetchFilteredAds = async () => {
@@ -80,8 +110,20 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 return;
             }
 
-            setItems(fetchedAds.slice(0, 10));
-            setHasMore(fetchedAds.length > 10);
+            const adsWithCoordinates = await Promise.all(fetchedAds.map(async (ad) => {
+                if (!ad.lat || !ad.lng) {
+                    const address = `${ad.postalCode} ${ad.city}, ${ad.country}`;
+                    const coordinates = await getCoordinates(address);
+                    if (coordinates) {
+                        ad.lat = coordinates.lat;
+                        ad.lng = coordinates.lng;
+                    }
+                }
+                return ad;
+            }));
+
+            setItems(adsWithCoordinates.slice(0, 10));
+            setHasMore(adsWithCoordinates.length > 10);
         } catch (error) {
             console.error('Erreur lors de la récupération des annonces:', error);
         }
@@ -128,8 +170,20 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 return;
             }
 
-            setItems(fetchedAds.slice(0, 10));
-            setHasMore(fetchedAds.length > 10);
+            const adsWithCoordinates = await Promise.all(fetchedAds.map(async (ad) => {
+                if (!ad.lat || !ad.lng) {
+                    const address = `${ad.postalCode} ${ad.city}, ${ad.country}`;
+                    const coordinates = await getCoordinates(address);
+                    if (coordinates) {
+                        ad.lat = coordinates.lat;
+                        ad.lng = coordinates.lng;
+                    }
+                }
+                return ad;
+            }));
+
+            setItems(adsWithCoordinates.slice(0, 10));
+            setHasMore(adsWithCoordinates.length > 10);
         } catch (error) {
             console.error(`Erreur lors de la récupération des annonces pour la sous-catégorie ${subCategory}:`, error);
         }

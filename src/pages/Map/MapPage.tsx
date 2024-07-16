@@ -10,8 +10,11 @@ import MapConfig from '../../services/utils/MapConfig';
 import { debounce } from '../../services/utils/debounce';
 import { getAds, getAdById, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
 import { AdWithoutCoordinatesInterface } from '../../services/interfaces/AdWithoutCoordinates';
+import axios from 'axios';
 
 type Category = string;
+
+const GEOCODEAPI_KEY = 'd5192c485eda412caca23991c255a796';
 
 export default function MapPage({ searchQuery }: { searchQuery: string }) {
     const [adsList, setAdsList] = useState<any[]>([]);
@@ -42,11 +45,13 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
         try {
             const listAd = await getAds();
             if (listAd) {
-                setAdsList(listAd.map((ad: AdWithoutCoordinatesInterface) => ({
-                    ...ad,
-                    lat: parseFloat(ad.lat),
-                    lng: parseFloat(ad.lng),
-                })));
+                const adsWithCoordinates = await Promise.all(
+                    listAd.map(async (ad: AdWithoutCoordinatesInterface) => {
+                        const coordinates = await getCoordinates(ad);
+                        return { ...ad, ...coordinates };
+                    })
+                );
+                setAdsList(adsWithCoordinates);
             }
         } catch (error) {
             console.error('Erreur lors de la récupération des annonces:', error);
@@ -75,11 +80,14 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
                 return;
             }
 
-            setAdsList(fetchedAds.map((ad: AdWithoutCoordinatesInterface) => ({
-                ...ad,
-                lat: parseFloat(ad.lat),
-                lng: parseFloat(ad.lng),
-            })));
+            const adsWithCoordinates = await Promise.all(
+                fetchedAds.map(async (ad: AdWithoutCoordinatesInterface) => {
+                    const coordinates = await getCoordinates(ad);
+                    return { ...ad, ...coordinates };
+                })
+            );
+
+            setAdsList(adsWithCoordinates);
         } catch (error) {
             console.error('Erreur lors de la récupération des annonces:', error);
         }
@@ -111,7 +119,14 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
                 return;
             }
 
-            setAdsList(fetchedAds);
+            const adsWithCoordinates = await Promise.all(
+                fetchedAds.map(async (ad: AdWithoutCoordinatesInterface) => {
+                    const coordinates = await getCoordinates(ad);
+                    return { ...ad, ...coordinates };
+                })
+            );
+
+            setAdsList(adsWithCoordinates);
 
         } catch (error) {
             console.error(`Erreur lors de la récupération des annonces pour la sous-catégorie ${subCategory}:`, error);
@@ -128,7 +143,6 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
                 }));
             } else {
                 console.warn(`Réponse inattendue pour les sous-catégories de la catégorie ${category}:`, response);
-                // Handle the case where the response is an empty array or not as expected
                 setSubCategories((prevSubCategories) => ({
                     ...prevSubCategories,
                     [category]: [],
@@ -182,9 +196,25 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
         try {
             const adDetails = await getAdById(id);
             console.log('Détails de l\'annonce:', adDetails);
-
         } catch (error) {
             console.error(`Erreur lors de la récupération des détails de l'annonce avec l'id ${id}:`, error);
+        }
+    };
+
+    const getCoordinates = async (ad: AdWithoutCoordinatesInterface) => {
+        const address = `${ad.address}, ${ad.postalCode}, ${ad.city}, ${ad.country}`;
+        try {
+            const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json`, {
+                params: {
+                    q: address,
+                    key: GEOCODEAPI_KEY,
+                },
+            });
+            const { lat, lng } = response.data.results[0].geometry;
+            return { lat, lng };
+        } catch (error) {
+            console.error('Erreur lors de la récupération du géocode:', error);
+            return { lat: 0, lng: 0 }; // Fallback to (0,0) if geocoding fails
         }
     };
 
@@ -258,7 +288,7 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
                         mapContainerStyle={mapConfig.defaultMapContainerStyle('1200px', '80vh')}
                         center={mapConfig.defaultMapCenter()}
                         zoom={mapConfig.defaultMapZoom(6)}
-                        options={mapConfig.defaultMapOptions(true,0,'auto','satellite')}
+                        options={mapConfig.defaultMapOptions(true, 0, 'auto', 'satellite')}
                     >
                         {adsList.map(ad => (
                             <MarkerF
