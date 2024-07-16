@@ -20,8 +20,6 @@ export interface AdWithoutCoordinatesInterface extends Omit<EventInput, 'id'> {
     city: string;
     country: string;
     attendees: number;
-    lat: string;
-    lng: string;
     category: string;
     transport: ["car", "van"];
     conform: boolean;
