@@ -28,8 +28,6 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
     // const  role = tokenDecode.role?tokenDecode.role:"nada";
     const [isAdmin, setIsAdmin] = useState(false);
 
-    console.log('isAdmin', isAdmin)
-
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
@@ -188,9 +186,9 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                             </Link>
                                         </ListGroup.Item>
                                         <ListGroup.Item>
-                                            <p>
-                                                Déconnexion
-                                            </p>
+                                        <Link  to="#" onClick={handleLogout} >
+                                        Déconnection
+                                            </Link>                                     
                                         </ListGroup.Item>
                                     </ListGroup>
                                 </div>

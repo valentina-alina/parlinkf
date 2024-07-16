@@ -9,8 +9,8 @@ interface ChildFormProps {
 
 const ChildForm: React.FC<ChildFormProps> = ({ index, onChange }) => {
     const [childData, setChildData] = useState({
-        nom: '',
-        prenom: '',
+        firstName: '',
+        lastName: '',
         school: '',
         classe: ''
     });
@@ -24,8 +24,8 @@ const ChildForm: React.FC<ChildFormProps> = ({ index, onChange }) => {
     return (
         <div>
         <h5 className="text-1xl font-bold tracking-tight text-blue-600 dark:text-white text-left"> Enfant {index+1} </h5>
-        <FloatingLabel variant="outlined" label="Nom" sizing="sm" id={`nom-${index}`} name="nom" onChange={handleInputChange} value={childData.nom} />
-        <FloatingLabel variant="outlined" label="Prenom" sizing="sm" id={`prenom-${index}`} name="prenom" onChange={handleInputChange} value={childData.prenom} />
+        <FloatingLabel variant="outlined" label="Nom" sizing="sm" id={`nom-${index}`} name="firstName" onChange={handleInputChange} value={childData.firstName} />
+        <FloatingLabel variant="outlined" label="Prenom" sizing="sm" id={`prenom-${index}`} name="lastName" onChange={handleInputChange} value={childData.lastName} />
         <FloatingLabel variant="outlined" label="Ecole" sizing="sm" id={`school-${index}`} name="school" onChange={handleInputChange} value={childData.school} />
         <FloatingLabel variant="outlined" label="Classe" sizing="sm" id={`classe-${index}`} name="classe" onChange={handleInputChange} value={childData.classe} />
         </div>
