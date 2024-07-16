@@ -23,7 +23,7 @@ export function SidebarEvent({ event }: SidebarEventProps) {
     const navigate = useNavigate();
 
     const handleViewDetail = (event: AdWithoutCoordinatesInterface) => {
-        navigate(`/annonce/${event.id}`, { state: { event } });
+        navigate(`/ad/${event.id}`, { state: { event } });
     };
 
     return (
