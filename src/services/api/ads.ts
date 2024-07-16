@@ -104,5 +104,25 @@ export async function getAdById(id: any) {
         return {
             error: error
         }
-    }
+    }}
+
+    export async function getCategoriesByName(name: string) {
+        try {
+            const {data} = await api.get(`categories/name/${name}`);
+            return data
+        } catch (error) {
+            return {
+                error: error
+            }
+        }}
+
+        export async function getSubCategoriesByName(name: string) {
+            try {
+                const {data} = await api.get(`subCategories/name/${name}`);
+                return data
+            } catch (error) {
+                return {
+                    error: error
+                }
+            }
 }

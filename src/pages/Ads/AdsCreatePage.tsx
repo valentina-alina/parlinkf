@@ -1,5 +1,5 @@
 import { Button, TextInput, Select, Card, FileInput, Label, FloatingLabel, Textarea } from "flowbite-react";
-import { getCategories, getSubCategories, createAd } from '../../services/api/ads';
+import { getCategories, getSubCategories, createAd, getCategoriesByName, getSubCategoriesByName } from '../../services/api/ads';
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
@@ -14,8 +14,8 @@ export default function AdCreatePage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [coordinates, setCoordinates] = useState({ lat: '1', lng: '1' });
 
-  const handleGeocode = (address:any) => {
-    axios.get(`https://api.opencagedata.com/geocode/v1/json`, { params: {
+  const handleGeocode = async (address:any) => {
+  await  axios.get(`https://api.opencagedata.com/geocode/v1/json`, { params: {
         q: address,
         key: GEOCODE_API_KEY
       }
@@ -30,11 +30,14 @@ export default function AdCreatePage() {
     });
   };
 
-const extractFormData = (formData) => {
-  const adressEntiere=formData.get('address')+','+formData.get('city')+','+formData.get('country')
-  console.log(adressEntiere)
-  const coordninates = handleGeocode(adressEntiere)
-  console.log(coordninates)
+const extractFormData = async (formData) => {
+
+const adressEntiere=formData.get('address')+','+formData.get('city')+','+formData.get('country')
+const coordninates = await handleGeocode(adressEntiere)
+
+const catId=await getCategoryId(formData.get('category'))
+const subCatId=await getSubCategoryId(formData.get('subcategory'))
+
   const formDatasSubmitedObject = {
     title: formData.get('title'),
     description: formData.get('description'),
@@ -42,22 +45,24 @@ const extractFormData = (formData) => {
     endTime: `${formData.get('enddate')}T${formData.get('endTime')}:00.000Z`,
     duration: 8, // Calculer la durée si nécessaire
     address: formData.get('address'),
-    postalCode: "00135-0498", // Ajouter le champ postalCode si disponible
+    postalCode: formData.get('zipCode'), // Ajouter le champ postalCode si disponible
     city: formData.get('city'),
     country: formData.get('country'),
-    lat: `${coordinates.lat}`, // Ajouter la logique pour obtenir la latitude réelle
-    lng: `${coordinates.lng}`, // Ajouter la logique pour obtenir la longitude réelle
+    lat: `${coordinates.lat}`, 
+    lng: `${coordinates.lng}`, 
     attendees: parseInt(formData.get('attendees')),
-    transport: "van", // Ajouter le champ transport si disponible
+    transport: formData.get('transport'), // Ajouter le champ transport si disponible
     conform: true, // Ajouter le champ conform si disponible
     status: "report", // Ajouter le champ status si disponible
     adPicture: formData.get('files').name,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    userId: extractUserIdFromToken(), // Extraire userId à partir du token
-    categoryId: getCategoryId(formData.get('category')),
-    subCategoryId: getSubCategoryId(formData.get('subcategory')),
+    userId: extractUserIdFromToken(), 
+    subCategoryId: subCatId,
+   categoryId: catId
   };
+  
+
   return formDatasSubmitedObject;
 };
 
@@ -70,14 +75,19 @@ const extractUserIdFromToken = () => {
   return null;
 };
 
-const getCategoryId = (categoryName) => {
-  // Ajouter la logique pour obtenir l'ID de la catégorie en fonction du nom
-  return "052ec5bb-4c06-408c-92df-e16168ecc67c"; // Exemple d'ID de catégorie
+const getCategoryId = async (categoryName:string) => {
+
+  const response = await getCategoriesByName(categoryName);
+  console.log("cat id de",categoryName, response.data.category.id)
+  
+  return response.data.category.id; // Exemple d'ID de catégorie
+
 };
 
-const getSubCategoryId = (subCategoryName) => {
-  // Ajouter la logique pour obtenir l'ID de la sous-catégorie en fonction du nom
-  return "0677791e-8949-4fad-9c30-262a8c0327dc"; // Exemple d'ID de sous-catégorie
+const getSubCategoryId = async (subCategoryName:string) => {
+
+  const response = await getSubCategoriesByName(subCategoryName);
+  return response.data.subCategory.id; // Exemple d'ID de catégorie
 };
 
 
@@ -123,8 +133,8 @@ const getSubCategoryId = (subCategoryName) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const formDatasSubmitedObject = extractFormData(formData);
-    console.log(formDatasSubmitedObject)
+    const formDatasSubmitedObject = await extractFormData(formData);
+    console.log("forDataSubmited",formDatasSubmitedObject)
 
    
     try {
@@ -199,7 +209,8 @@ const getSubCategoryId = (subCategoryName) => {
           {renderTextInput('city', 'Ville')}
           {renderTextInput('country', 'Pays')}
           {renderTextInput('address', 'Adresse')}
-
+          {renderTextInput('zipCode', 'ZIP Code')}
+          {renderTextInput('transport', 'Transport')}
           <Label htmlFor="files" value="Ajouter une image" />
           <FileInput name="files" id="files" />
 
