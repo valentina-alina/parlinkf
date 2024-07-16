@@ -18,8 +18,6 @@ export interface AdInterface {
     city: string;
     country: string;
     attendees: number;
-    lat: string;
-    lng: string;
     category: string;
     transport: ["car", "van"];
     conform: boolean;
