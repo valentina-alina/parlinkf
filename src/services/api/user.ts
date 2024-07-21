@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useApi } from "../../hooks/useApi.ts";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const api = useApi();
-
 
 export async function register(body:any) {
   try {
@@ -38,15 +38,14 @@ export async function registerClient(body:any) {
   }
 }
 
-
-
 export async function refreshToken(id: number, body:any) {
   const refreshToken = localStorage.getItem('refreshToken')
   const headers = { Authorization : "Bearer " + refreshToken }
-
+  console.log('headers', headers)
 
   try {
     const response = await api.get(`posts/${id}`, body);
+    console.log('response', response)
     // simulation of success api response
     return {
       datas: body,
