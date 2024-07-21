@@ -3,10 +3,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: reactjs:v1
+    image: registry.alt-tools.tech/aquildev/projet-ecole/front:devops
     container_name: reactjs
     ports:
-        - "5173:5173"
+      - "5173:80"
     command: npm run dev
     environment:
       - WORK_DIR=/usr/app

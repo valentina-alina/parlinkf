@@ -14,6 +14,9 @@ RUN npm install
 # Copy the app files to the container.
 COPY . .
 
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL:-'https://aquildev-ecole-back.alt-tools.tech'}
+
 # Build the application => TJ => JS
 RUN npm run build
 

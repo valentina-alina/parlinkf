@@ -1,26 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import NotFoundPage from './services/utils/NotFoundPage';
 import PrivateRoute from './services/utils/PrivateRoute';
 import Navbar from './components/Navbar/Navbar';
-import AdsDetailPage from './pages/Ads/AdsDetailPage';
-import CalendarPage from './pages/Calendar/CalendarPage';
-import MapPage from './pages/Map/MapPage';
-import AdsListPage from './pages/Ads/AdsListPage';
-import AdsListPageLists from './pages/Ads/AdsListPageLists';
 import FooterNav from './components/Footer/FooterNav';
-import AdSubscriptionPage from './pages/Ads/AdSubscriptionPage';
-import AdCreatePage from './pages/Ads/AdsCreatePage';
-import AdsEditPage from './pages/Ads/AdsEditPage';
-import LoginPage from './pages/Auth/LoginPage';
-import ForgotPswdPage from './pages/Auth/ForgotPasswordPage';
 import RequireAuth from './components/requireAuth';
 import { Suspense, lazy, useState } from 'react';
 import { ProfileInterface } from './services/interfaces/Profile';
 import { ContactInterface } from './services/interfaces/Contact';
 import { User } from './services/interfaces/User';
-import ClientAdminCreatePage from './pages/User/ClientAdminCreatePage';
 
 const ConfidentialityPage = lazy(() => import('./pages/Confidentiality/ConfidentialityPage'));
 const LegalPage = lazy(() => import('./pages/Legal/LegalPage'));
@@ -28,6 +16,18 @@ const ContactPage = lazy(() => import('./pages/Contact/ContactPage'));
 const UserManagement = lazy(() => import('./pages/User/UserManagement'));
 const UserProfilePage = lazy(() => import('./pages/User/UserProfilePage'));
 const UserEditProfilePage = lazy(() => import('./pages/User/UserEditProfilePage'));
+const CalendarPage = lazy(() => import('./pages/Calendar/CalendarPage'));
+const MapPage = lazy(() => import('./pages/Map/MapPage'));
+const AdsListPage = lazy(() => import('./pages/Ads/AdsListPage'));
+const AdsListPageLists = lazy(() => import('./pages/Ads/AdsListPageLists'));
+const NotFoundPage = lazy(() => import('./services/utils/NotFoundPage'));
+const LoginPage = lazy(() => import('./pages/Auth/LoginPage'));
+const ClientAdminCreatePage = lazy(() => import('./pages/User/ClientAdminCreatePage'));
+const AdsEditPage = lazy(() => import('./pages/Ads/AdsEditPage'));
+const AdCreatePage = lazy(() => import('./pages/Ads/AdsCreatePage'));
+const AdSubscriptionPage = lazy(() => import('./pages/Ads/AdSubscriptionPage'));
+const AdsDetailPage = lazy(() => import('./pages/Ads/AdsDetailPage'));
+const ForgotPswdPage = lazy(() => import('./pages/Auth/ForgotPasswordPage'));
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -46,20 +46,44 @@ function App() {
     <>
       <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <LoginPage />
+            </Suspense>
+            }
+          />
+          <Route path="/login" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <LoginPage />
+            </Suspense>
+            }
+          />
 
-        <Route path="/forgot-password-page" element={<ForgotPswdPage />} />
-          <Route path="/createAdmin" element={<ClientAdminCreatePage handleSubmitUser={(_user: User) => { /* Implémentation */ }}/>}/>
+          <Route path="/forgot-password-page" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <ForgotPswdPage />
+            </Suspense>
+            }
+          />
+          <Route path="/createAdmin" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <ClientAdminCreatePage handleSubmitUser={(_user: User) => { /* Implémentation */ }}/>
+            </Suspense>
+            }
+          />
 
           <Route element={<PrivateRoute />}>
           <Route element={<RequireAuth allowedRoles={["admin"]} />}>
-            <Route path="/users-handling" element=
-            {
-              <Suspense fallback={<div>Chargement...</div>}>
-                <UserManagement handleSubmitUser={(_user: User) => { /* Implémentation */ }} />
-              </Suspense>
-            }
+          <Route path="/users-handling" element=
+          {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <UserManagement handleSubmitUser={(_user: User) => { /* Implémentation */ }} />
+            </Suspense>
+          }
           />
           </Route>
           
@@ -77,12 +101,48 @@ function App() {
             </Suspense>
             }
           />
-          <Route path="/ad/:idAd" element={<AdsDetailPage />} />
-          <Route path="/my-ads/:idUser" element={<AdSubscriptionPage />} />
-          <Route path="/new-ad" element={<AdCreatePage />} />
-          <Route path="/edit-ad/:adId" element={<AdsEditPage />} />
-          <Route path="/calendar" element={<CalendarPage searchQuery={searchQuery} />} />
-          <Route path="/map" element={<MapPage searchQuery={searchQuery} />} />
+          <Route path="/ad/:idAd" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <AdsDetailPage />
+            </Suspense>
+            }
+          />
+          <Route path="/my-ads/:idUser" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <AdSubscriptionPage />
+            </Suspense>
+            }
+          />
+          <Route path="/new-ad" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <AdCreatePage />
+            </Suspense>
+            }
+          />
+          <Route path="/edit-ad/:adId" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <AdsEditPage />
+            </Suspense>
+            }
+          />
+          <Route path="/calendar" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <CalendarPage searchQuery={searchQuery} />
+            </Suspense>
+            }
+          />
+          <Route path="/map" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <MapPage searchQuery={searchQuery} />
+            </Suspense>
+            }
+          />
           <Route path="/confidentiality" element=
             {
             <Suspense fallback={<div>Chargement...</div>}>
@@ -104,11 +164,29 @@ function App() {
             </Suspense>
             }
           />
-          <Route path="/ads-grid" element={<AdsListPage searchQuery={searchQuery} />} />
-          <Route path="/ads-list" element={<AdsListPageLists searchQuery={searchQuery} />} />
+          <Route path="/ads-grid" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <AdsListPage searchQuery={searchQuery} />
+            </Suspense>
+            }
+          />
+          <Route path="/ads-list" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <AdsListPageLists searchQuery={searchQuery} />
+            </Suspense>
+            }
+          />
         </Route>
       
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element=
+            {
+            <Suspense fallback={<div>Chargement...</div>}>
+              <NotFoundPage />
+            </Suspense>
+            }
+          />
       </Routes>
       <FooterNav />
     </>
