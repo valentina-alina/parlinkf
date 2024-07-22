@@ -12,7 +12,7 @@ interface PropUserPage {
   handleSubmitUser: (author: any) => void;
 }
 
-export default function ClientAdminCreatePage(_props: PropUserPage) {
+export default function ForgotPswdPage(_props: PropUserPage) {
 
   const navigate = useNavigate();
   const validationSchema = Yup.object({

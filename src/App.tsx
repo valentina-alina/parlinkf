@@ -27,7 +27,7 @@ const AdsEditPage = lazy(() => import('./pages/Ads/AdsEditPage'));
 const AdCreatePage = lazy(() => import('./pages/Ads/AdsCreatePage'));
 const AdSubscriptionPage = lazy(() => import('./pages/Ads/AdSubscriptionPage'));
 const AdsDetailPage = lazy(() => import('./pages/Ads/AdsDetailPage'));
-const ForgotPswdPage = lazy(() => import('./pages/Auth/ForgotPasswordPage'));
+const ForgotPswdPage = lazy(() => import('./pages/Auth/ForgotPswd'));
 
 function App() {
   const [profiles, setProfiles] = useState<ProfileInterface[]>([]);
@@ -64,7 +64,7 @@ function App() {
           <Route path="/forgot-password-page" element=
             {
             <Suspense fallback={<div>Chargement...</div>}>
-              <ForgotPswdPage />
+              <ForgotPswdPage handleSubmitUser={(_user: User) => { /* Implémentation */ }} />
             </Suspense>
             }
           />
