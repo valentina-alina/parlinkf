@@ -6,14 +6,13 @@ WORKDIR /usr/app
 
 # Install app dependencies
 COPY package.json ./
-COPY package-lock.json ./
 RUN npm install
 
 # Copy the app files
 COPY . .
 
 # Install Cypress
-RUN npm install cypress --save-dev
+RUN npm install cypress@latest --save-dev
 
 # Set environment variable for Cypress
 ENV CI=1

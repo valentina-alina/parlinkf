@@ -7,7 +7,6 @@ services:
     container_name: reactjs
     ports:
       - "5173:80"
-    command: npm run dev
     environment:
       - WORK_DIR=/usr/app
     develop:
@@ -21,19 +20,17 @@ services:
           path: package.json
 
   cypress:
-  build:
-    context: .
-    dockerfile: Dockerfile.cypress
-  image: cypress:v1
-  container_name: cypress
-  depends_on:
-    - reactjs
-  environment:
-    - CYPRESS_baseUrl=http://reactjs:5173
-  volumes:
-    - .:/usr/app
-    - /usr/app/node_modules
-  command: >
-    sh -c "
-      npx cypress open --project /usr/app
-    "
+    build:
+      context: .
+      dockerfile: Dockerfile.cypress
+    image: cypress:v1
+    container_name: cypress
+    environment:
+      - CYPRESS_baseUrl=http://reactjs:5173
+    volumes:
+      - .:/usr/app
+      - /usr/app/node_modules
+    command: >
+      sh -c "
+        npx cypress open --project /usr/app
+      "

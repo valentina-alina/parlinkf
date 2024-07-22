@@ -6,11 +6,18 @@ import { MdAddToPhotos } from "react-icons/md";
 import Logo from '../../assets/logo.png';
 import { HiSearch } from "react-icons/hi";
 import { useEffect, useState } from "react";
-import { jwtDecode, JwtPayload } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+import { getUserById } from "../../services/api/user";
 // import NavbarLogo from "./NavbarLogo";
 
-interface CustomPayLoad extends JwtPayload {
+interface CustomPayLoad {
     role?: string;
+    userId?: string;
+}
+
+interface UserName {
+    firstName: string;
+    lastName: string
 }
 
 interface NavbarProps {
@@ -25,21 +32,54 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
     const auth = { token: true};
     const [isAdmin, setIsAdmin] = useState(false);
     console.log('isAdmin', isAdmin)
- 
+    const [role, setRole] =  useState<string>("");
+    console.log('role', role)
+    const userIdentity = {
+        firstName:"",
+        lastName: ""
+    };
+
+    const [userName, setUsername] =  useState<UserName>(userIdentity);
+    console.log('userName', userName)
 
     const handleLogout = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         event.preventDefault();
-        localStorage.removeItem('accessToken');
+        localStorage.removeItem('access_token');
         location.href = "/";
     };
+
     useEffect(() => {
-        const accessToken = localStorage.getItem('accessToken');
-        if (accessToken) {
-            const tokenDecode = jwtDecode(accessToken) as CustomPayLoad;
-            if (tokenDecode.role === 'admin') {
-                setIsAdmin(true);
+        const load = async () => {
+            const access_token = localStorage.getItem('access_token');
+            if (access_token) {
+                const tokenDecode = jwtDecode<CustomPayLoad>(access_token);
+                const decodedRole = tokenDecode.role ?? "";
+                setRole(decodedRole);
+
+                if (decodedRole === 'admin') {
+                    setIsAdmin(true);
+                }
+
+                if (tokenDecode.userId) {
+                    try {
+                        const user = await getUserById(tokenDecode.userId);
+                        if (user) {
+                            const userIdentity = {
+                                firstName: user.data.data.firstName,
+                                lastName: user.data.data.lastName,
+                            };
+                            setUsername(userIdentity);
+                        } else {
+                            setUsername({ firstName: "", lastName: "" });
+                        }
+                    } catch (error) {
+                        console.error('Erreur lors du chargement des donnes utilisateur:', error);
+                    }
+                }
             }
-        }
+        };
+        load();
+    
     }, []);
 
     return(
@@ -166,33 +206,31 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                 <div className="flex justify-center">
                                     <ListGroup className="w-48">
                                         <ListGroup.Item>
-                                            <Link to="/my-ads">
-                                                Mes annonces
-                                            </Link>
+                                            {userName.firstName + ' ' + userName.lastName + '-' + role}
                                         </ListGroup.Item>
                                         <ListGroup.Item>
-                                        <Link to="/my-subscriptions">
-                                                Mes inscriptions
+                                            <Link to="/edit-password-page">
+                                                Changer mot de passe
                                             </Link>
                                         </ListGroup.Item>
 
                                         {/* FIXME: gerer le role admin: visible si role = admin dans token */}
                                         {/* {isAdmin && ( */}
-                                            <ListGroup.Item>
+                                        <ListGroup.Item>
                                             <Link to="/users-handling">
                                                 Gestion utilisateurs
                                             </Link>
                                         </ListGroup.Item>
                                     {/* // ) } */}
                                         <ListGroup.Item>
-                                        <Link to="/my-account">
-                                                Fermeture de compte
-                                            </Link>
-                                        </ListGroup.Item>
+                                            <Link to="/my-account">
+                                                    Mon compte
+                                                </Link>
+                                            </ListGroup.Item>
                                         <ListGroup.Item>
-                                        <Link  to="#" onClick={handleLogout} >
-                                            Déconnection
-                                        </Link>                                     
+                                            <Link  to="#" onClick={handleLogout} >
+                                                Déconnection
+                                            </Link>                                     
                                         </ListGroup.Item>
                                     </ListGroup>
                                 </div>

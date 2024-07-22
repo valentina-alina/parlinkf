@@ -55,3 +55,15 @@ export async function refreshToken(id: number, body:any) {
     return error;
   }
 }
+
+export async function getUserById(id:string){
+  try {
+    const {data} = await api.get(`/user/${id}`);
+  console.log(data)
+    return data 
+  } catch (error) {
+    return {
+      error: error
+    };
+  }
+}
