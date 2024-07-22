@@ -14,6 +14,9 @@ COPY . .
 # Install Cypress
 RUN npm install cypress@latest --save-dev
 
+# Verify Cypress installation
+RUN npx cypress verify
+
 # Set environment variable for Cypress
 ENV CI=1
 
