@@ -11,7 +11,7 @@ interface AuthSignin {
 
 export async function signin(body:AuthSignin) {
   try {
-    const {data} = await api.post(`/auth/login`, body);
+    const {data} = await api.post(`auth/login`, body);
     return data 
   } catch (error) {
     return {
@@ -20,23 +20,24 @@ export async function signin(body:AuthSignin) {
   }
 }
 
-
-
-export async function refreshToken(id: number, body: any) {
-  const refreshToken = localStorage.getItem('refreshToken')
-  const headers = { Authorization : "Bearer " + refreshToken }
-  console.log('headers', headers)
-
-
+export async function signOut() {
   try {
-    const response = await api.get(`posts/${id}`, body);
-    console.log('response', response)
-    // simulation of success api response
-    return {
-      datas: body,
-      status: 200
-    };
+    // Make API call to sign out
+    const response = await api.post(`auth/signout`);
+
+    // Assuming the signout endpoint returns a success message or status
+    if (response.status === 200) {
+      // Clear tokens from localStorage
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      // Redirect or perform any other necessary actions after sign-out
+      location.href = "/"; // Redirect to login page after sign-out
+    } else {
+      console.error('La déconnexion a échoué:', response.data.message);
+      // Handle error if necessary
+    }
   } catch (error) {
-    return error;
+    console.error('La déconnexion a échoué:', error);
+    // Handle error if necessary
   }
 }

@@ -1,6 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosInstance } from 'axios';
 
+// Define interfaces for the expected response structure
+interface TokenData {
+    access_token: string;
+    refresh_token: string;
+}
+
+interface RefreshTokenResponse {
+    data: {
+        data: TokenData;
+    };
+}
+
+// Type guard to verify the structure of the response
+function isRefreshTokenResponse(response: any): response is RefreshTokenResponse {
+    return response && response.data && response.data.data && typeof response.data.data.access_token === 'string' && typeof response.data.data.refresh_token === 'string';
+}
+
 export function useApi() {
 
     const api: AxiosInstance = axios.create({
@@ -11,7 +28,7 @@ export function useApi() {
     });
 
     api.interceptors.request.use((config) => {
-        const token = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("access_token");
 
         if (token) {
             config.headers["Authorization"] = `Bearer ${token}`;
@@ -29,23 +46,32 @@ export function useApi() {
                     originalRequest._retry = true;
                 }
 
-                const refreshToken = localStorage.getItem("refreshToken");
+                const refresh_token = localStorage.getItem("refresh_token");
 
-                if(refreshToken) {
+                if(refresh_token) {
                     try {
-                        const result = await refreshAuthToken(refreshToken);
+                        const result = await refreshToken(refresh_token);
 
-                        localStorage.setItem("accessToken", result.data.tokens.accessToken);
-                        localStorage.setItem("refreshToken", result.data.tokens.refreshToken);
+                        if (isRefreshTokenResponse(result)) {
+                            const { access_token, refresh_token: new_refresh_token } = result.data.data;
 
-                        originalRequest.headers['Authorization'] = 'Bearer' + result.data.tokens.accesToken;
+                            localStorage.setItem("access_token", access_token);
+                            localStorage.setItem("refresh_token", new_refresh_token);
 
-                        return axios(originalRequest);
+                            originalRequest.headers['Authorization'] = `Bearer ${access_token}`;
+
+                            return api(originalRequest);
+                        } else {
+                            throw new Error('Invalid refresh token response');
+                        }
                     } catch(error) {
-                        location.href = "/"
+                        localStorage.removeItem('access_token');
+                        localStorage.removeItem('refresh_token');
+                        return Promise.reject(error);
                     }
                 } else {
-                    location.href = "/"
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('refresh_token');
                 }
             }
 
@@ -60,9 +86,27 @@ export function useApi() {
     return api;
 }
 
-async function refreshAuthToken(refreshToken: string) {
-    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/refresh_token`, {
-        refreshToken: refreshToken
+export async function refreshToken(refresh_token:string) {
+
+    const apiRefresh: AxiosInstance = axios.create({
+        baseURL: import.meta.env.VITE_API_BASE_URL,
+        headers: {
+            'Authorization' : "Bearer " + refresh_token 
+        }
     });
-    return response;
+
+    const headers = { Authorization : "Bearer " + refresh_token };
+    console.log('headers', headers)
+    // config.headers["Authorization"] = `Bearer ${token}`;
+    console.log("RefreshTokenFcn",refresh_token)
+
+    try {
+        const response = await apiRefresh.post(`${import.meta.env.VITE_API_BASE_URL}/auth/refresh_token`);
+
+        console.log('response', response)
+        
+        return response;
+    } catch (error) {
+        console.error('Erreur:', error);
+    }
 }
