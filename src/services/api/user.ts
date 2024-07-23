@@ -6,7 +6,7 @@ const api = useApi();
 
 export async function register(body:any) {
   try {
-    const {data} = await api.post(`/user/register`, body);
+    const {data} = await api.post(`user/register`, body);
     return data 
   } catch (error) {
     return {
@@ -17,7 +17,7 @@ export async function register(body:any) {
 
 export async function updateUserPswd( body: any) {
   try {
-    const { data } = await api.put(`/auth/mdp`, body);
+    const { data } = await api.put(`auth/mdp`, body);
     return data;
   } catch (error) {
     return {
@@ -28,7 +28,7 @@ export async function updateUserPswd( body: any) {
 
 export async function registerClient(body:any) {
   try {
-    const {data} = await api.post(`/auth/register`, body);
+    const {data} = await api.post(`auth/register`, body);
 
     return data 
   } catch (error) {
@@ -39,7 +39,7 @@ export async function registerClient(body:any) {
 }
 
 export async function refreshToken(id: number, body:any) {
-  const refreshToken = localStorage.getItem('refreshToken')
+  const refreshToken = localStorage.getItem('refresh_token')
   const headers = { Authorization : "Bearer " + refreshToken }
   console.log('headers', headers)
 
@@ -58,7 +58,7 @@ export async function refreshToken(id: number, body:any) {
 
 export async function getUserById(id:string){
   try {
-    const {data} = await api.get(`/user/${id}`);
+    const {data} = await api.get(`user/${id}`);
   console.log(data)
     return data 
   } catch (error) {

@@ -9,15 +9,10 @@ services:
       - "5173:80"
     environment:
       - WORK_DIR=/usr/app
-    develop:
-      watch:
-        - action: sync
-          path: ./
-          target: /${WORK_DIR}
-          ignore:
-            - node_modules
-        - action: rebuild
-          path: package.json
+    networks:
+      - backend-network
+    volumes:
+      - .:/usr/app
 
   cypress:
     build:
@@ -30,7 +25,15 @@ services:
     volumes:
       - .:/usr/app
       - /usr/app/node_modules
+    networks:
+      - backend-network
+    depends_on:
+      - reactjs
     command: >
       sh -c "
         npx cypress open --project /usr/app
       "
+
+networks:
+  backend-network:
+    external: true

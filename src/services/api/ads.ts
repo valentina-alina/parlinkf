@@ -8,7 +8,7 @@ const api = useApi();
 
 export async function createAd(body: any) {
     try {
-        const {data} = await api.post(`/ad`, body);
+        const {data} = await api.post(`ad`, body);
         return data 
     } catch (error) {
         return {
