@@ -208,7 +208,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         }, { ...initialCategoryCounts });
 
         setCategoryCounts(counts);
-        localStorage.getItem('refreshToken')
+        localStorage.getItem('refresh_token')
     };
 
     const fetchCategories = async () => {

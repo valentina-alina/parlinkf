@@ -49,7 +49,7 @@ export default function AdCreatePage() {
   };
 
   const extractUserIdFromToken = () => {
-    const token = localStorage.getItem('accessToken'); // Récupérer le token du localStorage (ou de n'importe où il est stocké)
+    const token = localStorage.getItem('access_token'); // Récupérer le token du localStorage (ou de n'importe où il est stocké)
     if (token) {
       const decodedToken = jwtDecode(token) as CustomPayLoad;
       return decodedToken.userId; // Assurez-vous que le payload du token contient bien un userId

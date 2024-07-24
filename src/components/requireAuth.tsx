@@ -8,15 +8,15 @@ interface CustomPayLoad extends JwtPayload {
 }
 
 const RequireAuth = ({ allowedRoles }:any) => {
-    const accessToken = localStorage.getItem('accessToken');
+    const access_token = localStorage.getItem('access_token');
     let userRole = null;
 
-    if (accessToken) {
+    if (access_token) {
         try {
-            const tokenDecode = jwtDecode(accessToken) as CustomPayLoad;
+            const tokenDecode = jwtDecode(access_token) as CustomPayLoad;
             userRole = tokenDecode?.role;
         } catch (error) {
-            console.error("Invalid token", error);
+            console.error("Token invalide", error);
         }
     }
 

@@ -39,8 +39,8 @@ export async function registerClient(body:any) {
 }
 
 export async function refreshToken(id: number, body:any) {
-  const refreshToken = localStorage.getItem('refresh_token')
-  const headers = { Authorization : "Bearer " + refreshToken }
+  const refresh_token = localStorage.getItem('refresh_token')
+  const headers = { Authorization : "Bearer " + refresh_token }
   console.log('headers', headers)
 
   try {
