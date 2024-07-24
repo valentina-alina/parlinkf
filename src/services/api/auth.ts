@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import axios from "axios";
 import { useApi } from "../../hooks/useApi.ts";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -11,12 +12,10 @@ interface AuthSignin {
 
 export async function signin(body:AuthSignin) {
   try {
-    const {data} = await api.post(`auth/login`, body);
+    const {data} = await axios.post(`${import.meta.env.VITE_API_BASE_URL}auth/login`, body);
     return data 
-  } catch (error) {
-    return {
-      error: error
-    };
+  } catch (error:any) {
+    throw new error(error)
   }
 }
 

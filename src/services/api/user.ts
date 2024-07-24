@@ -38,24 +38,6 @@ export async function registerClient(body:any) {
   }
 }
 
-export async function refreshToken(id: number, body:any) {
-  const refresh_token = localStorage.getItem('refresh_token')
-  const headers = { Authorization : "Bearer " + refresh_token }
-  console.log('headers', headers)
-
-  try {
-    const response = await api.get(`posts/${id}`, body);
-    console.log('response', response)
-    // simulation of success api response
-    return {
-      datas: body,
-      status: 200
-    };
-  } catch (error) {
-    return error;
-  }
-}
-
 export async function getUserById(id:string){
   try {
     const {data} = await api.get(`user/${id}`);
