@@ -35,8 +35,8 @@ export default function LoginPage() {
         const response = await signin(values);
 
         if (response.data.access_token) {
-          localStorage.setItem('accessToken', response.data.access_token);
-          localStorage.setItem('refreshToken', response.data.refresh_token);
+          localStorage.setItem('access_token', response.data.access_token);
+          localStorage.setItem('refresh_token', response.data.refresh_token);
           setLoginFailed(false);
           navigate('/ads-grid');
         }
