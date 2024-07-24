@@ -52,7 +52,7 @@ export default function LoginPage() {
       <div className="flex justify-center">
       <Card className="w-full md:max-w-md md:mx-auto hover:bg-transparent">     
           <h1 className="font-titleTest text-3xl my-8" data-cy="cypress-title">Connexion</h1><br />
-          {loginFailed && <p className="text-red-500 text-sm">Identifiants incorects</p>}
+          {loginFailed && <p className="text-red-500 text-sm">Identifiants incorrects</p>}
           <form onSubmit={handleSubmit}>
             <div className="mb-5">
               <label htmlFor="email" className="block mb-2 text-left text-sm font-medium text-gray-900 dark:text-white">Email</label>
@@ -107,7 +107,7 @@ export default function LoginPage() {
             </div>
           </form>
           <div className="text-left">
-                <Link to="/createAdmin" className="ms-2 text-sm text-blue-400 dark:text-blue-300 hover:underline">Creer un compte Client</Link>
+                <Link to="/createAdmin" className="ms-2 text-sm text-blue-400 dark:text-blue-300 hover:underline">Créer un compte Client</Link>
           </div>
 
           </Card>
