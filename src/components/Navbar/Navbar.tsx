@@ -229,7 +229,7 @@ export default function NavbarComponent({ searchQuery, setSearchQuery }: NavbarP
                                             </ListGroup.Item>
                                         <ListGroup.Item>
                                             <Link  to="#" onClick={handleLogout} >
-                                                Déconnection
+                                                Déconnexion
                                             </Link>                                     
                                         </ListGroup.Item>
                                     </ListGroup>
