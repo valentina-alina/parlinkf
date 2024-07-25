@@ -101,7 +101,7 @@ export async function refreshToken(refresh_token:string) {
     console.log("RefreshTokenFcn",refresh_token)
 
     try {
-        const response = await apiRefresh.post(`${import.meta.env.VITE_API_BASE_URL}/auth/refresh_token`);
+        const response = await apiRefresh.post(`${import.meta.env.VITE_API_BASE_URL}auth/refresh_token`);
 
         console.log('response', response)
         
