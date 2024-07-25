@@ -44,7 +44,7 @@ export function useApi() {
 
                 if(!originalRequest._retry) {
                     originalRequest._retry = true;
-                }
+                } else return Promise.reject(error);
 
                 const refresh_token = localStorage.getItem("refresh_token");
 
