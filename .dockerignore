@@ -5,3 +5,5 @@ README.md
 .vscode
 LICENSE
 npm-debug.log*
+android/
+cypress/
