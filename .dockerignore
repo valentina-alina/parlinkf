@@ -7,3 +7,4 @@ LICENSE
 npm-debug.log*
 android/
 cypress/
+dist/
