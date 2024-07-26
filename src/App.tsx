@@ -34,6 +34,7 @@ function App() {
   const [contactForms, setContactForms] = useState<ContactInterface[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+
   function handleSubmitProfile(profile: ProfileInterface): void {
     setProfiles([...profiles, profile]);
   }
