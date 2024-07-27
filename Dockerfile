@@ -15,7 +15,7 @@ RUN npm install
 COPY . .
 
 ARG BASE_BACK_URL
-ENV VITE_API_BASE_URL=${BASE_BACK_URL:-'http://192.168.1.75:3000/'}
+ENV VITE_API_BASE_URL=${BASE_BACK_URL:-'https://parlink-oqnbfn4vr-guillermos-projects-c72d7b63.vercel.app/'}
 
 # Build the application => TJ => JS
 RUN npm run build
