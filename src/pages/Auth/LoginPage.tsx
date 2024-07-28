@@ -9,12 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { signin } from '../../services/api/auth';
 import { Card } from 'flowbite-react';
 
-
-/* interface AuthSignin {
-  email: string;
-  password: string;
-} */
-
 export default function LoginPage() {
   const navigate = useNavigate();
   const [loginFailed, setLoginFailed] = useState(false);
@@ -24,7 +18,7 @@ export default function LoginPage() {
     password: Yup.string().required('Champs obligatoire')
   });
 
-  const formik = useFormik({
+  const { handleSubmit, handleChange, values, errors } = useFormik({
     initialValues: {
       email: '',
       password: '',
@@ -53,12 +47,12 @@ export default function LoginPage() {
       <Card className="w-full md:max-w-md md:mx-auto hover:bg-transparent">     
           <h1 className="font-titleTest text-3xl my-8" data-cy="cypress-title">Connexion</h1><br />
           {loginFailed && <p className="text-red-500 text-sm">Identifiants incorrects</p>}
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <div className="mb-5">
               <label htmlFor="email" className="block mb-2 text-left text-sm font-medium text-gray-900 dark:text-white">Email</label>
               <input
-                onChange={formik.handleChange}
-                value={formik.values.email}
+                onChange={handleChange}
+                value={values.email}
                 type="email"
                 id="email"
                 name="email"
@@ -67,13 +61,13 @@ export default function LoginPage() {
                 placeholder=""
                 required
               />
-              {formik.touched.email && formik.errors.email ? (<p className="text-red-500 text-sm">{formik.errors.email}</p>) : null}
+              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
             </div>
             <div className="mb-5">
               <label htmlFor="password" className="block mb-2 text-sm text-left font-medium text-gray-900 dark:text-white">Mot de passe</label>
               <input
-                onChange={formik.handleChange}
-                value={formik.values.password}
+                onChange={handleChange}
+                value={values.password}
                 type="password"
                 id="password"
                 name="password"
@@ -81,8 +75,8 @@ export default function LoginPage() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
               />
-              {formik.touched.password && formik.errors.password ? (<p className="text-red-500 text-sm">{formik.errors.password}</p>) : null}
-              </div>
+              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+            </div>
             <button
               type="submit"
               data-cy="login"
