@@ -20,7 +20,6 @@ ENV VITE_API_BASE_URL=${BASE_BACK_URL:-'https://parlink-back-45e9515c2378.heroku
 # Build the application => TJ => JS
 RUN npm run build
 
-
 FROM nginx:stable
 
 COPY --from=build /usr/app/dist /usr/share/nginx/html
