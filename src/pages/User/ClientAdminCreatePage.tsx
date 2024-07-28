@@ -128,7 +128,7 @@ export default function ClientAdminCreatePage(props: PropUserPage) {
               <div className="text-left mt-4">
                 <Link to="/login" className="text-sm text-blue-700 dark:text-blue-700 hover:underline">Se connecter</Link>
               </div>
-              <a href="/forgot-password-page" className="ms-2 text-sm text-blue-400 dark:text-blue-300 hover:underline">Changer mot de passe</a>
+              <Link to="/forgot-password-page" className="ms-2 text-sm text-blue-400 dark:text-blue-300 hover:underline">Changer mot de passe</Link>
             </Card>
           </div>
         </div>
