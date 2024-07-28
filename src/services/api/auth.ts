@@ -12,7 +12,7 @@ interface AuthSignin {
 
 export async function signin(body:AuthSignin) {
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}auth/login`, body);
+    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, body);
     return response 
   } catch (error:any) {
     throw new Error(error)
