@@ -24,7 +24,7 @@ export default function LoginPage() {
     password: Yup.string().required('Champs obligatoire')
   });
 
-  const { handleSubmit, handleChange, values, errors } = useFormik({
+  const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
@@ -34,7 +34,7 @@ export default function LoginPage() {
       try {
         const response = await signin(values);
 
-        if (response.data.access_token) {
+        if (response.data && response.data.access_token) {
           localStorage.setItem('access_token', response.data.access_token);
           localStorage.setItem('refresh_token', response.data.refresh_token);
           setLoginFailed(false);
@@ -53,12 +53,12 @@ export default function LoginPage() {
       <Card className="w-full md:max-w-md md:mx-auto hover:bg-transparent">     
           <h1 className="font-titleTest text-3xl my-8" data-cy="cypress-title">Connexion</h1><br />
           {loginFailed && <p className="text-red-500 text-sm">Identifiants incorrects</p>}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={formik.handleSubmit}>
             <div className="mb-5">
               <label htmlFor="email" className="block mb-2 text-left text-sm font-medium text-gray-900 dark:text-white">Email</label>
               <input
-                onChange={handleChange}
-                value={values.email}
+                onChange={formik.handleChange}
+                value={formik.values.email}
                 type="email"
                 id="email"
                 name="email"
@@ -67,13 +67,13 @@ export default function LoginPage() {
                 placeholder=""
                 required
               />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+              {formik.touched.email && formik.errors.email ? (<p className="text-red-500 text-sm">{formik.errors.email}</p>) : null}
             </div>
             <div className="mb-5">
               <label htmlFor="password" className="block mb-2 text-sm text-left font-medium text-gray-900 dark:text-white">Mot de passe</label>
               <input
-                onChange={handleChange}
-                value={values.password}
+                onChange={formik.handleChange}
+                value={formik.values.password}
                 type="password"
                 id="password"
                 name="password"
@@ -81,8 +81,8 @@ export default function LoginPage() {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
               />
-              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-            </div>
+              {formik.touched.password && formik.errors.password ? (<p className="text-red-500 text-sm">{formik.errors.password}</p>) : null}
+              </div>
             <button
               type="submit"
               data-cy="login"
