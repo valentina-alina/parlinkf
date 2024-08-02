@@ -81,13 +81,12 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 response = { data: { ads } };
             }
 
-            const fetchedAds = response.data.ads;
-
-            if (!Array.isArray(fetchedAds)) {
-                console.error('Attendait une liste d\'annonces mais a reçu:', fetchedAds);
+            if (!response || !response.data || !Array.isArray(response.data.ads)) {
+                console.error(`Erreur: réponse inattendue ou liste d'annonces manquante`, response);
                 return;
             }
 
+            const fetchedAds = response.data.ads;
             setItems(fetchedAds.slice(0, 12));
             setHasMore(fetchedAds.length > 12);
         } catch (error) {
@@ -129,12 +128,12 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const handleSubCategoryChange = async (subCategory: string) => {
         try {
             const response = await getAdsBySubCategories(subCategory);
-            const fetchedAds = response.data.ads;
-
-            if (!Array.isArray(fetchedAds)) {
-                console.error('Attendait une liste d\'annonces mais a reçu:', fetchedAds);
+            if (!response || !response.data || !Array.isArray(response.data.ads)) {
+                console.error(`Erreur: réponse inattendue ou liste d'annonces manquante pour la sous-catégorie ${subCategory}`, response);
                 return;
             }
+    
+            const fetchedAds = response.data.ads;
 
             setItems(fetchedAds.slice(0, 12));
             setHasMore(fetchedAds.length > 12);
@@ -144,6 +143,14 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     };
 
     const handleCategoryHover = async (category: Category) => {
+        if (category === 'all') {
+            setSubCategories((prevSubCategories) => ({
+                ...prevSubCategories,
+                [category]: [], // No sub-categories for 'all'
+            }));
+            return;
+        }
+
         try {
             const response = await getSubCategories(category);
             if (response && response.data && Array.isArray(response.data.subCategories)) {
@@ -256,7 +263,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                 </span>
                             </Link>
                         </div>
-                        {subCategories[category] && subCategories[category].length > 0 && (
+                        {subCategories[category] && subCategories[category].length > 0 && category !== 'all' && (
                             <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md w-60 z-10 hidden group-hover:block">
                                 {subCategories[category].map((subcategory, index) => (
                                     <Link
