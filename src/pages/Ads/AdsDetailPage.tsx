@@ -143,12 +143,12 @@ export default function AdsDetailPage() {
                                 </div>
                             </div>
                             <div className="flex justify-evenly gap-8 font-bodyTest mt-8 mb-10">
-                                <span className="before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-gray-700 relative flex gap-2 mt-2">
+                                <span className="before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-gray-700 relative flex gap-2 mt-2 h-12">
                                     <Button className="bg-gray-700">
                                         <span className="relative m-1">Contacter</span>
                                     </Button>
                                 </span>
-                                <span className="before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative flex gap-2 mt-2">
+                                <span className="before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative flex gap-2 mt-2 h-12">
                                     <Button className="bg-blue-700">
                                         <span className="relative text-white m-1">S'inscrire</span>
                                     </Button>
