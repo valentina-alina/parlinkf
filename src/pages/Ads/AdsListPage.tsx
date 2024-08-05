@@ -215,7 +215,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         }, { ...initialCategoryCounts });
 
         setCategoryCounts(counts);
-        localStorage.getItem('refresh_token')
+        localStorage.getItem('refresh_token');
     };
 
     const fetchCategories = async () => {
@@ -233,7 +233,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const fetchAdDetails = async (id: string) => {
         try {
             const adDetails = await getAdById(id);
-            console.log('Détails de l\'annonce:', adDetails);
+            console.log(`Détails de l'annonce:`, adDetails);
 
         } catch (error) {
             console.error(`Erreur lors de la récupération des détails de l'annonce avec l'id ${id}:`, error);

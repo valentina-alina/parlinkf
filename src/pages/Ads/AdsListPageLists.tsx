@@ -15,6 +15,8 @@ import { MapProvider } from '../../providers/MapProvider';
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import MapConfig from '../../services/utils/MapConfig';
 import { ThreeDots } from 'react-loader-spinner';
+import axios from 'axios';
+import { AdInterface } from '../../services/interfaces/Ad';
 
 type Category = string;
 
@@ -22,23 +24,7 @@ const initialCategoryCounts: Record<Category, number> = {
     all: 0,
 };
 
-const getCoordinates = async (address: string): Promise<{ lat: number, lng: number } | null> => {
-    try {
-        const GeocodeApiKey = 'd5192c485eda412caca23991c255a796';
-        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GeocodeApiKey}`);
-        const data = await response.json();
-        if (data.results.length > 0) {
-            const { lat, lng } = data.results[0].geometry.location;
-            return { lat, lng };
-        } else {
-            console.error(`Pas de résultat trouvé pour l'adresse: ${address}`);
-            return null;
-        }
-    } catch (error) {
-        console.error(`Erreur lors de la récupération des coordonnées pour l'adresse ${address}:`, error);
-        return null;
-    }
-};
+const GEOCODE_API_KEY = 'd5192c485eda412caca23991c255a796';
 
 export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
@@ -50,43 +36,53 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const [categoryCounts, setCategoryCounts] = useState(initialCategoryCounts);
     const [subCategories, setSubCategories] = useState<Record<Category, string[]>>({});
     const { id } = useParams<{ id: string }>();
+    const [ads, setAds] = useState<AdInterface | null>(null);
+    const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
 
     console.log('categoryCounts', categoryCounts)
 
     useEffect(() => {
+        const fetchAds = async () => {
+            try {
+                const ads = await getAds();
+                if (ads) {
+                    const selectedAd = ads.find((ad: any) => ad.id.toString() === id);
+                    if (selectedAd) {
+                        setAds({
+                            ...selectedAd,
+                            lat: parseFloat(selectedAd.lat),
+                            lng: parseFloat(selectedAd.lng),
+                        });
+                    } else {
+                        setAds(null);
+                    }
+                }
+    
+                setAdsList(ads);
+                updateCategoryCounts(ads);
+                fetchInitialItems(ads);
+            } catch(error) {
+                console.error('Erreur lors du chargement des annonces:', error);
+            }
+            
+        };
         fetchAds();
         fetchCategories();
     }, []);
 
     useEffect(() => {
-        if (id) {
-            fetchAdDetails(id);
+        if (ads) {
+            if(id) {
+                fetchAdDetails(id);
+                const address = `${ads.address}, ${ads.postalCode}, ${ads.city}, ${ads.country}`;
+                handleGeocode(address)
+            }
         }
-    }, [id]);
+    }, [id, ads]);
 
     useEffect(() => {        
         fetchFilteredAds();
     }, [selectedCategories, searchQuery]);
-
-
-    const fetchAds = async () => {
-        const ads = await getAds();
-        setAdsList(ads);
-        const adsWithCoordinates = await Promise.all(ads.map(async (ad:any) => {
-            if (!ad.lat || !ad.lng) {
-                const address = `${ad.postalCode} ${ad.city}, ${ad.country}`;
-                const coordinates = await getCoordinates(address);
-                if (coordinates) {
-                    ad.lat = coordinates.lat;
-                    ad.lng = coordinates.lng;
-                }
-            }
-            return ad;
-        }));
-        setAdsList(adsWithCoordinates);
-        updateCategoryCounts(adsWithCoordinates);
-        fetchInitialItems(adsWithCoordinates);
-    };
 
     const fetchFilteredAds = async () => {
         try {
@@ -102,28 +98,13 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 const ads = categoryAds.flatMap(category => category.data.ads);
                 response = { data: { ads } };
             }
-
-            const fetchedAds = response.data.ads;
-
-            if (!Array.isArray(fetchedAds)) {
-                console.error('Attendait une liste d\'annonces mais a reçu:', fetchedAds);
+            if (!response || !response.data || !Array.isArray(response.data.ads)) {
+                console.error(`Erreur: réponse inattendue ou liste d'annonces manquante`, response);
                 return;
             }
-
-            const adsWithCoordinates = await Promise.all(fetchedAds.map(async (ad) => {
-                if (!ad.lat || !ad.lng) {
-                    const address = `${ad.postalCode} ${ad.city}, ${ad.country}`;
-                    const coordinates = await getCoordinates(address);
-                    if (coordinates) {
-                        ad.lat = coordinates.lat;
-                        ad.lng = coordinates.lng;
-                    }
-                }
-                return ad;
-            }));
-
-            setItems(adsWithCoordinates.slice(0, 10));
-            setHasMore(adsWithCoordinates.length > 10);
+            const fetchedAds = response.data.ads;
+            setItems(fetchedAds.slice(0, 10));
+            setHasMore(fetchedAds.length > 10);
         } catch (error) {
             console.error('Erreur lors de la récupération des annonces:', error);
         }
@@ -163,33 +144,29 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const handleSubCategoryChange = async (subCategory: string) => {
         try {
             const response = await getAdsBySubCategories(subCategory);
-            const fetchedAds = response.data.ads;
-
-            if (!Array.isArray(fetchedAds)) {
-                console.error('Attendait une liste d\'annonces mais a reçu:', fetchedAds);
+            if (!response || !response.data || !Array.isArray(response.data.ads)) {
+                console.error(`Erreur: réponse inattendue ou liste d'annonces manquante pour la sous-catégorie ${subCategory}`, response);
                 return;
             }
+    
+            const fetchedAds = response.data.ads;
 
-            const adsWithCoordinates = await Promise.all(fetchedAds.map(async (ad) => {
-                if (!ad.lat || !ad.lng) {
-                    const address = `${ad.postalCode} ${ad.city}, ${ad.country}`;
-                    const coordinates = await getCoordinates(address);
-                    if (coordinates) {
-                        ad.lat = coordinates.lat;
-                        ad.lng = coordinates.lng;
-                    }
-                }
-                return ad;
-            }));
-
-            setItems(adsWithCoordinates.slice(0, 10));
-            setHasMore(adsWithCoordinates.length > 10);
+            setItems(fetchedAds.slice(0, 10));
+            setHasMore(fetchedAds.length > 10);
         } catch (error) {
             console.error(`Erreur lors de la récupération des annonces pour la sous-catégorie ${subCategory}:`, error);
         }
     };
 
     const handleCategoryHover = async (category: Category) => {
+        if (category === 'all') {
+            setSubCategories((prevSubCategories) => ({
+                ...prevSubCategories,
+                [category]: [], // No sub-categories for 'all'
+            }));
+            return;
+        }
+
         try {
             const response = await getSubCategories(category);
             if (response && response.data && Array.isArray(response.data.subCategories)) {
@@ -245,6 +222,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         }, { ...initialCategoryCounts });
 
         setCategoryCounts(counts);
+        localStorage.getItem('refresh_token');
     };
 
     const fetchCategories = async () => {
@@ -262,7 +240,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const fetchAdDetails = async (id: string) => {
         try {
             const adDetails = await getAdById(id);
-            console.log('Détails de l\'annonce:', adDetails);
+            console.log(`Détails de l'annonce:`, adDetails);
 
         } catch (error) {
             console.error(`Erreur lors de la récupération des détails de l'annonce avec l'id ${id}:`, error);
@@ -270,6 +248,21 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     };
 
     const mapConfig = new MapConfig();
+
+    const handleGeocode = async (address: string) => {
+        try {
+            const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json`, {
+                params: {
+                    q: address,
+                    key: GEOCODE_API_KEY,
+                },
+            });
+            const { lat, lng } = response.data.results[0].geometry;
+            setCoordinates({ lat, lng });
+        } catch (error) {
+            console.error('Erreur lors de la récupération du géocode:', error);
+        }
+    };
 
     return (
         <>
@@ -294,7 +287,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                     </span>
                                 </Link>
                             </div>
-                            {subCategories[category] && subCategories[category].length > 0 && (
+                            {subCategories[category] && subCategories[category].length > 0 && category !== 'all' && (
                                 <div className="absolute right-0 mt-2 bg-white shadow-lg p-2 rounded-md w-60 z-10 hidden group-hover:block">
                                     {subCategories[category].map((subcategory, index) => (
                                         <Link
@@ -407,11 +400,11 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                                 {event.lat && event.lng ? (
                                                     <GoogleMap
                                                         mapContainerStyle={mapConfig.defaultMapContainerStyle('250px','18vh')}
-                                                        center={{ lat: Number(event.lat), lng: Number(event.lng) }}
+                                                        center={coordinates || mapConfig.defaultMapCenter()}
                                                         zoom={mapConfig.defaultMapZoom(18)}
                                                         options={mapConfig.defaultMapOptions(true, 0, 'auto', 'satellite')}
                                                     >
-                                                        <MarkerF key={event.id} position={{ lat: Number(event.lat), lng: Number(event.lng) }} />
+                                                        {coordinates && <MarkerF key={event.id} position={coordinates} />}
                                                     </GoogleMap>
                                                 ) : (
                                                     <p>Coordonnées indisponibles</p>
