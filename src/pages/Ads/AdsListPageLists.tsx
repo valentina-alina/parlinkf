@@ -16,7 +16,6 @@ import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import MapConfig from '../../services/utils/MapConfig';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
-import { AdInterface } from '../../services/interfaces/Ad';
 
 type Category = string;
 
@@ -36,8 +35,6 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const [categoryCounts, setCategoryCounts] = useState(initialCategoryCounts);
     const [subCategories, setSubCategories] = useState<Record<Category, string[]>>({});
     const { id } = useParams<{ id: string }>();
-    const [ads, setAds] = useState<AdInterface | null>(null);
-    const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
 
     console.log('categoryCounts', categoryCounts)
 
@@ -46,21 +43,16 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             try {
                 const ads = await getAds();
                 if (ads) {
-                    const selectedAd = ads.find((ad: any) => ad.id.toString() === id);
-                    if (selectedAd) {
-                        setAds({
-                            ...selectedAd,
-                            lat: parseFloat(selectedAd.lat),
-                            lng: parseFloat(selectedAd.lng),
-                        });
-                    } else {
-                        setAds(null);
-                    }
+                    const fetchedAds = await Promise.all(
+                        ads.map(async (ad: any) => ({
+                            ...ad,
+                            coordinates: await fetchCoordinates(ad),
+                        }))
+                    );
+                    setAdsList(fetchedAds);
+                    updateCategoryCounts(fetchedAds);
+                    fetchInitialItems(fetchedAds);
                 }
-    
-                setAdsList(ads);
-                updateCategoryCounts(ads);
-                fetchInitialItems(ads);
             } catch(error) {
                 console.error('Erreur lors du chargement des annonces:', error);
             }
@@ -71,18 +63,31 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     }, []);
 
     useEffect(() => {
-        if (ads) {
-            if(id) {
-                fetchAdDetails(id);
-                const address = `${ads.address}, ${ads.postalCode}, ${ads.city}, ${ads.country}`;
-                handleGeocode(address)
-            }
+        if (id) {
+            fetchAdDetails(id);
         }
-    }, [id, ads]);
+    }, [id]);
 
     useEffect(() => {        
         fetchFilteredAds();
     }, [selectedCategories, searchQuery]);
+
+    const fetchCoordinates = async (ad: any) => {
+        const address = `${ad.address}, ${ad.postalCode}, ${ad.city}, ${ad.country}`;
+        try {
+            const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json`, {
+                params: {
+                    q: address,
+                    key: GEOCODE_API_KEY,
+                },
+            });
+            const { lat, lng } = response.data.results[0].geometry;
+            return { lat, lng };
+        } catch (error) {
+            console.error('Erreur lors de la récupération du géocode:', error);
+            return null;
+        }
+    };
 
     const fetchFilteredAds = async () => {
         try {
@@ -102,7 +107,12 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 console.error(`Erreur: réponse inattendue ou liste d'annonces manquante`, response);
                 return;
             }
-            const fetchedAds = response.data.ads;
+            const fetchedAds = await Promise.all(
+                response.data.ads.map(async (ad: any) => ({
+                    ...ad,
+                    coordinates: await fetchCoordinates(ad),
+                }))
+            );
             setItems(fetchedAds.slice(0, 10));
             setHasMore(fetchedAds.length > 10);
         } catch (error) {
@@ -149,7 +159,12 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 return;
             }
     
-            const fetchedAds = response.data.ads;
+            const fetchedAds = await Promise.all(
+                response.data.ads.map(async (ad: any) => ({
+                    ...ad,
+                    coordinates: await fetchCoordinates(ad),
+                }))
+            );
 
             setItems(fetchedAds.slice(0, 10));
             setHasMore(fetchedAds.length > 10);
@@ -219,19 +234,22 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             acc[category] = (acc[category] || 0) + 1;
             acc['all'] = (acc['all'] || 0) + 1;
             return acc;
-        }, { ...initialCategoryCounts });
+        }, {} as Record<Category, number>);
 
-        setCategoryCounts(counts);
-        localStorage.getItem('refresh_token');
+        setCategoryCounts((prevCounts) => ({
+            ...prevCounts,
+            ...counts,
+        }));
     };
 
     const fetchCategories = async () => {
         try {
             const response = await getCategories();
-            const fetchedCategories = response.data.categories;
-
-            setCategories(['all', ...fetchedCategories]);
-            console.log('Catégories récupérées:', fetchedCategories);
+            if (response && response.data && Array.isArray(response.data.categories)) {
+                setCategories(response.data.categories);
+            } else {
+                console.warn(`Réponse inattendue lors de la récupération des catégories:`, response);
+            }
         } catch (error) {
             console.error('Erreur lors de la récupération des catégories:', error);
         }
@@ -239,30 +257,17 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
 
     const fetchAdDetails = async (id: string) => {
         try {
-            const adDetails = await getAdById(id);
-            console.log(`Détails de l'annonce:`, adDetails);
-
+            const ad = await getAdById(id);
+            if (ad) {
+                const coordinates = await fetchCoordinates(ad);
+                setItems([{ ...ad, coordinates }]);
+            }
         } catch (error) {
             console.error(`Erreur lors de la récupération des détails de l'annonce avec l'id ${id}:`, error);
         }
     };
 
     const mapConfig = new MapConfig();
-
-    const handleGeocode = async (address: string) => {
-        try {
-            const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json`, {
-                params: {
-                    q: address,
-                    key: GEOCODE_API_KEY,
-                },
-            });
-            const { lat, lng } = response.data.results[0].geometry;
-            setCoordinates({ lat, lng });
-        } catch (error) {
-            console.error('Erreur lors de la récupération du géocode:', error);
-        }
-    };
 
     return (
         <>
@@ -397,14 +402,14 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                             </span>
                                             </div>
                                             <div className="w-96 sm:w-full flex justify-center items-center">
-                                                {event.lat && event.lng ? (
+                                                {event.coordinates ? (
                                                     <GoogleMap
                                                         mapContainerStyle={mapConfig.defaultMapContainerStyle('250px','18vh')}
-                                                        center={coordinates || mapConfig.defaultMapCenter()}
+                                                        center={event.coordinates || mapConfig.defaultMapCenter()}
                                                         zoom={mapConfig.defaultMapZoom(18)}
                                                         options={mapConfig.defaultMapOptions(true, 0, 'auto', 'satellite')}
                                                     >
-                                                        {coordinates && <MarkerF key={event.id} position={coordinates} />}
+                                                        <MarkerF key={event.id} position={event.coordinates} />
                                                     </GoogleMap>
                                                 ) : (
                                                     <p>Coordonnées indisponibles</p>
