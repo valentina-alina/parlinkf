@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { Button, Card, Label, TextInput, Textarea } from 'flowbite-react';
 import { useParams } from 'react-router-dom';
@@ -75,15 +77,6 @@ export default function AdsDetailPage() {
         }
     };
 
-    const startDate = ads ? new Date(ads.startTime) : new Date();
-    const endDate = ads ? new Date(ads.endTime) : new Date();
-
-    const formattedDate = `${startDate.toLocaleDateString('fr-FR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    })} de ${startDate.toLocaleTimeString('fr-FR')} à ${endDate.toLocaleTimeString('fr-FR')}`;
-
     return (
         <>
             <MapProvider>
@@ -107,7 +100,7 @@ export default function AdsDetailPage() {
                                         <p>{ads.city}</p>
                                     </div>
                                 </div>
-                                <p>{formattedDate}</p>
+                                <p>{format(new Date(ads.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</p>
                             </div>
                             <div className="flex justify-between items-center">
                                 <img src={ads.adPicture} alt="Ad Image" className="w-40 h-auto" />
