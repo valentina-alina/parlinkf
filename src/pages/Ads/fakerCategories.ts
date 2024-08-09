@@ -12,19 +12,19 @@ const fakerCategories = [
         group: [
             {
                 id: 1,
-                title: 'Musées et centres d\'expositions' ,
+                title: `Musées et centres d'expositions` ,
             },
             {
                 id: 2,
-                title: 'Zoos et aquariums',
+                title: `Zoos et aquariums`,
             },
             {
                 id: 3,
-                title: 'Parcs et jardins',
+                title: `Parcs et jardins`,
             },
             {
                 id: 4,
-                title: 'Camps de vacances',
+                title: `Camps de vacances`,
             }
         ]
     },
@@ -35,19 +35,19 @@ const fakerCategories = [
         group: [
             {
                 id: 1,
-                title: 'Mathématiques',
+                title: `Mathématiques`,
             },
             {
                 id: 2,
-                title: 'Enseignement moral et civique',
+                title: `Enseignement moral et civique`,
             },
             {
                 id: 3,
-                title: 'Histoire-géographie',
+                title: `Histoire-géographie`,
             },
             {
                 id: 4,
-                title: 'Technologie',
+                title: `Technologie`,
             }
         ]
     },
@@ -58,19 +58,19 @@ const fakerCategories = [
         group: [
             {
                 id: 1,
-                title: 'La garde à domicile partagée',
+                title: `La garde à domicile partagée`,
             },
             {
                 id: 2,
-                title: 'La crèche familial',
+                title: `La crèche familial`,
             },
             {
                 id: 3,
-                title: 'L\'assistance maternelle',
+                title: `L'assistance maternelle`,
             },
             {
                 id: 4,
-                title: 'La garde à domicile',
+                title: `La garde à domicile`,
             }
         ]
     },
@@ -81,19 +81,19 @@ const fakerCategories = [
         group: [
             {
                 id: 1,
-                title: 'Piscine',
+                title: `Piscine`,
             },
             {
                 id: 2,
-                title: 'Promenade',
+                title: `Promenade`,
             },
             {
                 id: 3,
-                title: 'Ressources',
+                title: `Ressources`,
             },
             {
                 id: 4,
-                title: 'Parc',
+                title: `Parc`,
             }
         ]
     }

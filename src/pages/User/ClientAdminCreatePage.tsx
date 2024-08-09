@@ -20,10 +20,10 @@ export default function ClientAdminCreatePage(props: PropUserPage) {
   console.log('handleSubmitUser', handleSubmitUser)
 
   const validationSchema = Yup.object({
-  nom: Yup.string().required('Le nom est requis'),
-  prenom: Yup.string().required('Le prénom est requis'),
-  email: Yup.string().email('Format d\'email invalide').required('L\'email est requis'),
-  role: Yup.string().required('Le rôle est requis'),
+  nom: Yup.string().required(`Le nom est requis`),
+  prenom: Yup.string().required(`Le prénom est requis`),
+  email: Yup.string().email(`Format d'email invalide`).required(`L'email est requis`),
+  role: Yup.string().required(`Le rôle est requis`),
   });
 
   const formik = useFormik({
@@ -65,11 +65,11 @@ export default function ClientAdminCreatePage(props: PropUserPage) {
           });
           // TODO----------------------------------------------------------------
         } else {
-          alert('Erreur lors de l\'ajout de l\'utilisateur');
+          alert(`Erreur lors de l'ajout de l'utilisateur`);
         }
       } catch (error) {
         console.error('Erreur:', error);
-        alert('Erreur lors de l\'ajout de l\'utilisateur');
+        alert(`Erreur lors de l'ajout de l'utilisateur`);
       }
     },
   });

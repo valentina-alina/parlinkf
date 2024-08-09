@@ -76,7 +76,7 @@ export default function CalendarPage({ searchQuery }: { searchQuery: string }) {
             const fetchedAds = response.data.ads;
 
             if (!Array.isArray(fetchedAds)) {
-                console.error('Attendait une liste d\'annonces mais a reçu:', fetchedAds);
+                console.error(`Attendait une liste d'annonces mais a reçu:`, fetchedAds);
                 return;
             }
 
@@ -88,7 +88,7 @@ export default function CalendarPage({ searchQuery }: { searchQuery: string }) {
 
             setAdsList(adsWithParsedDates);
         } catch (error) {
-            console.error('Erreur lors de la récupération des annonces:', error);
+            console.error(`Erreur lors de la récupération des annonces:`, error);
         }
     };
 
@@ -114,7 +114,7 @@ export default function CalendarPage({ searchQuery }: { searchQuery: string }) {
             const fetchedAds = response.data.ads;
 
             if (!Array.isArray(fetchedAds)) {
-                console.error('Attendait une liste d\'annonces mais a reçu:', fetchedAds);
+                console.error(`Attendait une liste d'annonces mais a reçu:`, fetchedAds);
                 return;
             }
 
@@ -178,16 +178,16 @@ export default function CalendarPage({ searchQuery }: { searchQuery: string }) {
             const fetchedCategories = response.data.categories;
 
             setCategories(['all', ...fetchedCategories]);
-            console.log('Catégories récupérées:', fetchedCategories);
+            console.log(`Catégories récupérées:`, fetchedCategories);
         } catch (error) {
-            console.error('Erreur lors de la récupération des catégories:', error);
+            console.error(`Erreur lors de la récupération des catégories:`, error);
         }
     };
 
     const fetchAdDetails = async (id: string) => {
         try {
             const adDetails = await getAdById(id);
-            console.log('Détails de l\'annonce:', adDetails);
+            console.log(`Détails de l'annonce:`, adDetails);
 
         } catch (error) {
             console.error(`Erreur lors de la récupération des détails de l'annonce avec l'id ${id}:`, error);

@@ -81,9 +81,9 @@ export default function AdCreatePage() {
       const response = await getCategories();
       const fetchedCategories = response.data.categories;
       setCategories([...fetchedCategories]);
-      console.log('Catégories récupérées:', fetchedCategories);
+      console.log(`Catégories récupérées:`, fetchedCategories);
     } catch (error) {
-      console.error('Erreur lors de la récupération des catégories:', error);
+      console.error(`Erreur lors de la récupération des catégories:`, error);
     }
   };
 
@@ -92,7 +92,7 @@ export default function AdCreatePage() {
       const response = await getSubCategories(category);
       if (response && response.data && Array.isArray(response.data.subCategories)) {
         setSubCategories(response.data.subCategories);
-        console.log('Sous-catégories récupérées:', response.data.subCategories);
+        console.log(`Sous-catégories récupérées:`, response.data.subCategories);
       } else {
         console.warn(`Réponse inattendue pour les sous-catégories de la catégorie ${category}:`, response);
         setSubCategories([]);
@@ -120,13 +120,13 @@ export default function AdCreatePage() {
       const response = await createAd(formDatasSubmitedObject);
 
       if (response) {
-        alert('Nouveau annonce ajouté avec succès');
+        alert(`Nouveau annonce ajouté avec succès`);
       } else {
-        alert('Erreur lors de l\'ajout de l\'annonce');
+        alert(`Erreur lors de l'ajout de l'annonce`);
       }
     } catch (error) {
       console.error('Erreur:', error);
-      alert('Erreur lors de l\'ajout de l\'annonce');
+      alert(`Erreur lors de l'ajout de l'annonce`);
     }
     alert(`Formulaire soumis`);
   };

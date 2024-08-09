@@ -96,12 +96,12 @@ export default function AdEditPage() {
       });
 
       if (response.ok) {
-        console.log('File uploaded successfully');
+        console.log(`Le fichier a bien été chargé`);
       } else {
-        console.error('File upload failed');
+        console.error(`Le fichier n'a pas été chargé`);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Erreur:', error);
     }
 
     alert(`Formulaire soumis`);

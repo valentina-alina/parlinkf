@@ -22,9 +22,9 @@ const UserManagement = ({ handleSubmitUser }:any) => {
   console.log('setChildCounterFromControlButton', setChildCounterFromControlButton)
 
   const validationSchema = Yup.object({
-    nom: Yup.string().required('Le prénom est requis'),
-    prenom: Yup.string().required('Le nom est requis'),
-    email: Yup.string().email('Format d\'email invalide').required('L\'email est requis'),
+    nom: Yup.string().required(`Le prénom est requis`),
+    prenom: Yup.string().required(`Le nom est requis`),
+    email: Yup.string().email(`Format d'email invalide`).required(`L'email est requis`),
   });
 
   const formik = useFormik({
@@ -36,7 +36,7 @@ const UserManagement = ({ handleSubmitUser }:any) => {
     validationSchema,
     onSubmit: (values) => {
       console.log(values);
-      alert("Nouveau utilisateur ajouté");
+      alert(`Nouveau utilisateur ajouté`);
     },
   });
   console.log('formik', formik)
