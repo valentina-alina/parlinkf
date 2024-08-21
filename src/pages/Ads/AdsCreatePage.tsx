@@ -3,6 +3,7 @@ import { Button, Select, Card, FileInput, Label, FloatingLabel, Textarea } from 
 import { getCategories, getSubCategories, createAd, getCategoriesByName, getSubCategoriesByName } from '../../services/api/ads';
 import { FormEvent, useEffect, useState } from "react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
 
 interface CustomPayLoad extends JwtPayload {
   role?: string;
@@ -14,6 +15,7 @@ export default function AdCreatePage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const navigate = useNavigate();
 
   console.log('selectedCategory', selectedCategory)
 
@@ -120,7 +122,7 @@ export default function AdCreatePage() {
       const response = await createAd(formDatasSubmitedObject);
 
       if (response) {
-        alert(`Nouveau annonce ajouté avec succès`);
+        navigate('/ads-grid');
       } else {
         alert(`Erreur lors de l'ajout de l'annonce`);
       }
@@ -128,7 +130,6 @@ export default function AdCreatePage() {
       console.error('Erreur:', error);
       alert(`Erreur lors de l'ajout de l'annonce`);
     }
-    alert(`Formulaire soumis`);
   };
 
   const renderTextInput = (name: string | undefined, label: string, type = 'text', required = false) => {

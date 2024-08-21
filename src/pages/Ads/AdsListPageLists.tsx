@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { format } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import MapConfig from '../../services/utils/MapConfig';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
+/* import { GiFlexibleStar } from "react-icons/gi"; */
 
 type Category = string;
 
@@ -385,41 +386,47 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                 if (searchQuery === '') { return event; }
                                 else if (event.title.toLowerCase().includes(searchQuery.toLowerCase()) || event.city.toLowerCase().includes(searchQuery.toLowerCase())) { return event }
                             })
-                            .map((event) => (
-                                <Card key={event.id} className='w-full my-4 shadow-lg'>
-                                    <Link to={`/ad/${event.id}`} className="w-full link text-blue-800 text-bodyTest">
-                                        <Link to={`/edit-ad/${event.id}`} className="link text-red-800 text-bodyTest">
-                                            <CiEdit />
+                            .map((event) => {                            
+                                return (
+                                    <Card key={event.id} className='w-full my-4 shadow-lg relative ...'>
+                                        {isSameDay(new Date(event.createdAt), new Date()) && (
+                                            <img src={'/src/assets/new.svg'} alt="new" className="w-10 h-10 absolute top-0 right-0 ..." />
+                                        )}
+                                        <Link to={`/ad/${event.id}`} className="w-full link text-blue-800 text-bodyTest">
+                                            
+                                            <Link to={`/edit-ad/${event.id}`} className="link text-red-800 text-bodyTest">
+                                                <CiEdit />
+                                            </Link>
+                                            <div className=" grid grid-cols-1 md:grid-cols-3" color="violet-900">
+                                                <div className='col-span-2 flex flex-col '>
+                                                <p className="text-start text-blue-600 p-1">{event.start}</p>
+                                                <p className="text-center p-1"><b >{event.title}</b> </p>
+                                                <p className="text-justify visible max-sm:hidden mb-1 line-clamp-1">{event.description}</p>
+                                                <span className="grid grid-cols-2 ">
+                                                    <i className="text-start">{event.city}</i>
+                                                    <span className=" text-blue-700 flex gap-1 justify-end items-center font-bold">Nbp: {event.attendees} </span>
+                                                </span>
+                                                </div>
+                                                <div className="w-96 sm:w-full flex justify-center items-center">
+                                                    {event.coordinates ? (
+                                                        <GoogleMap
+                                                            mapContainerStyle={mapConfig.defaultMapContainerStyle('250px','18vh')}
+                                                            center={event.coordinates || mapConfig.defaultMapCenter()}
+                                                            zoom={mapConfig.defaultMapZoom(18)}
+                                                            options={mapConfig.defaultMapOptions(true, 0, 'auto', 'satellite')}
+                                                        >
+                                                            <MarkerF key={event.id} position={event.coordinates} />
+                                                        </GoogleMap>
+                                                    ) : (
+                                                        <p>Coordonnées indisponibles</p>
+                                                    )}
+                                                </div>
+                                                <i className="flex justify-start">{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</i>
+                                            </div>
+                                    
                                         </Link>
-                                        <div className=" grid grid-cols-1 md:grid-cols-3" color="violet-900">
-                                            <div className='col-span-2 flex flex-col '>
-                                            <p className="text-start text-blue-600 p-1">{event.start}</p>
-                                            <p className="text-center p-1"><b >{event.title}</b> </p>
-                                            <p className="text-justify visible max-sm:hidden mb-1 line-clamp-1">{event.description}</p>
-                                            <span className="grid grid-cols-2 ">
-                                                <i className="text-start">{event.city}</i>
-                                                <span className=" text-blue-700 flex gap-1 justify-end items-center font-bold">Nbp: {event.attendees} </span>
-                                            </span>
-                                            </div>
-                                            <div className="w-96 sm:w-full flex justify-center items-center">
-                                                {event.coordinates ? (
-                                                    <GoogleMap
-                                                        mapContainerStyle={mapConfig.defaultMapContainerStyle('250px','18vh')}
-                                                        center={event.coordinates || mapConfig.defaultMapCenter()}
-                                                        zoom={mapConfig.defaultMapZoom(18)}
-                                                        options={mapConfig.defaultMapOptions(true, 0, 'auto', 'satellite')}
-                                                    >
-                                                        <MarkerF key={event.id} position={event.coordinates} />
-                                                    </GoogleMap>
-                                                ) : (
-                                                    <p>Coordonnées indisponibles</p>
-                                                )}
-                                            </div>
-                                        </div>
-                                
-                                    </Link>
-                                </Card>
-                        ))}
+                                    </Card>
+                                )})}
                     </div>
                 </InfiniteScroll>
                 <MapButton />
