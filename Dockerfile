@@ -1,6 +1,6 @@
 # Use the official Node.js image.
 # https://hub.docker.com/_/node
-FROM node:20.15.1-slim as build
+FROM node:20.15.1-slim AS build
 
 # Create and change to the app directory.
 WORKDIR /usr/app

@@ -1,25 +1,38 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 //? la page de creation des comptes
-import { useState/* , useEffect */ } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
-import { /* Button, Card, FloatingLabel, Tabs,  */Accordion, /* List,  */Avatar } from 'flowbite-react';
-// import { MdAddToPhotos } from 'react-icons/md';
+import { Accordion, Avatar, Tooltip, List } from 'flowbite-react';
 import { AiTwotoneDelete } from 'react-icons/ai';
-import profileFaker from './profileFaker';
 import UserCreatePage from './UserCreatePage';
-// import { User } from '../../services/interfaces/User';
-// import ControlButtonNumber from '../../services/utils/ControlButtonNumber';
 import { IoPersonAdd } from "react-icons/io5";
-import { Tooltip } from "flowbite-react";
-
-const users = profileFaker;
+import { getUsers } from '../../services/api/user';
 
 const UserManagement = ({ handleSubmitUser }:any) => {
   const [childCounterFromControlButton, setChildCounterFromControlButton] = useState(0);
+  const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
   console.log('childCounterFromControlButton', childCounterFromControlButton)
   console.log('setChildCounterFromControlButton', setChildCounterFromControlButton)
+  console.log('loading', loading)
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const usersDatas = await getUsers();
+        setUsers(usersDatas.data.users);
+      } catch (error) {
+        console.error('Failed to fetch users', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const validationSchema = Yup.object({
     nom: Yup.string().required(`Le prénom est requis`),
@@ -39,9 +52,14 @@ const UserManagement = ({ handleSubmitUser }:any) => {
       alert(`Nouveau utilisateur ajouté`);
     },
   });
-  console.log('formik', formik)
-const color ="text-red-800";
-console.log('color', color)
+  console.log('formik', formik);
+  const color ="text-red-800";
+  console.log('color', color);
+
+  if (loading) {
+    return <p>Chargement...</p>;
+  }
+
   return (
     <> 
   <h5 className="text-2xl font-bold tracking-tight text-blue-800 dark:text-white my-3">
@@ -55,22 +73,17 @@ console.log('color', color)
           <span className=" relative flex gap-2 p-1 text-xl  font-bold tracking-tight  text-white dark:text-white">
               <span ><IoPersonAdd /> </span> <span >Ajouter un utilisateur </span>
           </span>
-              {/* <span className='before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-blue-700 relative flex gap-2 p-1 mt-2'>
-                                <span className="relative text-white m-1">Ajouter un utilisateur </span> <span>
-                                    <IoPersonAdd  className="relative text-white h-5 w-5" />
-                                </span>
-                            </span> */}
           </Accordion.Title>
           <Accordion.Content>
             <UserCreatePage handleSubmitUser={handleSubmitUser} />
           </Accordion.Content>
         </Accordion.Panel>
         <div>
-          { users.map((user) => (            
+          { users.map((user:any) => (            
             <Accordion.Panel key={user.id} className=''>
               <Accordion.Title className=" hover:bg-violet-100">
                 <div className=" lg:w-[500px]  grid grid-cols-3 gap-4 ">
-                  <span className='flex gap-5 col-span-2' ><Avatar className='w-auto' img={user.file} alt={`${user.firstname} ${user.lastname}`} rounded size="sm" />
+                  <span className='flex gap-5 col-span-2' ><Avatar className='w-auto' img={user.Profile ? user.Profile.profilePicture : ""} alt={`${user.firstname} ${user.lastname}`} rounded size="sm" />
                   <p className="truncate text-left text-sm font-medium text-gray-900 dark:text-white">{`${user.firstname} ${user.lastname}`}</p>
                   </span>
                   <Link to={`/delete-user/${user.id}`} className={`flex justify-end  ${(user.delete === '1')?"text-red-800":(user.delete === '2')?"text-green-800":"text-gray-400"}`}>
@@ -83,17 +96,24 @@ console.log('color', color)
                 </div>
               </Accordion.Title>
               <Accordion.Content >
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
+                <div className="flex flex-col text-left">
+                  <p className="truncate text-sm text-gray-500 dark:text-gray-400">Mail : {user.email}</p>
+                  <p className="truncate text-sm text-gray-500 dark:text-gray-400">Téléphone : {user.Profile ? user.Profile.phone : ""}</p>
+                  <p className="truncate text-sm text-gray-500 dark:text-gray-400">Adresse : {user.Profile ? user.Profile.address : ""}</p>
+                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">Ville : {user.Profile ? user.Profile.city : ""}</p>
+                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">Code postal : {user.Profile ? user.Profile.postalCode : ""}</p><br />
+
+                  <List className="truncate text-sm text-gray-500 dark:text-gray-400">Enfants : 
+                    {user.userHasChild.map((child: any) => (
+                      <List.Item key={child.children.id} className="truncate text-sm text-gray-500 dark:text-gray-400">{child.children.firstName +" "+child.children.lastName}</List.Item>
+                    ))}
+                  </List><br />
+                  <List className="truncate text-sm text-gray-500 dark:text-gray-400">Subjects : 
+                  {user.userHasSubjects.map((subject: any) => ( 
+                    <List.Item key={subject.subjects.id} className="truncate text-sm text-gray-500 dark:text-gray-400">{subject.subjects.name}</List.Item>))
+                  }
+                  </List>
                 </div>
-                <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                  {user.phone}
-                </div>
-                <ul className="truncate text-sm text-gray-500 dark:text-gray-400">
-                  Enfants :
-                  <li>Léa classe : CM1</li>
-                  <li>Leo classe : CP</li>
-                </ul>
               </Accordion.Content>
             </Accordion.Panel>
           ))}

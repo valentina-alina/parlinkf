@@ -49,3 +49,13 @@ export async function getUserById(id:string){
     };
   }
 }
+
+export async function getUsers(){
+  try {
+    const {data} = await api.get(`user`);
+    console.log(data)
+    return data
+  } catch (error) {
+    return { error: error };
+  }
+}
