@@ -13,6 +13,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { getAds, getAdById, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
 import { debounce } from '../../services/utils/debounce';
 import { ThreeDots } from 'react-loader-spinner';
+import Nouveau from '../../assets/nouveau.png';
 /* import { GiFlexibleStar } from "react-icons/gi"; */
 
 type Category = string;
@@ -364,32 +365,29 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 }
             >
                 <div className='md:flex flex-wrap justify-between item-center gap-2 mt-8'>
-                    {items.map((event) => {
-                        return(
-                        <>
-                            <Card key={event.id} className='my-4 shadow-lg sm:w-80 sm:h-80 relative ...'>
-                                {isSameDay(new Date(event.createdAt), new Date()) && (
-                                    <img src={'../../assets/nouveau.png'} alt="new" className="w-10 h-10 absolute top-0 right-0 ..." />
-                                )}
-                                <Link to={`/ad/${event.id}`} className="link text-blue-800 text-bodyTest">
-                                    <Link to={`/edit-ad/${event.id}`} className="link text-red-800 text-bodyTest">
-                                        <CiEdit />
-                                    </Link>
-                                    <div className='flex flex-col'>
-                                        <b>
-                                            {event.title}
-                                        </b>
-                                        <i className='tracking-wider'>{event.start}</i>
-                                        <i className='flex justify-between items-center'>
-                                            {event.city} <span className='text-blue-700 font-bold'> Nbp {event.attendees}</span>
-                                        </i>
-                                        <img src={event.adPicture} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
-                                        <i className="flex justify-end">{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</i>
-                                    </div>
+                    {items.map((event) => (
+                        <Card key={event.id} className='my-4 shadow-lg sm:w-80 sm:h-80 relative ...'>
+                            {isSameDay(new Date(event.createdAt), new Date()) && (
+                                <img src={Nouveau} alt="new" className="w-10 h-10 absolute top-0 right-0 ..." />
+                            )}
+                            <Link to={`/ad/${event.id}`} className="link text-blue-800 text-bodyTest">
+                                <Link to={`/edit-ad/${event.id}`} className="link text-red-800 text-bodyTest">
+                                    <CiEdit />
                                 </Link>
-                            </Card>
-                        </>
-                    )})}
+                                <div className='flex flex-col'>
+                                    <b>
+                                        {event.title}
+                                    </b>
+                                    <i className='tracking-wider'>{event.start}</i>
+                                    <i className='flex justify-between items-center'>
+                                        {event.city} <span className='text-blue-700 font-bold'> Nbp {event.attendees}</span>
+                                    </i>
+                                    <img src={event.adPicture} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
+                                    <i className="flex justify-end">{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</i>
+                                </div>
+                            </Link>
+                        </Card>
+                    ))}
                 </div>
             </InfiniteScroll>
             <MapButton />

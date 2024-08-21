@@ -16,6 +16,7 @@ import { GoogleMap, MarkerF } from "@react-google-maps/api";
 import MapConfig from '../../services/utils/MapConfig';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
+import Nouveau from '../../assets/nouveau.png';
 /* import { GiFlexibleStar } from "react-icons/gi"; */
 
 type Category = string;
@@ -386,11 +387,11 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                 if (searchQuery === '') { return event; }
                                 else if (event.title.toLowerCase().includes(searchQuery.toLowerCase()) || event.city.toLowerCase().includes(searchQuery.toLowerCase())) { return event }
                             })
-                            .map((event) => {                            
-                                return (
+                            .map((event) => 
+                                (
                                     <Card key={event.id} className='w-full my-4 shadow-lg relative ...'>
                                         {isSameDay(new Date(event.createdAt), new Date()) && (
-                                            <img src={'../../assets/nouveau.png'} alt="new" className="w-10 h-10 absolute top-0 right-0 ..." />
+                                            <img src={Nouveau} alt="new" className="w-10 h-10 absolute top-0 right-0 ..." />
                                         )}
                                         <Link to={`/ad/${event.id}`} className="w-full link text-blue-800 text-bodyTest">
                                             
@@ -426,7 +427,9 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                     
                                         </Link>
                                     </Card>
-                                )})}
+                                )
+                            )
+                        }
                     </div>
                 </InfiniteScroll>
                 <MapButton />
