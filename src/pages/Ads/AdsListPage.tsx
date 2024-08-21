@@ -383,7 +383,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                         {event.city} <span className='text-blue-700 font-bold'> Nbp {event.attendees}</span>
                                     </i>
                                     <img src={event.adPicture} alt="Ad Image" className="w-96 h-40 md:w-80 mt-2" />
-                                    <i className="flex justify-end">{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</i>
+                                    <i className="flex justify-end absolute bottom-0">{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</i>
                                 </div>
                             </Link>
                         </Card>

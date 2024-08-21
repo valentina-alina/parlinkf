@@ -422,7 +422,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                                         <p>Coordonnées indisponibles</p>
                                                     )}
                                                 </div>
-                                                <i className="flex justify-start">{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</i>
+                                                <i className="flex justify-start absolute bottom-0">{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</i>
                                             </div>
                                     
                                         </Link>
