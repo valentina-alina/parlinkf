@@ -390,7 +390,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                 return (
                                     <Card key={event.id} className='w-full my-4 shadow-lg relative ...'>
                                         {isSameDay(new Date(event.createdAt), new Date()) && (
-                                            <img src={'/src/assets/new.svg'} alt="new" className="w-10 h-10 absolute top-0 right-0 ..." />
+                                            <img src={'../../assets/nouveau.png'} alt="new" className="w-10 h-10 absolute top-0 right-0 ..." />
                                         )}
                                         <Link to={`/ad/${event.id}`} className="w-full link text-blue-800 text-bodyTest">
                                             
