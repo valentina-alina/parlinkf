@@ -62,65 +62,63 @@ const UserManagement = ({ handleSubmitUser }:any) => {
 
   return (
     <> 
-  <h5 className="text-2xl font-bold tracking-tight text-blue-800 dark:text-white my-3">
-    Gestion des utilisateurs 
-  </h5>
+      <h5 className="text-2xl font-bold tracking-tight text-blue-800 dark:text-white my-3">
+        Gestion des utilisateurs 
+      </h5>
 
-    <div className=' flex flex-col gap-4 w-full md:w-1/2 lg:w-1/2 mx-auto'>
-      <Accordion  collapseAll className='w-full '>
-        <Accordion.Panel className=''>
-          <Accordion.Title className='hover:bg-vlue-700 text-left bg-blue-700 text-white'>
-          <span className=" relative flex gap-2 p-1 text-xl  font-bold tracking-tight  text-white dark:text-white">
-              <span ><IoPersonAdd /> </span> <span >Ajouter un utilisateur </span>
-          </span>
-          </Accordion.Title>
-          <Accordion.Content>
-            <UserCreatePage handleSubmitUser={handleSubmitUser} />
-          </Accordion.Content>
-        </Accordion.Panel>
-        <div>
-          { users.map((user:any) => (            
-            <Accordion.Panel key={user.id} className=''>
-              <Accordion.Title className=" hover:bg-violet-100">
-                <div className=" lg:w-[500px]  grid grid-cols-3 gap-4 ">
-                  <span className='flex gap-5 col-span-2' ><Avatar className='w-auto' img={user.Profile ? user.Profile.profilePicture : ""} alt={`${user.firstname} ${user.lastname}`} rounded size="sm" />
-                  <p className="truncate text-left text-sm font-medium text-gray-900 dark:text-white">{`${user.firstname} ${user.lastname}`}</p>
-                  </span>
-                  <Link to={`/delete-user/${user.id}`} className={`flex justify-end  ${(user.delete === '1')?"text-red-800":(user.delete === '2')?"text-green-800":"text-gray-400"}`}>
+      <div className=' flex flex-col gap-4 w-full md:w-1/2 lg:w-1/2 mx-auto'>
+        <Accordion collapseAll className='w-full '>
+          <Accordion.Panel className=''>
+            <Accordion.Title className='hover:bg-vlue-700 text-left bg-blue-700 text-white'>
+            <span className=" relative flex gap-2 p-1 text-xl  font-bold tracking-tight  text-white dark:text-white">
+                <span ><IoPersonAdd /> </span> <span >Ajouter un utilisateur </span>
+            </span>
+            </Accordion.Title>
+            <Accordion.Content>
+              <UserCreatePage handleSubmitUser={handleSubmitUser} />
+            </Accordion.Content>
+          </Accordion.Panel>
+          <>
+            { users.map((user:any) => (
+              <Accordion.Panel key={user.id} className=''>
+                <Accordion.Title className=" hover:bg-violet-100">
+                  <div className=" lg:w-[500px]  grid grid-cols-3 gap-4 ">
+                    <span className='flex gap-5 col-span-2' ><Avatar className='w-auto' img={user.Profile ? user.Profile.profilePicture : ""} alt={`${user.firstname} ${user.lastname}`} rounded size="sm" />
+                    <p className="truncate text-left text-sm font-medium text-gray-900 dark:text-white">{`${user.firstname} ${user.lastname}`}</p>
+                    </span>
+                    <Link to={`/delete-user/${user.id}`} className={`flex justify-end  ${(user.delete === '1')?"text-red-800":(user.delete === '2')?"text-green-800":"text-gray-400"}`}>
 
-                  <Tooltip content={`${(user.delete === '1')?"demande":(user.delete === '2')?"non-conforme":"suppresion"}`} style="light">
-                    <AiTwotoneDelete />
-                    </Tooltip>
-                  
-                  </Link>
-                </div>
-              </Accordion.Title>
-              <Accordion.Content >
-                <div className="flex flex-col text-left">
-                  <p className="truncate text-sm text-gray-500 dark:text-gray-400">Mail : {user.email}</p>
-                  <p className="truncate text-sm text-gray-500 dark:text-gray-400">Téléphone : {user.Profile ? user.Profile.phone : ""}</p>
-                  <p className="truncate text-sm text-gray-500 dark:text-gray-400">Adresse : {user.Profile ? user.Profile.address : ""}</p>
-                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">Ville : {user.Profile ? user.Profile.city : ""}</p>
-                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">Code postal : {user.Profile ? user.Profile.postalCode : ""}</p><br />
+                    <Tooltip content={`${(user.delete === '1')?"demande":(user.delete === '2')?"non-conforme":"suppresion"}`} style="light">
+                      <AiTwotoneDelete />
+                      </Tooltip>
+                    </Link>
+                  </div>
+                </Accordion.Title>
+                <Accordion.Content >
+                  <div className="flex flex-col text-left">
+                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">Mail : {user.email}</p>
+                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">Téléphone : {user.Profile ? user.Profile.phone : ""}</p>
+                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">Adresse : {user.Profile ? user.Profile.address : ""}</p>
+                      <p className="truncate text-sm text-gray-500 dark:text-gray-400">Ville : {user.Profile ? user.Profile.city : ""}</p>
+                      <p className="truncate text-sm text-gray-500 dark:text-gray-400">Code postal : {user.Profile ? user.Profile.postalCode : ""}</p><br />
 
-                  <List className="truncate text-sm text-gray-500 dark:text-gray-400">Enfants : 
-                    {user.userHasChild.map((child: any) => (
-                      <List.Item key={child.children.id} className="truncate text-sm text-gray-500 dark:text-gray-400">{child.children.firstName +" "+child.children.lastName}</List.Item>
-                    ))}
-                  </List><br />
-                  <List className="truncate text-sm text-gray-500 dark:text-gray-400">Subjects : 
-                  {user.userHasSubjects.map((subject: any) => ( 
-                    <List.Item key={subject.subjects.id} className="truncate text-sm text-gray-500 dark:text-gray-400">{subject.subjects.name}</List.Item>))
-                  }
-                  </List>
-                </div>
-              </Accordion.Content>
-            </Accordion.Panel>
-          ))}
-        </div>
-      </Accordion>
-    </div>
-    
+                    <List className="truncate text-sm text-gray-500 dark:text-gray-400">Enfants : 
+                      {user.userHasChild.map((child: any) => (
+                        <List.Item key={child.children.id} className="truncate text-sm text-gray-500 dark:text-gray-400">{child.children.firstName +" "+child.children.lastName}</List.Item>
+                      ))}
+                    </List><br />
+                    <List className="truncate text-sm text-gray-500 dark:text-gray-400">Subjects : 
+                    {user.userHasSubjects.map((subject: any) => ( 
+                      <List.Item key={subject.subjects.id} className="truncate text-sm text-gray-500 dark:text-gray-400">{subject.subjects.name}</List.Item>))
+                    }
+                    </List>
+                  </div>
+                </Accordion.Content>
+              </Accordion.Panel>
+            ))}
+          </>
+        </Accordion>
+      </div>
     </>
   );
 };
