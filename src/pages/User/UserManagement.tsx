@@ -49,7 +49,7 @@ const UserManagement = ({ handleSubmitUser }:any) => {
     validationSchema,
     onSubmit: (values) => {
       console.log(values);
-      alert(`Nouveau utilisateur ajouté`);
+      alert(`Nouvel utilisateur ajouté`);
     },
   });
   console.log('formik', formik);
@@ -78,7 +78,7 @@ const UserManagement = ({ handleSubmitUser }:any) => {
               <UserCreatePage handleSubmitUser={handleSubmitUser} />
             </Accordion.Content>
           </Accordion.Panel>
-          <>
+          <Accordion>
             { users && users.map((user:any) => (
               <Accordion.Panel key={user.id} className=''>
                 <Accordion.Title className=" hover:bg-violet-100">
@@ -99,8 +99,8 @@ const UserManagement = ({ handleSubmitUser }:any) => {
                     <p className="truncate text-sm text-gray-500 dark:text-gray-400">Mail : {user.email}</p>
                     <p className="truncate text-sm text-gray-500 dark:text-gray-400">Téléphone : {user.Profile ? user.Profile.phone : ""}</p>
                     <p className="truncate text-sm text-gray-500 dark:text-gray-400">Adresse : {user.Profile ? user.Profile.address : ""}</p>
-                      <p className="truncate text-sm text-gray-500 dark:text-gray-400">Ville : {user.Profile ? user.Profile.city : ""}</p>
-                      <p className="truncate text-sm text-gray-500 dark:text-gray-400">Code postal : {user.Profile ? user.Profile.postalCode : ""}</p><br />
+                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">Ville : {user.Profile ? user.Profile.city : ""}</p>
+                    <p className="truncate text-sm text-gray-500 dark:text-gray-400">Code postal : {user.Profile ? user.Profile.postalCode : ""}</p><br />
 
                     <List className="truncate text-sm text-gray-500 dark:text-gray-400">Enfants : 
                       {user.userHasChild && user.userHasChild.map((child: any) => (
@@ -116,7 +116,7 @@ const UserManagement = ({ handleSubmitUser }:any) => {
                 </Accordion.Content>
               </Accordion.Panel>
             ))}
-          </>
+          </Accordion>
         </Accordion>
       </div>
     </>
