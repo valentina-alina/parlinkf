@@ -18,6 +18,8 @@ ARG BASE_BACK_URL
 # ENV VITE_API_BASE_URL=${BASE_BACK_URL:-'https://parlink-back-45e9515c2378.herokuapp.com'}
 ENV VITE_API_BASE_URL=${BASE_BACK_URL:-`http://13.39.86.22:3215`}
 
+RUN echo "VITE_API_BASE_URL is set to: $VITE_API_BASE_URL"
+
 # Build the application => TJ => JS
 RUN npm run build
 
