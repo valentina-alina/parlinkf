@@ -26,7 +26,7 @@ export function useApi() {
             "Content-Type": "application/json"
         }
     });
-
+console.log(import.meta.env.VITE_API_BASE_URL);
     api.interceptors.request.use((config) => {
         const token = localStorage.getItem("access_token");
 
