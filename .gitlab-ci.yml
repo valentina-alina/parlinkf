@@ -6,7 +6,10 @@ build-test:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --build-arg BASE_BACK_URL=$URL_BACK_PROD_VR_AWS -t registry.alt-tools.tech/aquildev/projet-ecole/front:$CI_COMMIT_BRANCH .
+    # Affiche la valeur de URL_BACK_PROD_VR_AWSHTTPS pour vérification
+    - echo "URL_BACK_PROD_VR_AWSHTTPS: $URL_BACK_PROD_VR_AWSHTTPS"
+    # Utilise la variable dans le build Docker
+    - docker build --build-arg BASE_BACK_URL=$URL_BACK_PROD_VR_AWSHTTPS -t registry.alt-tools.tech/aquildev/projet-ecole/front:$CI_COMMIT_BRANCH .
     - docker push registry.alt-tools.tech/aquildev/projet-ecole/front:$CI_COMMIT_BRANCH
   rules:
     - when: manual
