@@ -1,0 +1,35 @@
+# Ce workflow se déclenche lors des commits sur la branche "prodionos"
+on:
+  push:
+    branches:
+      - prodionos
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    # Utilise Docker en tant que service
+    services:
+      docker:
+        image: docker:stable
+        options: --privileged
+
+    steps:
+      # Étape 1: Checkout du code source
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Étape 2: Se connecter à GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # Étape 3: Construire l'image Docker en passant la variable d'environnement
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }} \  # Utilisation de la variable du secret
+            -t ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ github.ref_name }} .
+
+      # Étape 4: Pousser l'image Docker sur GitHub Packages
+      - name: Push Docker image to GitHub Packages
+        run: docker push ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ github.ref_name }}
