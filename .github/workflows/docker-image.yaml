@@ -2,7 +2,7 @@
 on:
   push:
     branches:
-      - prodionos
+      - parlinkionos
 jobs:
   build-test:
     runs-on: ubuntu-latest
