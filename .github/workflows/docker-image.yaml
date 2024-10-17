@@ -23,11 +23,12 @@ jobs:
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       # Étape 3: Construire l'image Docker en passant la variable d'environnement
+      - name: Set build argument
+        run: echo "Setting VITE_API_BASE_URL to ${{ secrets.VITE_API_BASE_URL }}"
+
       - name: Build Docker image
-        run: |
-          docker build \
-            --build-arg VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }} \  # Utilisation de la variable du secret
-            -t ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ github.ref_name }} .
+        run: docker build --build-arg VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }} -t ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/parlinkfront:parlinkionos .
+
 
       # Étape 4: Pousser l'image Docker sur GitHub Packages
       - name: Push Docker image to GitHub Packages
