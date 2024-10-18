@@ -36,3 +36,4 @@ jobs:
       # Étape 4: Pousser l'image Docker sur GitHub Packages
       - name: Push Docker image to GitHub Packages
         run: docker push ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+        
