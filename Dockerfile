@@ -1,33 +1,38 @@
-# Use the official Node.js image.
+# Étape de build : Utilisation de l'image officielle Node.js
 FROM node:20.15.1-slim AS build
 
-# Create and change to the app directory.
+# Définir le répertoire de travail
 WORKDIR /usr/app
 
-# This command uses package.json to install dependencies.
-COPY package.json ./ 
+# Copier uniquement les fichiers nécessaires pour installer les dépendances
+COPY package.json package-lock.json* ./
 
-# Install app dependencies using the `npm install` command.
-RUN npm install
+# Installer les dépendances en utilisant npm
+RUN npm install --production
 
-# Copy the app files to the container.
+# Copier le reste des fichiers de l'application
 COPY . .
 
-# ARG to allow passing the base URL during build
+# Définir une variable d'argument pour passer l'URL de base de l'API
 ARG VITE_API_BASE_URL
 
-# Set the environment variable using the passed ARG or default
+# Définir la variable d'environnement
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL:-'http://87.106.87.104:3215'}
 
-# Optional: Display the variable value for debugging purposes
-RUN echo "VITE_API_BASE_URL is set to: $VITE_API_BASE_URL"
-
-# Build the application
+# Construire l'application pour la production
 RUN npm run build
 
-# Serve with NGINX
-FROM nginx:stable
+# Étape de production : Utilisation de l'image stable de NGINX
+FROM nginx:stable-alpine
+
+# Copier les fichiers générés vers le dossier de distribution NGINX
 COPY --from=build /usr/app/dist /usr/share/nginx/html
+
+# Copier la configuration NGINX
 COPY nginx.conf /etc/nginx/nginx.conf
 
+# Exposer le port 80 pour permettre l'accès HTTP
+EXPOSE 80
+
+# Lancer NGINX en mode non-détaché
 CMD ["nginx", "-g", "daemon off;"]
