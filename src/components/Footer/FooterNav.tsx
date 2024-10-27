@@ -7,7 +7,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { Footer, FooterCopyright, FooterIcon, FooterLink, FooterLinkGroup, FooterTitle } from "flowbite-react";
 import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
 import { ListGroup, MegaMenu } from "flowbite-react";
-
+import { PiUserCircleLight } from "react-icons/pi";
 const cssClasIcons = "w-[35px] h-[40px]  ";
 const navigationItems = [
     { path: '/', label: 'Retour', icon: <IoArrowUndoOutline className={cssClasIcons} /> },
@@ -80,9 +80,9 @@ export default function FooterNav() {
                     </div>
                 </div>
             </Footer>
-            <div className="fixed lg:hidden bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600 tablet p-3 scale-110">
+            <div className="fixed lg:hidden bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600 tablet p-3">
                 
-                <div className="grid h-full max-w-lg grid-cols-5 font-medium">
+                <div className="grid h-full z-100 max-w-lg grid-cols-5 font-medium">
 
                     {navigationItems.map((item, index) => (
                         <Link key={index} to={item.path}>
@@ -94,7 +94,7 @@ export default function FooterNav() {
                     ))}
                     <MegaMenu.Dropdown
                         toggle={
-                            <FaRegUserCircle  className={cssClasIcons} 
+                            <PiUserCircleLight className={cssClasIcons} 
                             />
                         } 
                     >

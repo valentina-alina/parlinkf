@@ -17,6 +17,7 @@ import MapConfig from '../../services/utils/MapConfig';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
 import Nouveau from '../../assets/nouveau.png';
+import FixedHeader from '../../components/Header/FixedHeader';
 /* import { GiFlexibleStar } from "react-icons/gi"; */
 
 type Category = string;
@@ -55,10 +56,10 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                     updateCategoryCounts(fetchedAds);
                     fetchInitialItems(fetchedAds);
                 }
-            } catch(error) {
+            } catch (error) {
                 console.error('Erreur lors du chargement des annonces:', error);
             }
-            
+
         };
         fetchAds();
         fetchCategories();
@@ -70,7 +71,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         }
     }, [id]);
 
-    useEffect(() => {        
+    useEffect(() => {
         fetchFilteredAds();
     }, [selectedCategories, searchQuery]);
 
@@ -122,7 +123,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         }
     };
 
-    const fetchInitialItems = (ads: any[]) => {        
+    const fetchInitialItems = (ads: any[]) => {
         const filteredAds = ads.filter((ad) => {
             const matchesCategory =
                 isAllSelected || selectedCategories.length === 0 || selectedCategories.includes(ad.category as Category);
@@ -145,8 +146,8 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             setIsAllSelected(false);
             setSelectedCategories((prevCategories) =>
                 prevCategories.includes(category)
-                ? prevCategories.filter((c) => c !== category)
-                : [...prevCategories, category]
+                    ? prevCategories.filter((c) => c !== category)
+                    : [...prevCategories, category]
             );
         }
 
@@ -160,7 +161,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 console.error(`Erreur: réponse inattendue ou liste d'annonces manquante pour la sous-catégorie ${subCategory}`, response);
                 return;
             }
-    
+
             const fetchedAds = await Promise.all(
                 response.data.ads.map(async (ad: any) => ({
                     ...ad,
@@ -188,8 +189,8 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             const response = await getSubCategories(category);
             if (response && response.data && Array.isArray(response.data.subCategories)) {
                 setSubCategories((prevSubCategories) => ({
-                ...prevSubCategories,
-                [category]: response.data.subCategories,
+                    ...prevSubCategories,
+                    [category]: response.data.subCategories,
                 }));
             } else {
                 console.warn(`Réponse inattendue pour les sous-catégories de la catégorie ${category}:`, response);
@@ -201,13 +202,13 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         } catch (error) {
             console.error(`Erreur lors de la récupération des sous-catégories de la catégorie ${category}:`, error);
             setSubCategories((prevSubCategories) => ({
-            ...prevSubCategories,
-            [category]: [],
+                ...prevSubCategories,
+                [category]: [],
             }));
         }
     };
 
-    const fetchMoreData = () => {        
+    const fetchMoreData = () => {
         const currentLength = items.length;
         const filteredAds = adsList.filter((ad) => {
             const matchesCategory =
@@ -229,7 +230,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
             setItems([...items, ...nextBatch]);
         }, 1500);
     };
-    
+
     const updateCategoryCounts = (ads: any[]) => {
         const counts = ads.reduce((acc, ad) => {
             const category = ad.category as Category;
@@ -247,15 +248,15 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     const fetchCategories = async () => {
         try {
             const response = await getCategories();
-            if (response && response.data && Array.isArray(response.data.categories)) {
-                setCategories(response.data.categories);
-            } else {
-                console.warn(`Réponse inattendue lors de la récupération des catégories:`, response);
-            }
+            const fetchedCategories = response.data.categories;
+
+            setCategories(['all', ...fetchedCategories]);
+            console.log('Catégories récupérées:', fetchedCategories);
         } catch (error) {
             console.error('Erreur lors de la récupération des catégories:', error);
         }
     };
+
 
     const fetchAdDetails = async (id: string) => {
         try {
@@ -274,144 +275,109 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     return (
         <>
             <MapProvider>
-                <div className='flex flex-row justify-around items-center gap-4 my-6 border-b-2 py-4 font-bodyTest'>
-                    {categories.map((category) => (
-                        <div className="event_filter_wrapper relative group" key={category}>
-                            <div className='relative'>
-                                <Link
-                                    to=""
-                                    onClick={() => handleCategoryChange(category)}
-                                    onMouseEnter={() => handleCategoryHover(category)}
-                                    className='flex active:ring focus:outline-none focus:border-b-2 focus:border-b-blue-800'
-                                >
-                                    <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
-                                        <Label
-                                            htmlFor={category}
-                                            className={`flex ${selectedCategories.includes(category) || (category === 'all' && isAllSelected) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg'}`}
-                                        >
-                                            {category === 'all' ? 'Toutes' : category}
-                                        </Label>
-                                    </span>
-                                </Link>
-                            </div>
-                            {subCategories[category] && subCategories[category].length > 0 && category !== 'all' && (
-                                <div className="absolute right-0 mt-2 bg-white shadow-lg p-2 rounded-md w-60 z-10 hidden group-hover:block">
-                                    {subCategories[category].map((subcategory, index) => (
-                                        <Link
-                                            to=""
-                                            key={index}
-                                            className="block px-3 py-1 text-sm text-gray-800 hover:bg-blue-700 hover:text-white"
-                                            onClick={() => handleSubCategoryChange(subcategory)}
-                                        >
-                                            {subcategory}
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-                            <p className={`${selectedCategories.includes(category) || (category === 'all' && isAllSelected) ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
-                            </p>
-                        </div>
-                    ))}
-                    <div className='flex justify-end items-center max-sm:hidden'>
-                        <Link className='text-blue-800' to="/ads-grid">
-                            <MdOutlineApps className='w-8 h-8 tex-blue-800' />
-                        </Link>
-                        <Link className='text-blue-800' to="/ads-list">
-                            <HiViewList className='w-8 h-8' />
-                        </Link>
-                    </div>
-                </div>
-                
-                {
-                    items.length === 0 ? (
-                        <>
-                            <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
-                            <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
-                        </>
-                    ) : (
-                        <h2 className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</h2>
-                    )
-                }
-                
-                <div className="grid grid-cols-1 mb-2">
-                    <Carousel>
-                        {items.map((event) => (
-                            <div key={
+
+                <FixedHeader
+                    categories={categories}
+                    selectedCategories={selectedCategories}
+                    isAllSelected={isAllSelected}
+                    subCategories={subCategories}
+                    handleCategoryChange={handleCategoryChange}
+                    handleCategoryHover={handleCategoryHover}
+                    handleSubCategoryChange={handleSubCategoryChange}
+                />
+                <div className="pt-[128px] p-4" >
+
+                    <h2 className="font-titleTest text-xl  sm:text-2xl ">
+                        {
+                            items.length === 0 ? (
+                                <>
+                                    <p className="font-titleTest text-3xl my-4">Fil des annonces : {items.length}</p>
+                                    <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
+                                </>
+                            ) : (
+                                <p data-cy="ads" className="font-titleTest text-3xl my-4">Fil des annonces : {items.length}</p>
+                            )
+                        }
+                    </h2>
+
+                    <div className="grid grid-cols-1 mb-2">
+                        <Carousel>
+                            {items.map((event) => (
+                                <div key={
                                     event.id
                                 } className="relative h-64 md:h-96">
-                                <Link to={`/ad/${
-                                        event.id
-                                    }`} className="link">
-                                    <div 
-                                        className="absolute inset-0 flex items-end justify-end p-5 bg-cover bg-center bg-no-repeat"
-                                        style={{ backgroundImage: `url(${event.adPicture})` }}
-                                    >                                    
-                                        <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
-                                            <b>{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</b><br />
-                                            <i>{event.title}</i><br />
-                                            <b>{event.city}</b>
+                                    <Link to={`/ad/${event.id
+                                        }`} className="link">
+                                        <div
+                                            className="absolute inset-0 flex items-end justify-end p-5 bg-cover bg-center bg-no-repeat"
+                                            style={{ backgroundImage: `url(${event.adPicture})` }}
+                                        >
+                                            <div className="p-3 bg-gray-500 bg-opacity-50 text-white">
+                                                <b>{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</b><br />
+                                                <i>{event.title}</i><br />
+                                                <b>{event.city}</b>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Link>
+                                    </Link>
+                                </div>
+                            ))}
+                        </Carousel>
+                    </div>
+                    <InfiniteScroll
+                        dataLength={items.length}
+                        next={fetchMoreData}
+                        hasMore={hasMore}
+                        loader={
+                            <div className="flex justify-center items-center w-full">
+                                <ThreeDots
+                                    visible={true}
+                                    height="80"
+                                    width="80"
+                                    color="#1A56DB"
+                                    radius="8"
+                                    ariaLabel="three-dots-loading"
+                                    wrapperStyle={{}}
+                                    wrapperClass=""
+                                />
                             </div>
-                        ))}
-                    </Carousel>
-                </div> 
-                <InfiniteScroll
-                    dataLength={items.length}
-                    next={fetchMoreData}
-                    hasMore={hasMore}
-                    loader={
-                        <div className="flex justify-center items-center w-full">
-                            <ThreeDots
-                            visible={true}
-                            height="80"
-                            width="80"
-                            color="#1A56DB"
-                            radius="8"
-                            ariaLabel="three-dots-loading"
-                            wrapperStyle={{}}
-                            wrapperClass=""
-                            />
-                        </div>
-                    }
-                    endMessage={
-                        <p className='text-center mt-6 text-blue-800'>
-                            <b>Fin de la liste!</b>
-                        </p>
-                    }
-                >            
-                    <div className='md:flex flex-wrap justify-between item-center gap-2 mt-8'>
-                        {items
-                            .filter((event) => {
-                                if (searchQuery === '') { return event; }
-                                else if (event.title.toLowerCase().includes(searchQuery.toLowerCase()) || event.city.toLowerCase().includes(searchQuery.toLowerCase())) { return event }
-                            })
-                            .map((event) => 
+                        }
+                        endMessage={
+                            <p className='text-center mt-6 text-blue-800'>
+                                <b>Fin de la liste!</b>
+                            </p>
+                        }
+                    >
+                        <div className='md:flex flex-wrap justify-between item-center gap-2 mt-8'>
+                            {items
+                                .filter((event) => {
+                                    if (searchQuery === '') { return event; }
+                                    else if (event.title.toLowerCase().includes(searchQuery.toLowerCase()) || event.city.toLowerCase().includes(searchQuery.toLowerCase())) { return event }
+                                })
+                                .map((event) =>
                                 (
                                     <Card key={event.id} className='w-full my-4 shadow-lg relative ...'>
                                         {isSameDay(new Date(event.createdAt), new Date()) && (
                                             <img src={Nouveau} alt="new" className="w-10 h-10 absolute top-0 right-0 ..." />
                                         )}
                                         <Link to={`/ad/${event.id}`} className="w-full link text-blue-800 text-bodyTest">
-                                            
+
                                             <Link to={`/edit-ad/${event.id}`} className="link text-red-800 text-bodyTest">
                                                 <CiEdit />
                                             </Link>
                                             <div className=" grid grid-cols-1 md:grid-cols-3" color="violet-900">
                                                 <div className='col-span-2 flex flex-col '>
-                                                <p className="text-start text-blue-600 p-1">{event.start}</p>
-                                                <p className="text-center p-1"><b >{event.title}</b> </p>
-                                                <p className="text-justify visible max-sm:hidden mb-1 line-clamp-1">{event.description}</p>
-                                                <span className="grid grid-cols-2 ">
-                                                    <i className="text-start">{event.city}</i>
-                                                    <span className=" text-blue-700 flex gap-1 justify-end items-center font-bold">Nbp: {event.attendees} </span>
-                                                </span>
+                                                    <p className="text-start text-blue-600 p-1">{event.start}</p>
+                                                    <p className="text-center p-1"><b >{event.title}</b> </p>
+                                                    <p className="text-justify visible max-sm:hidden mb-1 line-clamp-1">{event.description}</p>
+                                                    <span className="grid grid-cols-2 ">
+                                                        <i className="text-start">{event.city}</i>
+                                                        <span className=" text-blue-700 flex gap-1 justify-end items-center font-bold">Nbp: {event.attendees} </span>
+                                                    </span>
                                                 </div>
                                                 <div className="w-96 sm:w-full flex justify-center items-center">
                                                     {event.coordinates ? (
                                                         <GoogleMap
-                                                            mapContainerStyle={mapConfig.defaultMapContainerStyle('250px','18vh')}
+                                                            mapContainerStyle={mapConfig.defaultMapContainerStyle('250px', '18vh')}
                                                             center={event.coordinates || mapConfig.defaultMapCenter()}
                                                             zoom={mapConfig.defaultMapZoom(18)}
                                                             options={mapConfig.defaultMapOptions(true, 0, 'auto', 'satellite')}
@@ -424,15 +390,16 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                                                 </div>
                                                 <i className="flex justify-start absolute bottom-0">{format(new Date(event.startTime), "'le' dd/MM/yyyy 'à' HH'h'mm", { locale: fr })}</i>
                                             </div>
-                                    
+
                                         </Link>
                                     </Card>
                                 )
-                            )
-                        }
-                    </div>
-                </InfiniteScroll>
-                <MapButton />
+                                )
+                            }
+                        </div>
+                    </InfiniteScroll>
+                    <MapButton />
+                </div>
             </MapProvider>
         </>
     );

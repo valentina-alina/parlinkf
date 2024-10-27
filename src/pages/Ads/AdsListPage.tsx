@@ -14,6 +14,7 @@ import { getAds, getAdById, getAdsByParams, getCategories, getSubCategories, get
 import { debounce } from '../../services/utils/debounce';
 import { ThreeDots } from 'react-loader-spinner';
 import Nouveau from '../../assets/nouveau.png';
+import FixedHeader from '../../components/Header/FixedHeader';
 /* import { GiFlexibleStar } from "react-icons/gi"; */
 
 type Category = string;
@@ -243,80 +244,31 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
     };
 
     return (
-        <>
-            <div className='flex flex-row justify-around items-center gap-4 my-6 border-b-2 py-4 font-bodyTest'>
-                {categories.map((category) => (
-                    <div className="event_filter_wrapper relative group" key={category}>
-                        <div className='relative'>
-                            <Link
-                                data-cy="category"
-                                to=""
-                                onClick={() => handleCategoryChange(category)}
-                                onMouseEnter={() => handleCategoryHover(category)}
-                                className='flex active:ring focus:outline-none focus:border-b-2 focus:border-b-blue-800'
-                            >
-                                <span className='active:before:block active:before:absolute active:before:-inset-1 active:before:-skew-y-3 active:before:bg-blue-700 active:relative active:inline-block hover:before:block hover:before:absolute hover:before:-inset-1 hover:before:-skew-y-3 hover:before:bg-blue-700 hover:relative hover:inline-block'>
-                                    <Label
-                                        htmlFor={category}
-                                        className={`flex ${selectedCategories.includes(category) || (category === 'all' && isAllSelected) ? 'font-bold border-b-4 border-b-blue-800 active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg' : 'flex active:relative active:text-white hover:relative hover:text-white text-xs sm:text-lg'}`}
-                                    >
-                                        {category === 'all' ? 'Toutes' : category}
-                                    </Label>
-                                </span>
-                            </Link>
-                        </div>
-                        {subCategories[category] && subCategories[category].length > 0 && category !== 'all' && (
-                            <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md w-60 z-10 hidden group-hover:block">
-                                {subCategories[category].map((subcategory, index) => (
-                                    <Link
-                                        to=""
-                                        key={index}
-                                        className="block px-3 py-1 text-sm text-gray-800 hover:bg-blue-700 hover:text-white ms-14 sm:ms-0"
-                                        onClick={() => handleSubCategoryChange(subcategory)}
-                                    >
-                                        {subcategory}
-                                    </Link>
-                                ))}
-                            </div>
-                        )}
-                        <p className={`${selectedCategories.includes(category) || (category === 'all' && isAllSelected) ? 'font-bold text-sm text-center' : 'font-light text-sm text-center'}`}>
-                        </p>
-                    </div>
-                ))}
-                <div className='flex justify-end items-center max-sm:hidden'>
-                    <Link className='text-blue-800' to="/ads-grid">
-                        <MdOutlineApps className='w-8 h-8 tex-blue-800' />
-                    </Link>
-                    <Link data-cy="adslist" className='text-blue-800' to="/ads-list">
-                        <HiViewList className='w-8 h-8' />
-                    </Link>
-                </div>
-            </div>
+        <>        
+  
+  <FixedHeader
+      categories={categories}
+      selectedCategories={selectedCategories}
+      isAllSelected={isAllSelected}
+      subCategories={subCategories}
+      handleCategoryChange={handleCategoryChange}
+      handleCategoryHover={handleCategoryHover}
+      handleSubCategoryChange={handleSubCategoryChange}
+    />
+      <div className="pt-[128px] p-4" >
 
-            <h2 className="font-titleTest text-xl  sm:text-2xl mb-4">
+            <h2 className="font-titleTest text-xl  sm:text-2xl ">
                 {
                     items.length === 0 ? (
                         <>
-                            <p className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</p>
+                            <p className="font-titleTest text-3xl my-4">Fil des annonces : {items.length}</p>
                             <p className='font-bodyTest text-2xl mt-28 italic text-orange-500'>Nous n'avons pas trouvé d'évènement.</p>
                         </>
                     ) : (
-                        <p data-cy="ads" className="font-titleTest text-3xl my-14">Fil des annonces : {items.length}</p>
+                        <p data-cy="ads" className="font-titleTest text-xl my-4">Fil des annonces : {items.length}</p>
                     )
                 }
             </h2>
-
-            <div className="sm:hidden w-50 my-4">
-                <TextInput
-                    className="w-80"
-                    id="search"
-                    type="text"
-                    icon={HiSearch}
-                    placeholder="Rechercher..."
-                    value={localSearchQuery}
-                    onChange={handleSearchChange}
-                />
-            </div>
 
             <div className="grid grid-cols-1 mb-2
             ">
@@ -391,6 +343,7 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
                 </div>
             </InfiniteScroll>
             <MapButton />
+            </div>
         </>
     );
 }
