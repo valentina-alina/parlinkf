@@ -7,14 +7,14 @@ import { Link } from 'react-router-dom';
 import { /* Button, Card, FloatingLabel, Tabs,  */Accordion, /* List,  */Avatar } from 'flowbite-react';
 // import { MdAddToPhotos } from 'react-icons/md';
 import { AiTwotoneDelete } from 'react-icons/ai';
-import profileFaker from './profileFaker';
+// import profileFaker from './profileFaker';
 import UserCreatePage from './UserCreatePage';
 // import { User } from '../../services/interfaces/User';
 // import ControlButtonNumber from '../../services/utils/ControlButtonNumber';
 import { IoPersonAdd } from "react-icons/io5";
 import { Tooltip } from "flowbite-react";
 
-const users = profileFaker;
+// const users = profileFaker;
 
 const UserManagement = ({ handleSubmitUser }:any) => {
   const [childCounterFromControlButton, setChildCounterFromControlButton] = useState(0);
@@ -66,7 +66,7 @@ console.log('color', color)
             </Accordion.Content>
           </Accordion.Panel>
           <div>
-          { users.map((user) => (            
+          {/* { users.map((user) => (            
             <Accordion.Panel key={user.id} className=''>
               <Accordion.Title className=" hover:bg-violet-100">
                 <div className=" lg:w-[500px]  grid grid-cols-3 gap-4 ">
@@ -96,7 +96,7 @@ console.log('color', color)
                 </ul>
               </Accordion.Content>
             </Accordion.Panel>
-          ))}
+          ))} */}
         </div>
       </Accordion>
     </div>

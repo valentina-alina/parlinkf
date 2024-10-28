@@ -7,13 +7,13 @@ import ChildForm from '../../components/Child/ChildForm';
 import ControlButtonNumber from '../../services/utils/ControlButtonNumber';
 import { Button, FloatingLabel, Dropdown } from "flowbite-react";
 // GET subject from bdd 
-import subject from './subjectFaker';
-import profileFaker from './profileFaker';
+// import subject from './subjectFaker';
+// import profileFaker from './profileFaker';
 
 import { register } from '../../services/api/user'; 
 
-const users = profileFaker;
-console.log('users', users)
+// const users = profileFaker;
+// console.log('users', users)
 
 interface PropUserPage {
   handleSubmitUser: (author: User) => void;
@@ -115,7 +115,7 @@ export default function UserCreatePage(props: PropUserPage) {
             </div>
             <div>
               <Dropdown label="Sujets" dismissOnClick={false} color="gray" theme={{ floating: { target: "w-full" } }}>
-                {subject.map((item) => (
+                {/* {subject.map((item) => (
                   <Dropdown.Item key={item.name}>
                     <div className="flex items-center gap-2">
                       <input
@@ -130,7 +130,7 @@ export default function UserCreatePage(props: PropUserPage) {
                       </label>
                     </div>
                   </Dropdown.Item>
-                ))}
+                ))} */}
               </Dropdown>
             </div>
           </div>

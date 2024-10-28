@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { Button, Select, Card, FileInput, Label, FloatingLabel, Textarea } from "flowbite-react";
-import fakerAdsList from './fakerAdsList';
-import fakerCategories from './fakerCategories';
+// import fakerAdsList from './fakerAdsList';
+// import fakerCategories from './fakerCategories';
 import { useParams } from "react-router-dom";
 
 export default function AdEditPage() {
@@ -24,9 +24,9 @@ export default function AdEditPage() {
     imageUrl: ''
   });
 
-  const adToEdit = adId ? fakerAdsList.find(ad => ad.id === parseInt(adId)) : undefined;
-  console.log(adId);
-  console.log(adToEdit);
+  // const adToEdit = adId ? fakerAdsList.find(ad => ad.id === parseInt(adId)) : undefined;
+  // console.log(adId);
+  // console.log(adToEdit);
 
   useEffect(() => {
     const formatDate = (dateString: string | undefined) => {
@@ -43,24 +43,24 @@ export default function AdEditPage() {
       return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
     }; */
   
-    if (adToEdit) {
-      setFormData({
-        id: adToEdit.id,
-        title: adToEdit.title,
-        address: adToEdit.address,
-        city: adToEdit.city,
-        postal_code: adToEdit.postal_code,
-        lat: adToEdit.lat,
-        lng: adToEdit.lng,
-        start: formatDate(adToEdit.start),
-        end: formatDate(adToEdit.end),
-        attendees: adToEdit.attendees,
-        category: adToEdit.category,
-        description: adToEdit.description,
-        imageUrl: adToEdit.imageUrl,
-      });
-    }
-  }, [adToEdit]);
+  //   if (adToEdit) {
+  //     setFormData({
+  //       id: adToEdit.id,
+  //       title: adToEdit.title,
+  //       address: adToEdit.address,
+  //       city: adToEdit.city,
+  //       postal_code: adToEdit.postal_code,
+  //       lat: adToEdit.lat,
+  //       lng: adToEdit.lng,
+  //       start: formatDate(adToEdit.start),
+  //       end: formatDate(adToEdit.end),
+  //       attendees: adToEdit.attendees,
+  //       category: adToEdit.category,
+  //       description: adToEdit.description,
+  //       imageUrl: adToEdit.imageUrl,
+  //     });
+  //   }
+  // }, [adToEdit]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -132,11 +132,11 @@ export default function AdEditPage() {
           </h5>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <Select name="category" id="category" required value={formData.category} onChange={handleInputChange}>
-              {fakerCategories.map(category => (
+              {/* {fakerCategories.map(category => (
                 <option key={category.id} value={category.label}>
                   {category.label}
                 </option>
-              ))}
+              ))} */}
             </Select>
 
             {renderTextInput('title', 'Titre', 'text', true)}
