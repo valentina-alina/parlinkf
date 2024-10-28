@@ -3,7 +3,7 @@ import { IoArrowUndoOutline } from "react-icons/io5";
 import { AiOutlineHome } from "react-icons/ai";
 import { IoMdAddCircle } from "react-icons/io";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
-import { FaRegUserCircle } from "react-icons/fa";
+// import { FaRegUserCircle } from "react-icons/fa";
 import { Footer, FooterCopyright, FooterIcon, FooterLink, FooterLinkGroup, FooterTitle } from "flowbite-react";
 import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
 import { ListGroup, MegaMenu } from "flowbite-react";

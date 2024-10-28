@@ -29,16 +29,17 @@ export default function UserCreatePage(props: PropUserPage) {
     setChildCounterFromControlButton(childCounter);
   };
 
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  // const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const selectedSubjects = useState<string[]>([])[0];
   const [children, setChildren] = useState<any[]>([]);
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, item: string) => {
-    if (event.target.checked) {
-      setSelectedSubjects([...selectedSubjects, item]);
-    } else {
-      setSelectedSubjects(selectedSubjects.filter((i) => i !== item));
-    }
-  };
+  // const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, item: string) => {
+  //   if (event.target.checked) {
+  //     setSelectedSubjects([...selectedSubjects, item]);
+  //   } else {
+  //     setSelectedSubjects(selectedSubjects.filter((i) => i !== item));
+  //   }
+  // };
 
   const handleChildFormChange = (index: number, childData: any) => {
     const updatedChildren = [...children];

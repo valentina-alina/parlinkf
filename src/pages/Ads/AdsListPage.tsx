@@ -2,16 +2,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { format, isSameDay } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect} from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Card, Carousel, Label, TextInput } from "flowbite-react";
-import { HiViewList, HiSearch } from "react-icons/hi";
-import { MdOutlineApps } from "react-icons/md";
+import { Card, Carousel} from "flowbite-react";
+// import { HiViewList, HiSearch } from "react-icons/hi";
+// import { MdOutlineApps } from "react-icons/md";
 import MapButton from '../../components/Map/MapButton';
 import { CiEdit } from "react-icons/ci";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { getAds, getAdById, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
-import { debounce } from '../../services/utils/debounce';
+// import { debounce } from '../../services/utils/debounce';
 import { ThreeDots } from 'react-loader-spinner';
 import Nouveau from '../../assets/nouveau.png';
 import FixedHeader from '../../components/Header/FixedHeader';
@@ -24,7 +24,7 @@ const initialCategoryCounts: Record<Category, number> = {
 };
 
 export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
-    const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
+    const [localSearchQuery] = useState<string>('');
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
     const [items, setItems] = useState<any[]>([]);
@@ -177,14 +177,14 @@ export default function AdsListPage({ searchQuery }: { searchQuery: string }) {
         }
     };
 
-    const debouncedHandleSearchChange = useCallback(debounce((query: string) => {
-        setLocalSearchQuery(query);
-    }, 500), []);
+    // const debouncedHandleSearchChange = useCallback(debounce((query: string) => {
+    //     setLocalSearchQuery(query);
+    // }, 500), []);
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
-        debouncedHandleSearchChange(value);
-    };
+    // const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { value } = event.target;
+    //     debouncedHandleSearchChange(value);
+    // };
 
     const fetchMoreData = () => {
         const currentLength = items.length;

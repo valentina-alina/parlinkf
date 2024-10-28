@@ -5,18 +5,19 @@ import MapButton from '../../components/Map/MapButton';
 import Sidebar from '../../components/Calendar/Sidebar';
 import FullCalendar from '../../components/Calendar/FullCalendar';
 import { EventInput } from '@fullcalendar/core';
-import { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Label, TextInput } from 'flowbite-react';
+import {  useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+// import { Label, TextInput } from 'flowbite-react';
 // import fakerCategories from '../Ads/fakerCategories';
-import { HiSearch } from "react-icons/hi";
-import { debounce } from '../../services/utils/debounce';
+// import { HiSearch } from "react-icons/hi";
+// import { debounce } from '../../services/utils/debounce';
 import FixedHeader from '../../components/Header/FixedHeader';
 
 type Category = string;
 
 export default function CalendarPage({ searchQuery }: { searchQuery: string }) {
-    const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
+    // const [localSearchQuery, setLocalSearchQuery] = useState<string>('');  
+      const [localSearchQuery] = useState<string>('');
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [adsList, setAdsList] = useState<any[]>([]);
     const [showWeekNumbers, setShowWeekNumbers] = useState(true);
@@ -150,14 +151,14 @@ export default function CalendarPage({ searchQuery }: { searchQuery: string }) {
         }
     };
 
-    const debouncedHandleSearchChange = useCallback(debounce((query: string) => {
-        setLocalSearchQuery(query);
-    }, 500), []);
+    // const debouncedHandleSearchChange = useCallback(debounce((query: string) => {
+    //     setLocalSearchQuery(query);
+    // }, 500), []);
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
-        debouncedHandleSearchChange(value);
-    };
+    // const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { value } = event.target;
+    //     debouncedHandleSearchChange(value);
+    // };
 
     const eventInputs: EventInput[] = adsList.map((event: any) => ({
         id: String(event.id),

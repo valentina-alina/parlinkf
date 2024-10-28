@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect} from 'react';
 import { MapProvider } from '../../providers/MapProvider';
 import { GoogleMap, MarkerF, InfoWindowF } from "@react-google-maps/api";
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Label, TextInput } from 'flowbite-react';
-import { HiSearch } from "react-icons/hi";
+import {  useNavigate, useParams } from 'react-router-dom';
+// import { Label, TextInput } from 'flowbite-react';
+// import { HiSearch } from "react-icons/hi";
 import MapConfig from '../../services/utils/MapConfig';
-import { debounce } from '../../services/utils/debounce';
+// import { debounce } from '../../services/utils/debounce';
 import { getAds, getAdById, getAdsByParams, getCategories, getSubCategories, getAdsByCategories, getAdsBySubCategories } from '../../services/api/ads';
 import { AdWithoutCoordinatesInterface } from '../../services/interfaces/AdWithoutCoordinates';
 import axios from 'axios';
@@ -20,7 +20,8 @@ const GEOCODEAPI_KEY = 'd5192c485eda412caca23991c255a796';
 export default function MapPage({ searchQuery }: { searchQuery: string }) {
     const [adsList, setAdsList] = useState<any[]>([]);
     const [activeMarker, setActiveMarker] = useState<number | null>(null);
-    const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
+    // const [localSearchQuery, setLocalSearchQuery] = useState<string>('');
+    const [localSearchQuery] = useState<string>('');
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [isAllSelected, setIsAllSelected] = useState<boolean>(true);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -165,14 +166,14 @@ export default function MapPage({ searchQuery }: { searchQuery: string }) {
         }
     };
 
-    const debouncedHandleSearchChange = useCallback(debounce((query: string) => {
-        setLocalSearchQuery(query);
-    }, 500), []);
+    // const debouncedHandleSearchChange = useCallback(debounce((query: string) => {
+    //     setLocalSearchQuery(query);
+    // }, 500), []);
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
-        debouncedHandleSearchChange(value);
-    };
+    // const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { value } = event.target;
+    //     debouncedHandleSearchChange(value);
+    // };
 
     const fetchCategories = async () => {
         try {

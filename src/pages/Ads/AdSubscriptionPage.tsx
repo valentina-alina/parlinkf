@@ -1,55 +1,55 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useParams } from "react-router-dom";
-import { getSubscribedProfiles } from "../../services/api/userSubscribed";
-import { useEffect, useState } from "react";
-import { SubscribedProfileInterface } from "../../services/interfaces/SubscribedProfile";
-import { Card } from "flowbite-react";
-import { useNavigate } from 'react-router-dom';
+// import { useParams } from "react-router-dom";
+// import { getSubscribedProfiles } from "../../services/api/userSubscribed";
+// import { useEffect, useState } from "react";
+// import { SubscribedProfileInterface } from "../../services/interfaces/SubscribedProfile";
+// import { Card } from "flowbite-react";
+// import { useNavigate } from 'react-router-dom';
 
 const AdSubscriptionPage = () => {
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
-    const handleViewDetail = (subscription: any) => {
-        navigate(`/annonce/${subscription.ad_id}`, { state: { subscription } });
-    };
+    // const handleViewDetail = (subscription: any) => {
+    //     navigate(`/annonce/${subscription.ad_id}`, { state: { subscription } });
+    // };
     
-    const { idUser } = useParams();
+    // const { idUser } = useParams();
 
-    const [ subscribedProfiles, setSubscribedProfiles ] = useState<SubscribedProfileInterface | null>({
-        id: 0,
-        firstname: '',
-        lastname: '',
-        birthDate: new Date(),
-        email: '',
-        phone: '',
-        isSubscribed: true,
-        subscriptions: null,
-    });
+    // const [ subscribedProfiles, setSubscribedProfiles ] = useState<SubscribedProfileInterface | null>({
+    //     id: 0,
+    //     firstname: '',
+    //     lastname: '',
+    //     birthDate: new Date(),
+    //     email: '',
+    //     phone: '',
+    //     isSubscribed: true,
+    //     subscriptions: null,
+    // });
 
-    useEffect(() => {
-        const loadSubscribedProfiles = async () => {
-            const listSubscribedProfile = await getSubscribedProfiles();
-            if (listSubscribedProfile) {
-                const selectedSubscribedProfile = listSubscribedProfile.find(subscribedProfile => subscribedProfile.id.toString() === idUser);
-                if (selectedSubscribedProfile) {
-                    setSubscribedProfiles({
-                        ...(selectedSubscribedProfile as unknown as SubscribedProfileInterface),
-                    });
-                } else {
-                    setSubscribedProfiles(null);
-                }
-            }
-        };
-        loadSubscribedProfiles();
-    }, [idUser]);
+    // useEffect(() => {
+    //     const loadSubscribedProfiles = async () => {
+    //         const listSubscribedProfile = await getSubscribedProfiles();
+    //         if (listSubscribedProfile) {
+    //             const selectedSubscribedProfile = listSubscribedProfile.find(subscribedProfile => subscribedProfile.id.toString() === idUser);
+    //             if (selectedSubscribedProfile) {
+    //                 setSubscribedProfiles({
+    //                     ...(selectedSubscribedProfile as unknown as SubscribedProfileInterface),
+    //                 });
+    //             } else {
+    //                 setSubscribedProfiles(null);
+    //             }
+    //         }
+    //     };
+    //     loadSubscribedProfiles();
+    // }, [idUser]);
 
     return (
         <>
             <h1 className="font-titleTest text-3xl sm:my-40">Mes annonces</h1>
 
-            {
+            {/* {
                 !subscribedProfiles ? (
                     <p className="font-bodyTest text-2xl my-32 italic text-orange-500">Oups! Il n'y a pas d'annonce sur mon compte</p>
                 ) : (
@@ -85,11 +85,11 @@ const AdSubscriptionPage = () => {
                                     }
                                 </div>
                             </Card>
-                        </div>
-                    </>
+                        </div> */}
+                    {/* </>
                 )
             }
-            
+             */}
         </>
     )
 }
